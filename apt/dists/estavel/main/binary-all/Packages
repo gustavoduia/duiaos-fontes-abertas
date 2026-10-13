@@ -1,0 +1,65 @@
+Package: duiaos-desktop
+Architecture: all
+Version: 0.2.0
+Priority: optional
+Section: metapackages
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 4
+Depends: duiaos-identidade (= 0.2.0), duiaos-shell (= 0.2.0)
+Filename: pool/estavel/duiaos-desktop_0.2.0_all.deb
+Size: 896
+MD5sum: d9b9ce9f73615653aee5cc3c083ced0c
+SHA1: 68272eb42c581e697e36c6698d9dc312b7f5a16e
+SHA256: b58671e36f719305962e536d250e87a92f8f148d96a81be2f1f386c15c36c885
+SHA512: a8733f961b9ab7e79a299d4b11a7a6cf0c32d651e025222467ac529861cb5d82e83aeb7d800e249788c57e16912fffa3c252742eccde9e7e2547f2679922b978
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — sistema completo (metapacote)
+ Instala e mantém atualizados todos os componentes próprios do DuiaOS.
+ Para atualizar o DuiaOS: sudo apt update && sudo apt full-upgrade
+
+Package: duiaos-identidade
+Architecture: all
+Version: 0.2.0
+Priority: optional
+Section: misc
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 436
+Depends: base-files, plymouth, efibootmgr, console-setup, keyboard-configuration, kbd, systemd
+Filename: pool/estavel/duiaos-identidade_0.2.0_all.deb
+Size: 210444
+MD5sum: 910b81a017639e42bf668c619e14d8f6
+SHA1: 07bcc8c713f4abfb8687b878fb6c8687ffa7fae6
+SHA256: 6a7aa39206b2186e768790dec2892b3d3bb6f50275a9e0e1e902d953b267b8b5
+SHA512: 7015c0ce0f27d16b6d2644120f2288346bad5a4caa1fc6cac0af0da9e2d1771589ce1499f10ea36d3dccaf35849e5be631e6c628e241effc0757747ceeef86d4
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — identidade e padrões do sistema
+ Nome e versão do sistema (os-release), animação de boot, tema do menu de
+ boot, papel de parede, teclado ABNT2, scripts do DuiaOS e o repositório de
+ atualizações do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-shell
+Architecture: all
+Version: 0.2.0
+Priority: optional
+Section: x11
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 312
+Depends: duiaos-identidade (= 0.2.0), python3, greetd, cage, python3-pamela, swayidle, swaylock, dbus-user-session, polkitd, plymouth, labwc, foot, swaybg, wlr-randr, wlrctl, qt6-wayland, qt6-svg-plugins, qml6-module-org-kde-layershell, qml6-module-qtqml, qml6-module-qtqml-models, qml6-module-qtqml-workerscript, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-window, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, hicolor-icon-theme, fonts-inter, fonts-manrope, fonts-jetbrains-mono
+Filename: pool/estavel/duiaos-shell_0.2.0_all.deb
+Size: 27776
+MD5sum: 786c82470f144b17ea615108a9faaf6b
+SHA1: 82c9f2c1d8c3d60b3c5fda90580f75ea234285cd
+SHA256: cdfb63d2dc2ee9f42db4b3a2172ad6340e7096873ddb9fa28c95346c34e43fb5
+SHA512: a27d12b0f771f856eedbb32f8128eab3b34483809a84739368d8153192e4313530387804d5d04e0f70e13446f520ec9477dcbd3c6d4ee0756a287be5b6f3dd5e
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — interface gráfica
+ Tela de Entrada e Tela de Bloqueio, Barra de Recursos, Ilha de Aplicativos,
+ Central de Aplicativos, Menu de Energia e a sessão gráfica do DuiaOS
+ (labwc + Qt6/QML + Python).
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+

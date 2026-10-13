@@ -1,0 +1,36 @@
+Architectures: amd64 arm64 all
+Codename: estavel
+Components: main
+Date: Mon, 12 Oct 2026 02:09:30 +0000
+Description: Pacotes do DuiaOS (canal estavel)
+Label: DuiaOS
+Origin: DuiaOS
+Suite: estavel
+MD5Sum:
+ 2b696528c56bd9e0224124c91a283c14             3356 main/binary-all/Packages
+ e7af27f2543a9513229348045cac9b09             1588 main/binary-all/Packages.gz
+ 2b696528c56bd9e0224124c91a283c14             3356 main/binary-amd64/Packages
+ e7af27f2543a9513229348045cac9b09             1588 main/binary-amd64/Packages.gz
+ 2b696528c56bd9e0224124c91a283c14             3356 main/binary-arm64/Packages
+ e7af27f2543a9513229348045cac9b09             1588 main/binary-arm64/Packages.gz
+SHA1:
+ 0525d43877cc036976bfd4ef0a7a8c93eb79f76d             3356 main/binary-all/Packages
+ 788480d90f3a9737c322d332c1cefc938dec5490             1588 main/binary-all/Packages.gz
+ 0525d43877cc036976bfd4ef0a7a8c93eb79f76d             3356 main/binary-amd64/Packages
+ 788480d90f3a9737c322d332c1cefc938dec5490             1588 main/binary-amd64/Packages.gz
+ 0525d43877cc036976bfd4ef0a7a8c93eb79f76d             3356 main/binary-arm64/Packages
+ 788480d90f3a9737c322d332c1cefc938dec5490             1588 main/binary-arm64/Packages.gz
+SHA256:
+ 94f31ca13bf71eb7cd934b9ef7de3ea21798be9ba8bd3ff078988dd96ec59f52             3356 main/binary-all/Packages
+ 28b7b1c8131e6a7773388502d6b94c3bc1b8706c6119db7d952da904476c11f9             1588 main/binary-all/Packages.gz
+ 94f31ca13bf71eb7cd934b9ef7de3ea21798be9ba8bd3ff078988dd96ec59f52             3356 main/binary-amd64/Packages
+ 28b7b1c8131e6a7773388502d6b94c3bc1b8706c6119db7d952da904476c11f9             1588 main/binary-amd64/Packages.gz
+ 94f31ca13bf71eb7cd934b9ef7de3ea21798be9ba8bd3ff078988dd96ec59f52             3356 main/binary-arm64/Packages
+ 28b7b1c8131e6a7773388502d6b94c3bc1b8706c6119db7d952da904476c11f9             1588 main/binary-arm64/Packages.gz
+SHA512:
+ 24d71937ca8e3e14878b2b415cc213d6a496d802907dcdd059b5ef728c49fd96ad858bcd62f0eb598d4c169ca8892106ecc8c137bcccc7b30dead35965948b67             3356 main/binary-all/Packages
+ a6434ca274928dbb2528fcbb8f3062b1e23c87b7e837a41e62d1c44813a3b0e0fc504c954bf7ea9dcde0d55d9fedd36f1575a9cce0e18fde75b908fe363737e2             1588 main/binary-all/Packages.gz
+ 24d71937ca8e3e14878b2b415cc213d6a496d802907dcdd059b5ef728c49fd96ad858bcd62f0eb598d4c169ca8892106ecc8c137bcccc7b30dead35965948b67             3356 main/binary-amd64/Packages
+ a6434ca274928dbb2528fcbb8f3062b1e23c87b7e837a41e62d1c44813a3b0e0fc504c954bf7ea9dcde0d55d9fedd36f1575a9cce0e18fde75b908fe363737e2             1588 main/binary-amd64/Packages.gz
+ 24d71937ca8e3e14878b2b415cc213d6a496d802907dcdd059b5ef728c49fd96ad858bcd62f0eb598d4c169ca8892106ecc8c137bcccc7b30dead35965948b67             3356 main/binary-arm64/Packages
+ a6434ca274928dbb2528fcbb8f3062b1e23c87b7e837a41e62d1c44813a3b0e0fc504c954bf7ea9dcde0d55d9fedd36f1575a9cce0e18fde75b908fe363737e2             1588 main/binary-arm64/Packages.gz
