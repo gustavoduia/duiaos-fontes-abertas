@@ -1,8 +1,7 @@
 <!--
-  Este arquivo é o README do repositório público
-  https://github.com/gustavoduia/duiaos-fontes-abertas.
-  A fonte da verdade é a pasta publico/ do repositório interno (privado).
-  O workflow sincronizar-publico.yml copia a pasta para cá a cada mudança.
+  README do repositório público https://github.com/gustavoduia/duiaos-fontes-abertas:
+  código aberto do DuiaOS (GPL-3 e outras licenças que exigem publicação), modificações em software
+  livre, EULA, licenças e marca. Editado direto aqui, na main (ADR 043 do DuiaOS).
 -->
 
 <p align="center">
