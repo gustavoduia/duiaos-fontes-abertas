@@ -84,4 +84,12 @@ Rectangle {
         }
         MouseArea { id: areaSeguir; anchors.fill: parent; hoverEnabled: true; cursorShape: Qt.PointingHandCursor; onClicked: faixa.fim ? ViewManager.quit() : ViewManager.next() }
     }
+
+    // No Wayland, a faixa não se redesenha sozinha quando a página em widgets (o disco) entra; um ponto
+    // invisível que muda duas vezes por segundo força o redesenho (custa quase nada)
+    Rectangle {
+        id: pulso
+        width: 1; height: 1; color: "transparent"; opacity: 0
+        Timer { interval: 500; running: true; repeat: true; onTriggered: pulso.opacity = pulso.opacity > 0 ? 0 : 0.01 }
+    }
 }

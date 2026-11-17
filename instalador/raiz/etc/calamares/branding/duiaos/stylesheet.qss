@@ -37,12 +37,10 @@ QHeaderView::section { background-color: #F2F4FC; color: #56608A; border: none; 
 
 /* Escolhas (Apagar o disco, Instalar ao lado, Substituir, Manual) e caixas de marcar */
 QRadioButton, QCheckBox { spacing: 10px; background: transparent; }
-QRadioButton::indicator { width: 20px; height: 20px; border-radius: 11px; border: 2px solid #BFC8EA; background: #FFFFFF; }
-QRadioButton::indicator:hover { border-color: #3D5BFF; }
-QRadioButton::indicator:checked { border: 6px solid #3D5BFF; background: #FFFFFF; }
-QCheckBox::indicator { width: 20px; height: 20px; border-radius: 6px; border: 2px solid #BFC8EA; background: #FFFFFF; }
-QCheckBox::indicator:hover { border-color: #3D5BFF; }
-QCheckBox::indicator:checked { border: 2px solid #3D5BFF; background: #3D5BFF; }
+QRadioButton::indicator { width: 22px; height: 22px; image: url(/etc/calamares/branding/duiaos/simbolos/radio.svg); }
+QRadioButton::indicator:checked { image: url(/etc/calamares/branding/duiaos/simbolos/radio-marcado.svg); }
+QCheckBox::indicator { width: 22px; height: 22px; image: url(/etc/calamares/branding/duiaos/simbolos/caixa.svg); }
+QCheckBox::indicator:checked { image: url(/etc/calamares/branding/duiaos/simbolos/caixa-marcada.svg); }
 
 QGroupBox { border: 1px solid #DADFF2; border-radius: 18px; margin-top: 16px; padding: 14px; background-color: #FFFFFF; }
 QGroupBox::title { subcontrol-origin: margin; left: 16px; padding: 0 6px; color: #16205C; font-weight: 700; }

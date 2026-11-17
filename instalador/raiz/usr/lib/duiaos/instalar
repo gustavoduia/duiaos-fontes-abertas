@@ -1,9 +1,22 @@
 #!/bin/sh
 # DuiaOS — abre o instalador (Calamares com a identidade do DuiaOS) no modo live.
+# Enquanto ele está aberto, o Wise fica desligado: o rosto dele não fica por cima dos botões do instalador
+# em tela cheia, e a IA local sai da memória (a instalação usa bastante). Ao fechar, a sessão religa o Wise.
 # O arquivo fstab deixado pelo live-build atrapalha o particionamento: sai durante a instalação.
+DESLIGADO="${XDG_RUNTIME_DIR:-/tmp}/duiaos-wise-desligado"
+WISE_ESTAVA_LIGADO=0
+if [ ! -e "${DESLIGADO}" ] && pgrep -u "$(id -u)" -f "duiaos-wise|-m wise" >/dev/null 2>&1 && [ -x /usr/bin/duiaos-wise ]; then
+  WISE_ESTAVA_LIGADO=1
+  /usr/bin/duiaos-wise --desligar >/dev/null 2>&1 || true
+fi
 [ -e /etc/fstab ] && sudo -n mv /etc/fstab /etc/fstab.duiaos-live 2>/dev/null
 sudo -n -E env QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-wayland}" QT_WAYLAND_SHELL_INTEGRATION= \
   XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}" calamares "$@"
 CODIGO=$?
 [ -e /etc/fstab.duiaos-live ] && sudo -n mv /etc/fstab.duiaos-live /etc/fstab 2>/dev/null
+# Religa o Wise (o laço da sessão o abre de novo quando o arquivo some; Pausar false volta a IA)
+if [ "${WISE_ESTAVA_LIGADO}" = 1 ]; then
+  rm -f "${DESLIGADO}"
+  busctl call org.duiaos.IA1 /org/duiaos/IA1 org.duiaos.IA1 Pausar b false >/dev/null 2>&1 || true
+fi
 exit "${CODIGO}"
