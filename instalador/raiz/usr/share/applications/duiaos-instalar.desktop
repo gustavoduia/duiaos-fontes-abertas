@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Instalar o DuiaOS
+Comment=Instala o DuiaOS neste computador
+Exec=/usr/lib/duiaos/instalar
+Icon=duiaos
+Categories=System;
+StartupWMClass=calamares

@@ -1,0 +1,9 @@
+#!/bin/sh
+# DuiaOS — abre o instalador (Calamares com a identidade do DuiaOS) no modo live.
+# O arquivo fstab deixado pelo live-build atrapalha o particionamento: sai durante a instalação.
+[ -e /etc/fstab ] && sudo -n mv /etc/fstab /etc/fstab.duiaos-live 2>/dev/null
+sudo -n -E env QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-wayland}" QT_WAYLAND_SHELL_INTEGRATION= \
+  XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}" calamares "$@"
+CODIGO=$?
+[ -e /etc/fstab.duiaos-live ] && sudo -n mv /etc/fstab.duiaos-live /etc/fstab 2>/dev/null
+exit "${CODIGO}"

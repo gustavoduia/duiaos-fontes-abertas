@@ -1,0 +1,39 @@
+# DuiaOS — identidade do instalador
+---
+componentName:   duiaos
+welcomeStyleCalamares: false
+welcomeExpandingLogo: true
+windowExpanding: normal
+windowSize: 1000px,680px
+windowPlacement: center
+
+strings:
+    productName:         DuiaOS
+    shortProductName:    DuiaOS
+    version:             "@VERSAO@"
+    shortVersion:        "@VERSAO@"
+    versionedName:       DuiaOS @VERSAO@
+    shortVersionedName:  DuiaOS @VERSAO@
+    bootloaderEntryName: DuiaOS
+    productUrl:          https://duiaos.gustavoduia.workers.dev
+    supportUrl:          https://duiaos.gustavoduia.workers.dev/suporte/
+    knownIssuesUrl:      https://duiaos-docs.gustavoduia.workers.dev/problemas/
+    releaseNotesUrl:     https://duiaos.gustavoduia.workers.dev/novidades/
+    donateUrl:           https://duiaos.gustavoduia.workers.dev
+
+sidebar: widget
+navigation: widget
+
+images:
+    productLogo:         "logo.png"
+    productIcon:         "logo.png"
+    productWelcome:      "boas-vindas.png"
+
+slideshow:               "show.qml"
+slideshowAPI: 2
+
+style:
+   SidebarBackground:    "#0A0F1F"
+   SidebarText:          "#C7D6FF"
+   SidebarTextCurrent:   "#FFFFFF"
+   SidebarBackgroundCurrent: "#3D5BFF"

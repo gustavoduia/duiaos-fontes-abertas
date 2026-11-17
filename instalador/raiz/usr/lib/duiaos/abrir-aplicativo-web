@@ -1,0 +1,8 @@
+#!/bin/sh
+# DuiaOS — abre um site como aplicativo (janela própria, sem barra de endereços) no navegador que houver.
+URL="${1:?Uso: abrir-aplicativo-web https://…}"
+case "${URL}" in https://*) ;; *) exit 2 ;; esac
+for NAVEGADOR in google-chrome-stable google-chrome chromium brave-browser microsoft-edge; do
+  command -v "${NAVEGADOR}" >/dev/null 2>&1 && exec "${NAVEGADOR}" --app="${URL}"
+done
+exec xdg-open "${URL}"

@@ -1,0 +1,17 @@
+[Unit]
+Description=DuiaOS: instala os programas escolhidos na instalação que ainda faltam
+ConditionPathExists=/var/lib/duiaos/programas-pendentes
+Wants=network-online.target
+After=network-online.target duiaos-agente.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/lib/duiaos/instalar-programas
+# Sem internet ou com falha (código 75): tenta de novo, até a lista esvaziar
+Restart=on-failure
+RestartSec=10min
+TimeoutStartSec=1h
+Nice=10
+
+[Install]
+WantedBy=multi-user.target
