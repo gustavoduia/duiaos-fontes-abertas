@@ -10,9 +10,19 @@ if [ ! -e "${DESLIGADO}" ] && pgrep -u "$(id -u)" -f "duiaos-wise|-m wise" >/dev
   /usr/bin/duiaos-wise --desligar >/dev/null 2>&1 || true
 fi
 [ -e /etc/fstab ] && sudo -n mv /etc/fstab /etc/fstab.duiaos-live 2>/dev/null
-sudo -n -E env QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-wayland}" QT_WAYLAND_SHELL_INTEGRATION= \
-  XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}" calamares "$@"
-CODIGO=$?
+# O Calamares roda pelo Xwayland (xcb): no Wayland nativo, os campos das páginas QML (QQuickWidget) não
+# recebem o teclado e a faixa do alto não se redesenha; o setxkbmap (teclado ao vivo) também só funciona no X.
+# O xhost libera só o root local para a tela do usuário durante a instalação.
+TELA="${DISPLAY:-:0}"
+if command -v Xwayland >/dev/null 2>&1 && DISPLAY="${TELA}" xhost +si:localuser:root >/dev/null 2>&1; then
+  sudo -n -E env DISPLAY="${TELA}" QT_QPA_PLATFORM=xcb XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" calamares "$@"
+  CODIGO=$?
+  DISPLAY="${TELA}" xhost -si:localuser:root >/dev/null 2>&1 || true
+else
+  sudo -n -E env QT_QPA_PLATFORM="${QT_QPA_PLATFORM:-wayland}" QT_WAYLAND_SHELL_INTEGRATION= \
+    XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR}" WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-0}" calamares "$@"
+  CODIGO=$?
+fi
 [ -e /etc/fstab.duiaos-live ] && sudo -n mv /etc/fstab.duiaos-live /etc/fstab 2>/dev/null
 # Religa o Wise (o laço da sessão o abre de novo quando o arquivo some; Pausar false volta a IA)
 if [ "${WISE_ESTAVA_LIGADO}" = 1 ]; then

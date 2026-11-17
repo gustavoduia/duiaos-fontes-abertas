@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // DuiaOS — "Revisar": o que vai acontecer, numa lista só, antes de começar a instalar. As escolhas são
-// lidas do armazenamento global do instalador sempre que a página aparece; o que vai mudar no disco vem
+// lidas do armazenamento global do instalador a cada troca de etapa; o que vai mudar no disco vem
 // do resumo do próprio particionamento.
 import io.calamares.ui 1.0
 import io.calamares.core 1.0
@@ -16,8 +16,10 @@ Pagina {
     Estilo { id: e }
     Nomes { id: nomes }
 
-    property int versao: 0                  // muda a cada vez que a página aparece: relê as escolhas
-    function onActivate() { versao++ }
+    // Relê as escolhas a cada troca de etapa: o SummaryQmlViewStep do Calamares 3.3 não chama o onActivate()
+    // do QML, e o armazenamento global não avisa quando muda (sem isso, a página mostrava o que havia ao
+    // carregar: teclado "Padrão", sem fuso e sem conta).
+    readonly property int versao: ViewManager.currentStepIndex
 
     readonly property var nomesProgramas: ({ firefox: "Firefox", chrome: "Google Chrome", thunderbird: "Thunderbird",
         libreoffice: "LibreOffice", vlc: "VLC", whatsapp: "WhatsApp", telegram: "Telegram", antivirus: "Antivírus" })

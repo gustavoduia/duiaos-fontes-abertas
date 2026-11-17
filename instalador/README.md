@@ -13,7 +13,7 @@ do Debian: `sources-media`, `bootloader-config` e os outros).
 | `raiz/etc/calamares/modules/` | A configuração de cada página (`partition.conf`, `usersq.conf`, `aparencia.conf`…) |
 | `raiz/usr/share/duiaos/instalador/modulos/duiaos/` | Último passo (módulo Python do Calamares, GPL-3): grava o modo escolhido, ajusta repositórios e chama a instalação dos programas |
 | `raiz/usr/lib/duiaos/instalar-programas` | Instala os programas escolhidos; o que faltar chega quando o sistema ligar com internet (`duiaos-programas.service`) |
-| `raiz/usr/lib/duiaos/instalar` | Abre o instalador no modo live |
+| `raiz/usr/lib/duiaos/instalar` | Abre o instalador no modo live, pelo Xwayland (no Wayland nativo os campos QML não recebem o teclado) |
 
 Licença: GPL-3.0-or-later (os arquivos que se ligam ao Calamares). As imagens e a marca seguem `TRADEMARKS.md`.
 
