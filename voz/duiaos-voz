@@ -9,24 +9,38 @@
 #
 # Usa o sherpa-onnx (Apache-2.0), que traz o espeak-ng (GPL-3) para transformar o texto em fonemas —
 # por isso este programa é GPL-3 e roda sempre como processo separado: os programas do DuiaOS
-# conversam com ele só pela linha de comando (texto na entrada, linhas JSON na saída).
+# conversam com ele só pela linha de comando (linhas JSON na entrada e na saída).
 """duiaos-voz — a voz do sistema.
 
+  duiaos-voz servir                      fica aberto e recebe pedidos (uma linha JSON por pedido), com os
+                                         modelos carregados uma vez só — é o modo que o Wise usa
   duiaos-voz estado                      o que está instalado (JSON)
   duiaos-voz baixar ITEM                 baixa uma voz ou o reconhecimento (linhas JSON com o andamento)
   duiaos-voz remover ITEM
   duiaos-voz falar [--voz V] [--velocidade N] [--arquivo SAIDA.wav]
-                                         fala cada linha que chegar pela entrada, em ordem, sem intervalo;
-                                         uma linha JSON por frase falada; termina quando a entrada fecha
-  duiaos-voz ouvir [--segundos N] [--arquivo ENTRADA.wav] [--preciso]
+                                         fala cada linha que chegar pela entrada, em ordem
+  duiaos-voz ouvir [--segundos N] [--arquivo ENTRADA.wav]
                                          ouve o microfone até a pessoa parar de falar e escreve o texto (JSON)
 
-Itens: dora, alex, santa (vozes naturais, modelo Kokoro), faber (voz leve, Piper), ouvir (reconhecimento
-Whisper base), ouvir-preciso (Whisper small). Tudo fica em ~/.local/share/duiaos/voz.
+Itens: dora, alex, santa (vozes naturais, modelo Kokoro), faber (voz leve, Piper) e ouvir (reconhecimento
+de fala Parakeet v3, da NVIDIA, com português). Tudo fica em ~/.local/share/duiaos/voz.
+
+Pedidos do modo servir (campo "cmd"):
+  {"cmd": "falar", "id": "f1", "texto": "...", "voz": "dora", "velocidade": 1.0}   uma frase (entra na fila)
+  {"cmd": "concluir", "id": "f1"}         não há mais frases dessa fala (o fim é avisado quando terminar)
+  {"cmd": "calar"}                        para de falar na hora e esvazia a fila
+  {"cmd": "ouvir", "id": "o1", "segundos": 30}
+  {"cmd": "parar_ouvir"}                  para de ouvir e transcreve o que já ouviu
+  {"cmd": "cancelar_ouvir"}               para de ouvir e descarta
+  {"cmd": "preparar", "voz": "dora", "ouvir": true}   carrega os modelos antes (a primeira fala sai sem espera)
+  {"cmd": "descarregar"}                  tira os modelos da memória
+Respostas (campo "evento"): pronto, falando, frase, fim_fala, ouvindo, nivel, transcrevendo, texto, erro.
 """
 import hashlib
 import json
 import os
+import queue
+import re
 import shutil
 import signal
 import subprocess
@@ -50,28 +64,49 @@ PACOTES = {
               "sha256": "7add3f923ad6bc25ca8a192805fd1a64d1b3893e4611c4a9719545a825039a83", "raiz": "vits-piper-pt_BR-faber-medium",
               "manter": ("pt_BR-faber-medium.onnx", "tokens.txt", "espeak-ng-data", "MODEL_CARD"),
               "licenca": "MIT (Piper); dados CC0"},
-    "ouvir": {"url": FONTE + "/asr-models/sherpa-onnx-whisper-base.tar.bz2", "tamanho": 207557382,
-              "sha256": "911b2083efd7c0dca2ac3b358b75222660dc09fb716d64fbfc417ba6c99ff3de", "raiz": "sherpa-onnx-whisper-base",
-              "manter": ("base-encoder.int8.onnx", "base-decoder.int8.onnx", "base-tokens.txt"), "licenca": "MIT (Whisper)"},
-    "ouvir-preciso": {"url": FONTE + "/asr-models/sherpa-onnx-whisper-small.tar.bz2", "tamanho": 639387718,
-                      "sha256": "486a46afbb7ba798507190ffe02fea2dd726049af212e774537efac6afb210a6", "raiz": "sherpa-onnx-whisper-small",
-                      "manter": ("small-encoder.int8.onnx", "small-decoder.int8.onnx", "small-tokens.txt"),
-                      "licenca": "MIT (Whisper)"},
+    # Reconhecimento: Parakeet TDT 0.6B v3 (25 línguas europeias, português incluído). Não inventa texto
+    # quando só há ruído (o Whisper inventava) e é mais rápido no processador.
+    "ouvir": {"url": FONTE + "/asr-models/sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8.tar.bz2", "tamanho": 487211443,
+              "sha256": "1495e91b59d7fc53ddca91f3431758ec99f8fa253fdb0e1e851be0f72b14b0f9",
+              "raiz": "sherpa-onnx-nemo-parakeet-tdt-0.6b-v3-int8", "pasta": "reconhecimento",
+              "manter": ("encoder.int8.onnx", "decoder.int8.onnx", "joiner.int8.onnx", "tokens.txt"),
+              "licenca": "CC-BY-4.0 (NVIDIA Parakeet TDT 0.6B v3)"},
 }
 VAD = {"url": FONTE + "/asr-models/silero_vad.onnx", "sha256": "9e2449e1087496d8d4caba907f23e0bd3f78d91fa552479bb9c23ac09cbb1fd6", "tamanho": 643854}
 # Vozes: nome → (pacote, número do falante no modelo, descrição)
 VOZES = {"dora": ("kokoro", 43, "Dora — feminina, natural"), "alex": ("kokoro", 44, "Alex — masculina, natural"),
          "santa": ("kokoro", 45, "Santa — masculina, grave"), "faber": ("faber", 0, "Faber — masculina, leve e rápida")}
 NUCLEOS = max(1, min(4, (os.cpu_count() or 2) - 1))
+TAXA_MICROFONE = 16000
+OCIOSO_S = 600                      # sem uso por 10 minutos, os modelos saem da memória
+# O que o Whisper (versões antigas) inventa quando só há ruído
+ALUCINACOES = re.compile(r"^\W*$|^[\[\(].*[\]\)]\W*$|amara\.org|legendas? (pela|por)|inscreva-se|obrigad[oa] por assistir"
+                         r"|♪|^tchau\W*$|^obrigad[oa]\W*$", re.I)
+
+_saida = threading.Lock()
 
 
 def dizer(**dados):
-    print(json.dumps(dados, ensure_ascii=False), flush=True)
+    with _saida:
+        print(json.dumps(dados, ensure_ascii=False), flush=True)
+
+
+def pasta_do(pacote):
+    return PASTA / PACOTES[pacote].get("pasta", pacote)
 
 
 def instalado(pacote):
     info = PACOTES[pacote]
-    return all((PASTA / pacote / nome).exists() for nome in info["manter"] if nome not in ("LICENSE", "MODEL_CARD"))
+    return all((pasta_do(pacote) / nome).exists() for nome in info["manter"] if nome not in ("LICENSE", "MODEL_CARD"))
+
+
+def whisper_antigo():
+    """Reconhecimento baixado por versões antigas (Whisper), usado só se o Parakeet não estiver aqui."""
+    for pasta, prefixo in (("ouvir-preciso", "small"), ("ouvir", "base")):
+        base = PASTA / pasta
+        if (base / f"{prefixo}-encoder.int8.onnx").exists() and (base / f"{prefixo}-tokens.txt").exists():
+            return base, prefixo
+    return None
 
 
 # ------------------------------------------------------------------ estado, baixar, remover
@@ -82,12 +117,13 @@ def estado():
         motor = True
     except ImportError:
         motor = False
+    reconhecimento = "parakeet" if instalado("ouvir") else ("whisper" if whisper_antigo() else "")
     return {"motor": motor, "pasta": str(PASTA),
             "vozes": [{"id": nome, "nome": descricao, "pacote": pacote, "instalada": instalado(pacote),
                        "tamanho": PACOTES[pacote]["tamanho"]} for nome, (pacote, _n, descricao) in VOZES.items()],
             "pacotes": {nome: {"instalado": instalado(nome), "tamanho": info["tamanho"], "licenca": info["licenca"]}
                         for nome, info in PACOTES.items()},
-            "ouvir": instalado("ouvir") or instalado("ouvir-preciso"),
+            "ouvir": bool(reconhecimento), "reconhecimento": reconhecimento,
             "tocar": bool(tocador(24000, so_conferir=True)), "gravar": bool(gravador(so_conferir=True))}
 
 
@@ -107,7 +143,7 @@ def _baixar_arquivo(url, destino, soma, ao_andar):
             if time.monotonic() - ultimo > 0.4:
                 ultimo = time.monotonic()
                 ao_andar(feito, total)
-    if not soma.startswith("@") and resumo.hexdigest() != soma:
+    if resumo.hexdigest() != soma:
         parcial.unlink(missing_ok=True)
         raise RuntimeError("o arquivo baixado não confere (soma diferente); nada foi instalado")
     os.replace(parcial, destino)
@@ -116,6 +152,8 @@ def _baixar_arquivo(url, destino, soma, ao_andar):
 def baixar(pacote):
     if pacote in VOZES:
         pacote = VOZES[pacote][0]
+    if pacote == "ouvir-preciso":                 # nome antigo
+        pacote = "ouvir"
     if pacote not in PACOTES:
         dizer(erro=f"item desconhecido: {pacote}")
         return 2
@@ -129,7 +167,7 @@ def baixar(pacote):
                         lambda feito, total: dizer(fracao=round(0.92 * feito / (total or info["tamanho"]), 3), baixado=feito,
                                                    total=total or info["tamanho"]))
         dizer(fracao=0.93, etapa="instalando")
-        destino, temporario = PASTA / pacote, PASTA / "baixando" / pacote
+        destino, temporario = pasta_do(pacote), PASTA / "baixando" / pacote
         shutil.rmtree(temporario, ignore_errors=True)
         with tarfile.open(arquivo, "r:bz2") as tar:
             raiz = info["raiz"] + "/"
@@ -139,8 +177,14 @@ def baixar(pacote):
             tar.extractall(temporario, members=membros, filter="data")
         shutil.rmtree(destino, ignore_errors=True)
         os.replace(temporario / info["raiz"], destino)
-        if pacote.startswith("ouvir") and not (PASTA / "silero_vad.onnx").exists():
-            _baixar_arquivo(VAD["url"], PASTA / "silero_vad.onnx", VAD["sha256"], lambda *_: None)
+        if pacote == "ouvir":
+            if not (PASTA / "silero_vad.onnx").exists():
+                _baixar_arquivo(VAD["url"], PASTA / "silero_vad.onnx", VAD["sha256"], lambda *_: None)
+            # O Whisper das versões antigas não é mais usado: libera o espaço
+            for antiga in ("ouvir-preciso",):
+                shutil.rmtree(PASTA / antiga, ignore_errors=True)
+            for sobra in (PASTA / "ouvir").glob("*-*.onnx") if (PASTA / "ouvir").is_dir() else []:
+                sobra.unlink(missing_ok=True)
     except (OSError, RuntimeError, tarfile.TarError) as erro:
         dizer(erro=str(erro)[:300])
         return 1
@@ -154,7 +198,9 @@ def remover(pacote):
     if pacote in VOZES:
         pacote = VOZES[pacote][0]
     if pacote in PACOTES:
-        shutil.rmtree(PASTA / pacote, ignore_errors=True)
+        shutil.rmtree(pasta_do(pacote), ignore_errors=True)
+    if pacote == "ouvir":
+        shutil.rmtree(PASTA / "ouvir-preciso", ignore_errors=True)
     dizer(pronto=True)
     return 0
 
@@ -164,28 +210,28 @@ def remover(pacote):
 def tocador(taxa, so_conferir=False):
     """Processo que toca PCM de 16 bits, mono, vindo pela entrada (PipeWire, PulseAudio ou ALSA)."""
     candidatos = [["pw-cat", "--playback", "--raw", "--format", "s16", "--rate", str(taxa), "--channels", "1",
-                   "--media-role", "Communication", "-"],
+                   "--media-role", "Assistant", "--properties", "media.name=Wise", "-"],
                   ["paplay", "--raw", f"--rate={taxa}", "--format=s16le", "--channels=1", "--client-name=Wise"],
                   ["aplay", "-q", "-t", "raw", "-f", "S16_LE", "-r", str(taxa), "-c", "1", "-"]]
     for comando in candidatos:
         if shutil.which(comando[0]):
             if so_conferir:
                 return comando[0]
-            return subprocess.Popen(comando, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            return subprocess.Popen(comando, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
     return None
 
 
 def gravador(so_conferir=False):
     """Processo que escreve na saída o microfone em PCM de 16 bits, mono, 16 kHz."""
-    candidatos = [["pw-cat", "--record", "--raw", "--format", "s16", "--rate", "16000", "--channels", "1",
-                   "--media-role", "Communication", "-"],
-                  ["parecord", "--raw", "--rate=16000", "--format=s16le", "--channels=1", "--client-name=Wise"],
-                  ["arecord", "-q", "-t", "raw", "-f", "S16_LE", "-r", "16000", "-c", "1", "-"]]
+    candidatos = [["pw-cat", "--record", "--raw", "--format", "s16", "--rate", str(TAXA_MICROFONE), "--channels", "1",
+                   "--media-role", "Communication", "--properties", "media.name=Wise", "-"],
+                  ["parecord", "--raw", f"--rate={TAXA_MICROFONE}", "--format=s16le", "--channels=1", "--client-name=Wise"],
+                  ["arecord", "-q", "-t", "raw", "-f", "S16_LE", "-r", str(TAXA_MICROFONE), "-c", "1", "-"]]
     for comando in candidatos:
         if shutil.which(comando[0]):
             if so_conferir:
                 return comando[0]
-            return subprocess.Popen(comando, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            return subprocess.Popen(comando, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     return None
 
 
@@ -193,20 +239,25 @@ def gravador(so_conferir=False):
 
 def preparar_texto(texto):
     """Texto de conversa → texto para ser falado (sem marcações, endereços e símbolos soltos)."""
-    import re
     texto = re.sub(r"```.*?```", " ", texto, flags=re.S)
     texto = re.sub(r"\[([^\]]+)\]\([^)]*\)", r"\1", texto)
     texto = re.sub(r"https?://\S+", " ", texto)
     texto = re.sub(r"(^|\n)\s*(#{1,6}|[-*+•]|\d+[.)])\s+", r"\1", texto)
     texto = re.sub(r"[*_`#>|~]+", "", texto)
-    texto = texto.replace("%", " por cento").replace("&", " e ").replace("GB", " gigabytes").replace("MB", " megabytes")
+    texto = re.sub(r"[\U0001F000-\U0001FAFF☀-➿]", "", texto)            # emojis não são falados
+    texto = re.sub(r"(\d)\s*°C", r"\1 graus", texto)
+    texto = re.sub(r"(\d)\s*%", r"\1 por cento", texto)
+    for sigla, extenso in (("GB", "gigabytes"), ("MB", "megabytes"), ("KB", "kilobytes"), ("TB", "terabytes"),
+                           ("km/h", "quilômetros por hora"), ("mm", "milímetros")):
+        texto = re.sub(rf"(\d)\s*{re.escape(sigla)}\b", rf"\1 {extenso}", texto)
+    texto = texto.replace("&", " e ")
     return " ".join(texto.split())
 
 
 def criar_voz(nome):
     import sherpa_onnx
     pacote, falante, _descricao = VOZES[nome]
-    pasta = PASTA / pacote
+    pasta = pasta_do(pacote)
     if pacote == "kokoro":
         modelo = sherpa_onnx.OfflineTtsModelConfig(
             kokoro=sherpa_onnx.OfflineTtsKokoroModelConfig(
@@ -222,29 +273,176 @@ def criar_voz(nome):
     return sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(model=modelo, max_num_sentences=1)), falante
 
 
+def voz_disponivel(nome):
+    """A voz pedida, ou outra que esteja instalada (ou "" se nenhuma)."""
+    if nome in VOZES and instalado(VOZES[nome][0]):
+        return nome
+    return next((n for n, (pacote, _f, _d) in VOZES.items() if instalado(pacote)), "")
+
+
+def para_pcm(audio, numpy):
+    amostras = numpy.asarray(audio.samples, dtype=numpy.float32)
+    pico = float(numpy.max(numpy.abs(amostras))) if len(amostras) else 0.0
+    if pico > 0.98:                                    # evita estalos (a voz às vezes passa do limite)
+        amostras = amostras * (0.95 / pico)
+    return (numpy.clip(amostras, -1, 1) * 32767).astype(numpy.int16).tobytes()
+
+
+class Falante:
+    """A fala do modo servir: uma fila de frases, sintetizadas numa linha e tocadas noutra (enquanto uma
+    frase toca, a próxima já está sendo preparada). Calar para na hora."""
+
+    def __init__(self):
+        import numpy
+        self.numpy = numpy
+        self.vozes = {}                                  # nome → (modelo, falante)
+        self.frases = queue.Queue()
+        self.audio = queue.Queue(maxsize=8)
+        self.geracao = 0                                 # muda ao calar: o que estava na fila é descartado
+        self.processo = None
+        self.taxa = 0
+        self.ultimo_uso = time.monotonic()
+        self.contas = {}                                 # id → {"frases", "inicio", "primeira", "concluida"}
+        threading.Thread(target=self._sintetizar, daemon=True).start()
+        threading.Thread(target=self._tocar, daemon=True).start()
+
+    def falar(self, ident, texto, voz, velocidade):
+        texto = preparar_texto(texto)
+        if not texto:
+            return
+        conta = self.contas.setdefault(ident, {"frases": 0, "inicio": time.monotonic(), "primeira": None, "pendentes": 0,
+                                               "concluida": False})
+        conta["pendentes"] += 1
+        self.frases.put((self.geracao, ident, texto, voz, velocidade))
+
+    def concluir(self, ident):
+        conta = self.contas.get(ident)
+        if conta is None:
+            dizer(evento="fim_fala", id=ident, frases=0)
+            return
+        conta["concluida"] = True
+        self.frases.put((self.geracao, ident, None, "", 1.0))   # o fim passa pela mesma fila: chega depois da última frase
+
+    def calar(self):
+        self.geracao += 1
+        for fila in (self.frases, self.audio):
+            while True:
+                try:
+                    fila.get_nowait()
+                except queue.Empty:
+                    break
+        self._fechar_tocador(na_hora=True)
+        for ident in list(self.contas):
+            dizer(evento="fim_fala", id=ident, frases=self.contas[ident]["frases"], calada=True)
+        self.contas.clear()
+
+    def descarregar(self):
+        self.vozes.clear()
+
+    def _voz(self, nome):
+        nome = voz_disponivel(nome)
+        if not nome:
+            raise RuntimeError("nenhuma voz instalada (Configurações › Wise › Voz)")
+        if nome not in self.vozes:
+            inicio = time.monotonic()
+            self.vozes[nome] = criar_voz(nome)
+            dizer(evento="voz_carregada", voz=nome, segundos=round(time.monotonic() - inicio, 2))
+        return self.vozes[nome]
+
+    def _sintetizar(self):
+        while True:
+            geracao, ident, texto, nome, velocidade = self.frases.get()
+            if geracao != self.geracao:
+                continue
+            if texto is None:
+                self.audio.put((geracao, ident, None, 0))
+                continue
+            try:
+                modelo, falante = self._voz(nome)
+                inicio = time.monotonic()
+                audio = modelo.generate(texto, sid=falante, speed=velocidade)
+                pcm = para_pcm(audio, self.numpy)
+                if geracao != self.geracao:
+                    continue
+                self.ultimo_uso = time.monotonic()
+                self.audio.put((geracao, ident, pcm, audio.sample_rate))
+                dizer(evento="frase", id=ident, segundos=round(len(pcm) / 2 / audio.sample_rate, 2),
+                      sintese=round(time.monotonic() - inicio, 2))
+            except Exception as erro:  # noqa: BLE001 — modelo corrompido, falta de memória…
+                dizer(evento="erro", id=ident, mensagem=f"não consegui falar: {erro}"[:300])
+                self.audio.put((geracao, ident, b"", 0))
+
+    def _abrir_tocador(self, taxa):
+        if self.processo is not None and self.taxa == taxa and self.processo.poll() is None:
+            return self.processo
+        self._fechar_tocador()
+        self.processo, self.taxa = tocador(taxa), taxa
+        if self.processo is None:
+            raise RuntimeError("sem programa para tocar o som (pipewire, pulseaudio-utils ou alsa-utils)")
+        return self.processo
+
+    def _fechar_tocador(self, na_hora=False):
+        processo, self.processo = self.processo, None
+        if processo is None:
+            return
+        try:
+            if na_hora:
+                processo.kill()
+            else:
+                processo.stdin.close()
+                processo.wait(timeout=60)
+        except (OSError, ValueError, subprocess.TimeoutExpired):
+            processo.kill()
+
+    def _tocar(self):
+        respiro = b"\x00\x00" * int(24000 * 0.16)
+        while True:
+            geracao, ident, pcm, taxa = self.audio.get()
+            if geracao != self.geracao:
+                continue
+            conta = self.contas.get(ident)
+            if pcm is None:                                # fim da fala: espera tocar tudo e avisa
+                self._fechar_tocador()
+                if conta is not None:
+                    dizer(evento="fim_fala", id=ident, frases=conta["frases"],
+                          primeira_s=round(conta["primeira"], 2) if conta["primeira"] is not None else None)
+                    self.contas.pop(ident, None)
+                continue
+            if not pcm:
+                continue
+            try:
+                processo = self._abrir_tocador(taxa)
+                if conta is not None:
+                    conta["frases"] += 1
+                    if conta["primeira"] is None:
+                        conta["primeira"] = time.monotonic() - conta["inicio"]
+                        dizer(evento="falando", id=ident, primeira_s=round(conta["primeira"], 2))
+                processo.stdin.write(pcm + respiro[: int(taxa * 0.16) * 2])
+                processo.stdin.flush()
+            except (BrokenPipeError, OSError, ValueError, RuntimeError) as erro:
+                if geracao == self.geracao:
+                    dizer(evento="erro", id=ident, mensagem=f"não consegui tocar o som: {erro}"[:300])
+                self._fechar_tocador(na_hora=True)
+
+
 def falar(argumentos):
+    """Modo antigo (linha de comando): fala cada linha da entrada; com --arquivo, grava num WAV."""
     import numpy
-    nome = opcao(argumentos, "--voz", "dora")
+    nome = voz_disponivel(opcao(argumentos, "--voz", "dora"))
     velocidade = min(1.5, max(0.7, float(opcao(argumentos, "--velocidade", "1.0"))))
     arquivo = opcao(argumentos, "--arquivo", "")
-    if nome not in VOZES:
-        nome = "dora"
-    if not instalado(VOZES[nome][0]):
-        # A voz pedida não está aqui: usa outra que esteja
-        nome = next((n for n, (pacote, _f, _d) in VOZES.items() if instalado(pacote)), "")
-        if not nome:
-            dizer(erro="nenhuma voz instalada (duiaos-voz baixar dora)")
-            return 3
+    if not nome:
+        dizer(erro="nenhuma voz instalada (duiaos-voz baixar dora)")
+        return 3
     try:
         voz, falante = criar_voz(nome)
-    except Exception as erro:  # noqa: BLE001 — modelo corrompido, falta de memória…
+    except Exception as erro:  # noqa: BLE001
         dizer(erro=f"não consegui carregar a voz: {erro}"[:300])
         return 1
     taxa = voz.sample_rate
-    saida_wav = None
-    processo = None
+    import wave
+    saida_wav = processo = None
     if arquivo:
-        import wave
         saida_wav = wave.open(arquivo, "wb")
         saida_wav.setnchannels(1)
         saida_wav.setsampwidth(2)
@@ -258,7 +456,7 @@ def falar(argumentos):
     signal.signal(signal.SIGTERM, lambda *_: parar.set())
     dizer(pronto=True, voz=nome, taxa=taxa)
     numero = 0
-    silencio = numpy.zeros(int(taxa * 0.18), dtype=numpy.int16).tobytes()      # respiro entre as frases
+    silencio = numpy.zeros(int(taxa * 0.16), dtype=numpy.int16).tobytes()
     try:
         for linha in sys.stdin:
             if parar.is_set():
@@ -268,17 +466,15 @@ def falar(argumentos):
                 continue
             numero += 1
             inicio = time.monotonic()
-            audio = voz.generate(texto, sid=falante, speed=velocidade)
-            amostras = (numpy.clip(numpy.asarray(audio.samples, dtype=numpy.float32), -1, 1) * 32767).astype(numpy.int16)
+            pcm = para_pcm(voz.generate(texto, sid=falante, speed=velocidade), numpy)
             if parar.is_set():
                 break
-            dados = amostras.tobytes() + silencio
             if saida_wav is not None:
-                saida_wav.writeframes(dados)
+                saida_wav.writeframes(pcm + silencio)
             else:
-                processo.stdin.write(dados)
+                processo.stdin.write(pcm + silencio)
                 processo.stdin.flush()
-            dizer(frase=numero, segundos=round(len(amostras) / taxa, 2), sintese=round(time.monotonic() - inicio, 2))
+            dizer(frase=numero, segundos=round(len(pcm) / 2 / taxa, 2), sintese=round(time.monotonic() - inicio, 2))
     except (BrokenPipeError, OSError):
         pass
     finally:
@@ -287,10 +483,10 @@ def falar(argumentos):
         if processo is not None:
             try:
                 if parar.is_set():
-                    processo.kill()                 # mandaram calar: para na hora
+                    processo.kill()
                 else:
                     processo.stdin.close()
-                    processo.wait(timeout=120)      # deixa terminar de tocar
+                    processo.wait(timeout=120)
             except (OSError, subprocess.TimeoutExpired):
                 processo.kill()
     dizer(fim=True, frases=numero)
@@ -299,94 +495,297 @@ def falar(argumentos):
 
 # ------------------------------------------------------------------ ouvir
 
-def ouvir(argumentos):
-    import numpy
+def limpar_texto(texto, motor):
+    texto = " ".join(str(texto or "").split())
+    if motor == "whisper" and ALUCINACOES.search(texto):
+        return ""
+    if texto and texto[0].islower():
+        texto = texto[0].upper() + texto[1:]
+    return texto
+
+
+def db(valor):
+    import math
+    return round(20 * math.log10(max(valor, 1e-6)), 1)
+
+
+class Ouvido:
+    """Reconhecimento de fala: o modelo fica carregado entre um pedido e outro."""
+
+    def __init__(self):
+        self.reconhecedor = None
+        self.motor = ""
+        self.ultimo_uso = time.monotonic()
+
+    def carregar(self):
+        import sherpa_onnx
+        if self.reconhecedor is not None:
+            return
+        inicio = time.monotonic()
+        if instalado("ouvir"):
+            pasta = pasta_do("ouvir")
+            self.reconhecedor = sherpa_onnx.OfflineRecognizer.from_transducer(
+                encoder=str(pasta / "encoder.int8.onnx"), decoder=str(pasta / "decoder.int8.onnx"),
+                joiner=str(pasta / "joiner.int8.onnx"), tokens=str(pasta / "tokens.txt"),
+                model_type="nemo_transducer", num_threads=NUCLEOS)
+            self.motor = "parakeet"
+        else:
+            antigo = whisper_antigo()
+            if not antigo:
+                raise RuntimeError("o reconhecimento de fala não está instalado (Configurações › Wise › Voz)")
+            pasta, prefixo = antigo
+            idioma = (os.environ.get("LANG") or "pt_BR")[:2].lower()
+            self.reconhecedor = sherpa_onnx.OfflineRecognizer.from_whisper(
+                encoder=str(pasta / f"{prefixo}-encoder.int8.onnx"), decoder=str(pasta / f"{prefixo}-decoder.int8.onnx"),
+                tokens=str(pasta / f"{prefixo}-tokens.txt"), language=idioma if len(idioma) == 2 else "pt",
+                task="transcribe", num_threads=NUCLEOS)
+            self.motor = "whisper"
+        dizer(evento="reconhecimento_carregado", motor=self.motor, segundos=round(time.monotonic() - inicio, 2))
+
+    def descarregar(self):
+        self.reconhecedor = None
+
+    def transcrever(self, audio, numpy):
+        """Áudio (float32, 16 kHz) → texto. Normaliza o volume antes (microfone baixo)."""
+        self.carregar()
+        self.ultimo_uso = time.monotonic()
+        audio = audio - float(numpy.mean(audio)) if len(audio) else audio
+        pico = float(numpy.max(numpy.abs(audio))) if len(audio) else 0.0
+        if 0 < pico < 0.5:
+            audio = audio * min(20.0, 0.7 / pico)
+        partes = []
+        passo = 28 * TAXA_MICROFONE                           # o Whisper lê até 30 s por vez; o Parakeet aguenta mais
+        for comeco in range(0, len(audio), passo):
+            fluxo = self.reconhecedor.create_stream()
+            fluxo.accept_waveform(TAXA_MICROFONE, audio[comeco:comeco + passo].astype(numpy.float32))
+            self.reconhecedor.decode_stream(fluxo)
+            partes.append(fluxo.result.text.strip())
+        return limpar_texto(" ".join(p for p in partes if p), self.motor)
+
+
+def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=False):
+    """Lê o microfone (ou um arquivo) em blocos e devolve (áudio só com a fala, estatísticas).
+    Usa o detector de fala (Silero) e guarda o áudio inteiro, para recortar cada fala com uma folga antes e
+    depois (o detector corta o comecinho das palavras)."""
     import sherpa_onnx
-    limite = min(120.0, max(3.0, float(opcao(argumentos, "--segundos", "30"))))
-    arquivo = opcao(argumentos, "--arquivo", "")
-    pacote = "ouvir-preciso" if ("--preciso" in argumentos or not instalado("ouvir")) and instalado("ouvir-preciso") else "ouvir"
-    if not instalado(pacote):
-        dizer(erro="o reconhecimento de fala não está instalado (duiaos-voz baixar ouvir)")
-        return 3
-    prefixo = "small" if pacote == "ouvir-preciso" else "base"
-    pasta = PASTA / pacote
-    idioma = (os.environ.get("LANG") or "pt_BR")[:2].lower()
-    reconhecedor = sherpa_onnx.OfflineRecognizer.from_whisper(
-        encoder=str(pasta / f"{prefixo}-encoder.int8.onnx"), decoder=str(pasta / f"{prefixo}-decoder.int8.onnx"),
-        tokens=str(pasta / f"{prefixo}-tokens.txt"), language=idioma if len(idioma) == 2 else "pt", task="transcribe",
-        num_threads=NUCLEOS)
     config = sherpa_onnx.VadModelConfig()
-    config.silero_vad.model = str(PASTA / "silero_vad.onnx")
-    config.silero_vad.min_silence_duration = 0.25
-    config.sample_rate = 16000
+    config.silero_vad.model = str(vad_modelo)
+    config.silero_vad.threshold = 0.45
+    config.silero_vad.min_silence_duration = 0.5
+    config.silero_vad.min_speech_duration = 0.2
+    config.sample_rate = TAXA_MICROFONE
     vad = sherpa_onnx.VoiceActivityDetector(config, buffer_size_in_seconds=limite + 5)
     janela = config.silero_vad.window_size
+    tudo, resto, trechos = [], numpy.zeros(0, dtype=numpy.float32), []
+    total, falou, ultima_fala, soma_quadrados, pico, amostras = 0.0, False, None, 0.0, 0.0, 0
+    picos_recentes = []                               # ganho automático: microfones embutidos costumam ser baixos
+    inicio = time.monotonic()
+    for bloco in blocos:
+        if parar.is_set():
+            break
+        bloco = bloco - float(numpy.mean(bloco)) if len(bloco) else bloco
+        picos_recentes = (picos_recentes + [float(numpy.max(numpy.abs(bloco))) if len(bloco) else 0.0])[-15:]
+        ganho = min(30.0, max(1.0, 0.35 / max(max(picos_recentes), 1e-4)))
+        bloco = numpy.clip(bloco * ganho, -1.0, 1.0).astype(numpy.float32)
+        tudo.append(bloco)
+        amostras += len(bloco)
+        total += len(bloco) / TAXA_MICROFONE
+        soma_quadrados += float(numpy.sum((bloco / ganho) ** 2))     # o nível de verdade (antes do ganho)
+        pico = max(pico, picos_recentes[-1])
+        resto = numpy.concatenate([resto, bloco])
+        while len(resto) >= janela:
+            vad.accept_waveform(resto[:janela])
+            resto = resto[janela:]
+        agora = total if eh_arquivo else time.monotonic() - inicio
+        if vad.is_speech_detected():
+            falou, ultima_fala = True, agora
+        while not vad.empty():
+            trechos.append((vad.front.start, vad.front.start + len(vad.front.samples)))
+            vad.pop()
+        rms = float(numpy.sqrt(numpy.mean(bloco ** 2))) if len(bloco) else 0.0
+        ao_evento(nivel=round(min(1.0, rms * 4), 2), falando=bool(vad.is_speech_detected()))
+        # Termina 1,2 s depois de a pessoa parar de falar; sem fala nenhuma, depois de 7 s; ou no limite
+        if (falou and ultima_fala is not None and agora - ultima_fala > 1.2) or (not falou and agora > 7) or agora > limite:
+            break
+    vad.flush()
+    while not vad.empty():
+        trechos.append((vad.front.start, vad.front.start + len(vad.front.samples)))
+        vad.pop()
+    audio = numpy.concatenate(tudo) if tudo else numpy.zeros(0, dtype=numpy.float32)
+    folga = int(0.3 * TAXA_MICROFONE)
+    fala = numpy.concatenate([audio[max(0, a - folga):min(len(audio), b + folga)] for a, b in trechos]) if trechos else audio[:0]
+    media = (soma_quadrados / amostras) ** 0.5 if amostras else 0.0
+    return fala, {"ouvido_s": round(total, 1), "fala_s": round(len(fala) / TAXA_MICROFONE, 1),
+                  "nivel_medio_db": db(media), "pico_db": db(pico), "mudo": pico == 0.0}
 
-    parar = threading.Event()
-    signal.signal(signal.SIGTERM, lambda *_: parar.set())
+
+def blocos_do_arquivo(arquivo, numpy):
+    import wave
+    with wave.open(arquivo) as w:
+        bruto, taxa = w.readframes(w.getnframes()), w.getframerate()
+    amostras = numpy.frombuffer(bruto, dtype=numpy.int16).astype(numpy.float32) / 32768
+    if taxa != TAXA_MICROFONE:
+        posicoes = numpy.linspace(0, len(amostras) - 1, int(len(amostras) * TAXA_MICROFONE / taxa))
+        amostras = numpy.interp(posicoes, numpy.arange(len(amostras)), amostras).astype(numpy.float32)
+    return (amostras[i:i + 1600] for i in range(0, len(amostras), 1600))
+
+
+def blocos_do_microfone(processo, parar, numpy):
+    while not parar.is_set():
+        dados = processo.stdout.read(3200)          # 0,1 s
+        if not dados:
+            return
+        yield numpy.frombuffer(dados[:len(dados) // 2 * 2], dtype=numpy.int16).astype(numpy.float32) / 32768
+
+
+def explicar_silencio(estatisticas):
+    """Por que não houve texto, em português, para a pessoa."""
+    if estatisticas.get("mudo"):
+        return "O microfone não mandou nenhum som. Confira se há um microfone ligado em Configurações › Som."
+    if estatisticas.get("pico_db", -99) < -45:
+        return "O som do microfone está muito baixo. Aumente o volume de entrada em Configurações › Som ou fale mais perto."
+    return "Não entendi o que foi dito. Tente de novo, falando um pouco mais devagar."
+
+
+def ouvir_uma_vez(ouvido, argumentos_ou_pedido, ao_evento, parar):
+    """Ouve (microfone ou arquivo) e devolve o evento final com o texto."""
+    import numpy
+    limite = min(120.0, max(3.0, float(argumentos_ou_pedido.get("segundos", 30))))
+    arquivo = argumentos_ou_pedido.get("arquivo", "")
+    if not (PASTA / "silero_vad.onnx").exists():
+        return {"erro": "o reconhecimento de fala não está instalado (Configurações › Wise › Voz)"}
+    try:
+        ouvido.carregar()                            # antes de abrir o microfone: o primeiro pedido não perde fala
+    except Exception as erro:  # noqa: BLE001
+        return {"erro": str(erro)[:300]}
+    processo = None
     if arquivo:
-        import wave
-        with wave.open(arquivo) as w:
-            bruto = w.readframes(w.getnframes())
-            taxa = w.getframerate()
-        amostras = numpy.frombuffer(bruto, dtype=numpy.int16).astype(numpy.float32) / 32768
-        if taxa != 16000:                            # reamostragem simples (só para os testes)
-            posicoes = numpy.linspace(0, len(amostras) - 1, int(len(amostras) * 16000 / taxa))
-            amostras = numpy.interp(posicoes, numpy.arange(len(amostras)), amostras).astype(numpy.float32)
-        blocos = (amostras[i:i + 1600] for i in range(0, len(amostras), 1600))
-        processo = None
+        blocos = blocos_do_arquivo(arquivo, numpy)
     else:
         processo = gravador()
         if processo is None:
-            dizer(erro="sem programa para gravar o microfone (pipewire, pulseaudio-utils ou alsa-utils)")
-            return 1
-
-        def do_microfone():
-            while not parar.is_set():
-                dados = processo.stdout.read(3200)          # 0,1 s
-                if not dados:
-                    return
-                yield numpy.frombuffer(dados[:len(dados) // 2 * 2], dtype=numpy.int16).astype(numpy.float32) / 32768
-        blocos = do_microfone()
-    dizer(ouvindo=True)
-    falas, resto = [], numpy.zeros(0, dtype=numpy.float32)
-    inicio, ultima_fala, falou, total = time.monotonic(), None, False, 0.0
+            return {"erro": "sem programa para gravar o microfone (pipewire, pulseaudio-utils ou alsa-utils)"}
+        blocos = blocos_do_microfone(processo, parar, numpy)
+    ao_evento(ouvindo=True)
     try:
-        for bloco in blocos:
-            total += len(bloco) / 16000
-            resto = numpy.concatenate([resto, bloco])
-            while len(resto) >= janela:
-                vad.accept_waveform(resto[:janela])
-                resto = resto[janela:]
-            agora = total if arquivo else time.monotonic() - inicio
-            if vad.is_speech_detected():
-                falou, ultima_fala = True, agora
-            while not vad.empty():
-                falas.append(numpy.array(vad.front.samples, dtype=numpy.float32))
-                vad.pop()
-            dizer(nivel=round(float(min(1.0, numpy.sqrt(numpy.mean(bloco ** 2)) * 6)), 2), falando=bool(vad.is_speech_detected()))
-            # Termina 1,3 s depois de a pessoa parar de falar; sem fala nenhuma, depois de 8 s; ou no limite
-            if (falou and ultima_fala is not None and agora - ultima_fala > 1.3) or (not falou and agora > 8) or agora > limite:
-                break
+        fala, estatisticas = escutar(blocos, PASTA / "silero_vad.onnx", limite, parar, numpy, ao_evento, eh_arquivo=bool(arquivo))
     finally:
         if processo is not None:
             processo.kill()
-    vad.flush()
-    while not vad.empty():
-        falas.append(numpy.array(vad.front.samples, dtype=numpy.float32))
-        vad.pop()
-    if not falas:
-        dizer(texto="", fim=True)
-        return 0
-    dizer(transcrevendo=True)
-    audio = numpy.concatenate(falas)
-    partes = []
-    for comeco in range(0, len(audio), 28 * 16000):          # o Whisper lê até 30 s por vez
-        fluxo = reconhecedor.create_stream()
-        fluxo.accept_waveform(16000, audio[comeco:comeco + 28 * 16000])
-        reconhecedor.decode_stream(fluxo)
-        partes.append(fluxo.result.text.strip())
-    dizer(texto=" ".join(p for p in partes if p), fim=True, segundos=round(len(audio) / 16000, 1))
+    if argumentos_ou_pedido.get("cancelado"):
+        return {"texto": "", "cancelado": True, **estatisticas}
+    if len(fala) < int(0.25 * TAXA_MICROFONE):
+        return {"texto": "", "motivo": explicar_silencio(estatisticas), **estatisticas}
+    ao_evento(transcrevendo=True)
+    inicio = time.monotonic()
+    try:
+        texto = ouvido.transcrever(fala, numpy)
+    except Exception as erro:  # noqa: BLE001
+        return {"erro": f"o reconhecimento falhou: {erro}"[:300], **estatisticas}
+    final = {"texto": texto, "motor": ouvido.motor, "transcricao_s": round(time.monotonic() - inicio, 2), **estatisticas}
+    if not texto:
+        final["motivo"] = explicar_silencio(estatisticas)
+    return final
+
+
+def ouvir(argumentos):
+    """Modo antigo (linha de comando)."""
+    parar = threading.Event()
+    signal.signal(signal.SIGTERM, lambda *_: parar.set())
+    pedido = {"segundos": opcao(argumentos, "--segundos", "30"), "arquivo": opcao(argumentos, "--arquivo", "")}
+    final = ouvir_uma_vez(Ouvido(), pedido, lambda **dados: dizer(**dados), parar)
+    dizer(fim=True, **final)
+    return 0 if "erro" not in final else 1
+
+
+# ------------------------------------------------------------------ servir
+
+def servir():
+    """Modo servidor: lê pedidos JSON da entrada até ela fechar. Fala e escuta rodam em linhas próprias."""
+    try:
+        import numpy  # noqa: F401
+        import sherpa_onnx  # noqa: F401
+    except ImportError as erro:
+        dizer(evento="erro", mensagem=f"o motor de voz não está instalado: {erro}")
+        return 1
+    falante, ouvido = Falante(), Ouvido()
+    escuta = {"linha": None, "parar": threading.Event(), "pedido": {}}
+
+    def vigiar_ociosidade():
+        while True:
+            time.sleep(30)
+            agora = time.monotonic()
+            if falante.vozes and agora - falante.ultimo_uso > OCIOSO_S and falante.frases.empty():
+                falante.descarregar()
+                dizer(evento="descarregado", parte="fala")
+            if ouvido.reconhecedor is not None and agora - ouvido.ultimo_uso > OCIOSO_S and escuta["linha"] is None:
+                ouvido.descarregar()
+                dizer(evento="descarregado", parte="escuta")
+    threading.Thread(target=vigiar_ociosidade, daemon=True).start()
+
+    def escutar_em_linha(ident, pedido):
+        def ao_evento(**dados):
+            if "nivel" in dados:
+                dizer(evento="nivel", id=ident, **dados)
+            elif dados.get("ouvindo"):
+                dizer(evento="ouvindo", id=ident)
+            elif dados.get("transcrevendo"):
+                dizer(evento="transcrevendo", id=ident)
+        final = ouvir_uma_vez(ouvido, pedido, ao_evento, escuta["parar"])
+        escuta["linha"] = None
+        if "erro" in final:
+            dizer(evento="erro", id=ident, mensagem=final.pop("erro"), **final)
+        else:
+            dizer(evento="texto", id=ident, **final)
+
+    dizer(evento="pronto", nucleos=NUCLEOS, **{k: v for k, v in estado().items() if k in ("ouvir", "reconhecimento")})
+    for linha in sys.stdin:
+        try:
+            pedido = json.loads(linha)
+        except ValueError:
+            continue
+        if not isinstance(pedido, dict):
+            continue
+        cmd, ident = pedido.get("cmd"), str(pedido.get("id") or "")
+        if cmd == "falar":
+            velocidade = min(1.5, max(0.7, float(pedido.get("velocidade") or 1.0)))
+            falante.falar(ident, str(pedido.get("texto") or ""), str(pedido.get("voz") or "dora"), velocidade)
+        elif cmd == "concluir":
+            falante.concluir(ident)
+        elif cmd == "calar":
+            falante.calar()
+        elif cmd == "ouvir":
+            if escuta["linha"] is not None:
+                dizer(evento="erro", id=ident, mensagem="já estou ouvindo")
+                continue
+            falante.calar()                              # o Wise não fala por cima da pessoa
+            escuta["parar"] = threading.Event()
+            escuta["pedido"] = dict(pedido)
+            escuta["linha"] = threading.Thread(target=escutar_em_linha, args=(ident, escuta["pedido"]), daemon=True)
+            escuta["linha"].start()
+        elif cmd in ("parar_ouvir", "cancelar_ouvir"):
+            if cmd == "cancelar_ouvir" and escuta["linha"] is not None:
+                escuta["pedido"]["cancelado"] = True
+            escuta["parar"].set()
+        elif cmd == "preparar":
+            def preparar(voz=str(pedido.get("voz") or "dora"), escuta_tambem=bool(pedido.get("ouvir"))):
+                try:
+                    if voz_disponivel(voz):
+                        falante._voz(voz)
+                        falante.ultimo_uso = time.monotonic()
+                    if escuta_tambem and (instalado("ouvir") or whisper_antigo()):
+                        ouvido.carregar()
+                        ouvido.ultimo_uso = time.monotonic()
+                except Exception as erro:  # noqa: BLE001
+                    dizer(evento="erro", mensagem=f"não consegui preparar a voz: {erro}"[:300])
+            threading.Thread(target=preparar, daemon=True).start()
+        elif cmd == "descarregar":
+            falante.descarregar()
+            ouvido.descarregar()
+        elif cmd == "estado":
+            dizer(evento="estado", **estado())
+    falante.calar()
+    escuta["parar"].set()
     return 0
 
 
@@ -396,6 +795,8 @@ def opcao(argumentos, nome, padrao):
 
 def main(argumentos):
     comando = argumentos[0] if argumentos else ""
+    if comando == "servir":
+        return servir()
     if comando == "estado":
         dizer(**estado())
         return 0

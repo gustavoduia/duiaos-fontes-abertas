@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
 # DuiaOS — último passo do instalador (módulo do Calamares): aplica no sistema novo o que a pessoa
-# escolheu na página "Programas e aparência" e os ajustes do DuiaOS.
+# escolheu nas páginas "Programas" e "Aparência" e os ajustes do DuiaOS.
 # Copyright (C) 2026 DuiaOS. Software livre: GNU GPL, versão 3 ou posterior.
 import os
 import shutil
@@ -51,10 +51,13 @@ def run():
     if not raiz or not os.path.isdir(raiz):
         return ("O DuiaOS não terminou de ser ajustado", "O instalador não encontrou o sistema novo.")
     programas, opcoes = ler_escolha(gs.value("packagechooser_packagechooserq"))
+    modo = str(gs.value("packagechooser_aparencia") or opcoes.get("modo", "claro")).strip().lower()
+    if modo not in ("claro", "escuro", "automatico"):
+        modo = "claro"
     usuario = gs.value("username") or ""
 
     libcalamares.job.setprogress(0.05)
-    gravar_aparencia(raiz, usuario, opcoes.get("modo", "claro"))
+    gravar_aparencia(raiz, usuario, modo)
 
     # Repositórios do Debian e do DuiaOS, SSH desligado, chaves deste computador (o mesmo do instalador clássico)
     if os.path.exists(os.path.join(raiz, "usr/lib/duiaos/pos-instalacao")):

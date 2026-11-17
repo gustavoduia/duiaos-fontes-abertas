@@ -3,8 +3,9 @@
 componentName:   duiaos
 welcomeStyleCalamares: false
 welcomeExpandingLogo: true
-windowExpanding: normal
-windowSize: 1000px,680px
+# Tela cheia, como o instalador do macOS e a configuração do Windows
+windowExpanding: fullscreen
+windowSize: 1180px,780px
 windowPlacement: center
 
 strings:
@@ -21,19 +22,20 @@ strings:
     releaseNotesUrl:     https://duiaos.gustavoduia.workers.dev/novidades/
     donateUrl:           https://duiaos.gustavoduia.workers.dev
 
-sidebar: widget
-navigation: widget
+# Faixas próprias: andamento no alto (calamares-sidebar.qml) e botões embaixo (calamares-navigation.qml)
+sidebar: qml,top
+navigation: qml,bottom
 
 images:
     productLogo:         "logo.png"
     productIcon:         "logo.png"
-    productWelcome:      "boas-vindas.png"
+    productWelcome:      "logo.png"
 
 slideshow:               "show.qml"
 slideshowAPI: 2
 
 style:
-   SidebarBackground:    "#0A0F1F"
-   SidebarText:          "#C7D6FF"
-   SidebarTextCurrent:   "#FFFFFF"
-   SidebarBackgroundCurrent: "#3D5BFF"
+   SidebarBackground:    "#F2F4FC"
+   SidebarText:          "#56608A"
+   SidebarTextCurrent:   "#0E1430"
+   SidebarBackgroundCurrent: "#E7ECFF"

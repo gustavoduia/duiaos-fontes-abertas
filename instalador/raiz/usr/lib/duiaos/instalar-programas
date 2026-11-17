@@ -5,12 +5,12 @@
 # internet (duiaos-programas.service). Cada programa instalado sai da lista; lista vazia = arquivo apagado.
 #
 #   firefox       Firefox (pacote do Debian, em português)
-#   chrome        Google Chrome (baixado do Google; em computadores ARM, o Chromium do Debian)
+#   chrome        Google Chrome (o .deb oficial do Google, para Intel/AMD e para ARM)
 #   thunderbird   Thunderbird, em português
 #   libreoffice   LibreOffice Writer, Calc e Impress, em português
 #   vlc           VLC
 #   whatsapp      WhatsApp Web como aplicativo (não existe WhatsApp oficial para Linux)
-#   telegram      Telegram Desktop (pacote do Debian)
+#   telegram      Telegram Desktop (Flathub: não existe no Debian 13)
 #   antivirus     ClamAV com a tela ClamTk (livre e gratuito)
 set -u
 LISTA=/var/lib/duiaos/programas-pendentes
@@ -30,16 +30,18 @@ um() {
   case "$1" in
     firefox)     instalar firefox-esr firefox-esr-l10n-pt-br ;;
     chrome)
-      if [ "$(dpkg --print-architecture)" = amd64 ]; then
-        curl -fL --retry 2 -m 900 -o /tmp/google-chrome.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-          && apt-get install -y -q /tmp/google-chrome.deb; R=$?; rm -f /tmp/google-chrome.deb; return $R
-      else
-        instalar chromium chromium-l10n
-      fi ;;
+      # O Google publica o Chrome para Linux em amd64 e arm64; o pacote liga o repositório dele (atualizações pelo apt)
+      ARQ="$(dpkg --print-architecture)"
+      case "${ARQ}" in amd64|arm64) ;; *) echo "chrome: sem pacote para ${ARQ}" >&2; return 0 ;; esac
+      curl -fL --retry 2 -m 900 -o /tmp/google-chrome.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_${ARQ}.deb" \
+        && apt-get install -y -q /tmp/google-chrome.deb; R=$?; rm -f /tmp/google-chrome.deb; return $R ;;
     thunderbird) instalar thunderbird thunderbird-l10n-pt-br ;;
     libreoffice) instalar libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-gtk3 libreoffice-l10n-pt-br ;;
     vlc)         instalar vlc ;;
-    telegram)    instalar telegram-desktop ;;
+    telegram)
+      # Para todas as contas do computador (o Flathub tem o Telegram para Intel/AMD e ARM)
+      flatpak remote-add --system --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo \
+        && flatpak install --system -y --noninteractive flathub org.telegram.desktop ;;
     antivirus)   instalar clamav clamav-freshclam clamtk ;;
     whatsapp)
       cat > /usr/share/applications/duiaos-whatsapp-web.desktop <<'ATALHO'
