@@ -1,0 +1,36 @@
+Architectures: amd64 arm64 all
+Codename: teste
+Components: main
+Date: Wed, 18 Nov 2026 17:20:00 +0000
+Description: Pacotes do DuiaOS (canal teste)
+Label: DuiaOS
+Origin: DuiaOS
+Suite: teste
+MD5Sum:
+ e27820235607461bcd03faba629ac3b1            50649 main/binary-all/Packages
+ 0929c404185486a291f7f282d9318b04             9627 main/binary-all/Packages.gz
+ 442cd99cc8f866c377eac0f3d50d33e5            54435 main/binary-amd64/Packages
+ 6129b6a3e241e16cc0d376f4df90fd0d            10959 main/binary-amd64/Packages.gz
+ 784239db20d09b4b961ef1acff2209e3            54434 main/binary-arm64/Packages
+ a377a9bf6c2dd0908f5195dde2d6ad59            10963 main/binary-arm64/Packages.gz
+SHA1:
+ 08e4d5a455539461050164f9320ec81f22df6362            50649 main/binary-all/Packages
+ 408dbb2a95211a377d8534cd7f38d353e39acb1a             9627 main/binary-all/Packages.gz
+ 485e3e949d53952170ec760f9fbdea26700290e8            54435 main/binary-amd64/Packages
+ 7796580f4b43daac76e9ea8b3ae028ce6aa5e94f            10959 main/binary-amd64/Packages.gz
+ 25772f86c66596092ef4ed2d8e695c5236286f9d            54434 main/binary-arm64/Packages
+ 5bc696bc6d90738033d692e2889318fd5e013475            10963 main/binary-arm64/Packages.gz
+SHA256:
+ f9ae3573816ca4edb1a0ce07068ca5ea76fe54c436b2078039b3f8c941f45b0e            50649 main/binary-all/Packages
+ ea527fefe47a86bd6cce88ee9010008057f5dc71fd7d3a34e08aeae57d23c7e6             9627 main/binary-all/Packages.gz
+ 498adb93e9faadad8763639e8a0c5abaca1d84678871571898a94a612c3701f4            54435 main/binary-amd64/Packages
+ 7a8bf420ccc99c3ec6830b089b3cc0387258927f16c7925ae7218f9d33260644            10959 main/binary-amd64/Packages.gz
+ fcf322cd87c7c4b2b9900b0815d28c55d5cb9468082eaccc6d6561c5ac127bd0            54434 main/binary-arm64/Packages
+ 531bef400263a162131f9277bd021e807c02e1a54efd18615a2ae4a1f452798d            10963 main/binary-arm64/Packages.gz
+SHA512:
+ 1b1064a325163d859acb67b32381fccb0bda884f6989e189c7693e56e1a020318280f789004128db135ca7e5f72a47172352a3b8d7b18d60c500f269a3466e93            50649 main/binary-all/Packages
+ aca79b9641f5dc0e9e5d8e91b6a6067a8c817657c124dda4d3312262e640203f31f2eef264b58d297dc85f33a6fd7313127d4ec79fb41468c8502914c044ecbd             9627 main/binary-all/Packages.gz
+ 81725a89fce1378443198e72c836b43c4f1cc2c6160a4eaa6b329df1f9b92d5ec651d744674c2b01707e9b358ddae678042523855ccfef1801d3e26a44228ee4            54435 main/binary-amd64/Packages
+ 67722c8999026f8ee12af420b39760f8797979dd3257418565ca2e9c2f72fc464d250287a1bf47112e1ed9d83b550011d3f07e683fa8c149407571a733794b28            10959 main/binary-amd64/Packages.gz
+ 2c70eebe05400d601b7abbdd22b39f959f97e1152026b1d403f5a28c6b40f7299b04a4573bd43f9a2fdd0eed5534ef08e9df83b0b2591afbf5b2ab6556c4c1c6            54434 main/binary-arm64/Packages
+ decc19ac8f419bc711026942e12b6d0dc94b016d117fc050da4a2eb79ec73ce0371b563fca5575e2c23f28efb9d3ab8075555df74543d2648bd553e5eb82955a            10963 main/binary-arm64/Packages.gz
