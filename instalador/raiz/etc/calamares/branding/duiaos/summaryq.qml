@@ -21,7 +21,7 @@ Pagina {
     // carregar: teclado "Padrão", sem fuso e sem conta).
     readonly property int versao: ViewManager.currentStepIndex
 
-    readonly property var nomesProgramas: ({ firefox: "Firefox", chrome: "Google Chrome", thunderbird: "Thunderbird",
+    readonly property var nomesProgramas: ({ thunderbird: "Thunderbird",
         libreoffice: "LibreOffice", vlc: "VLC", whatsapp: "WhatsApp", telegram: "Telegram", antivirus: "Antivírus" })
     readonly property var nomesModos: ({ claro: "claro", escuro: "escuro", automatico: "automático (claro de dia, escuro à noite)" })
     readonly property var nomesIdiomas: ({ "pt_BR": "Português (Brasil)", "pt_PT": "Português (Portugal)", "en_US": "English (United States)", "es_ES": "Español" })

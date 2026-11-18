@@ -4,8 +4,6 @@
 # um por linha). Roda no fim da instalação (--agora) e, para o que faltar, quando o sistema liga com
 # internet (duiaos-programas.service). Cada programa instalado sai da lista; lista vazia = arquivo apagado.
 #
-#   firefox       Firefox (pacote do Debian, em português)
-#   chrome        Google Chrome (o .deb oficial do Google, para Intel/AMD e para ARM)
 #   thunderbird   Thunderbird, em português
 #   libreoffice   LibreOffice Writer, Calc e Impress, em português
 #   vlc           VLC
@@ -28,13 +26,6 @@ instalar() { apt-get install -y -q --no-install-recommends "$@"; }
 
 um() {
   case "$1" in
-    firefox)     instalar firefox-esr firefox-esr-l10n-pt-br ;;
-    chrome)
-      # O Google publica o Chrome para Linux em amd64 e arm64; o pacote liga o repositório dele (atualizações pelo apt)
-      ARQ="$(dpkg --print-architecture)"
-      case "${ARQ}" in amd64|arm64) ;; *) echo "chrome: sem pacote para ${ARQ}" >&2; return 0 ;; esac
-      curl -fL --retry 2 -m 900 -o /tmp/google-chrome.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_${ARQ}.deb" \
-        && apt-get install -y -q /tmp/google-chrome.deb; R=$?; rm -f /tmp/google-chrome.deb; return $R ;;
     thunderbird) instalar thunderbird thunderbird-l10n-pt-br ;;
     libreoffice) instalar libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-gtk3 libreoffice-l10n-pt-br ;;
     vlc)         instalar vlc ;;

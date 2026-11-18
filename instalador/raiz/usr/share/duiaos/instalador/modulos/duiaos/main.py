@@ -15,7 +15,7 @@ def pretty_name():
 
 
 def ler_escolha(texto):
-    """"firefox,vlc;modo=escuro" → (["firefox", "vlc"], {"modo": "escuro"}). Só nomes conhecidos passam adiante
+    """"libreoffice,vlc;modo=escuro" → (["libreoffice", "vlc"], {"modo": "escuro"}). Só nomes conhecidos passam adiante
     (o programa que instala confere de novo)."""
     programas, opcoes = [], {}
     for parte in str(texto or "").replace(";", ",").split(","):

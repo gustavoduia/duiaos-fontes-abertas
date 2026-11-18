@@ -18,7 +18,7 @@ do Debian: `sources-media`, `bootloader-config` e os outros).
 Licença: GPL-3.0-or-later (os arquivos que se ligam ao Calamares). As imagens e a marca seguem `TRADEMARKS.md`.
 
 Os ícones em `branding/duiaos/programas/` mostram os programas que a pessoa pode escolher e são marcas dos seus
-donos: Firefox e Thunderbird (Mozilla, dos pacotes do Debian), Google Chrome (Google, do pacote oficial), LibreOffice
+donos: Thunderbird (Mozilla, do pacote do Debian), LibreOffice
 (The Document Foundation, do pacote do Debian), VLC (VideoLAN, do pacote do Debian) e Telegram (Telegram FZ-LLC, do
 repositório do Telegram Desktop). Os ícones do WhatsApp e do antivírus foram desenhados pelo DuiaOS (genéricos).
 

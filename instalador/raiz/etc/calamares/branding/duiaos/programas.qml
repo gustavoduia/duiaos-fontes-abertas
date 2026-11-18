@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // DuiaOS — "Programas": o que já vem instalado junto com o DuiaOS. A escolha vai para o passo "duiaos"
-// como texto (ex.: "firefox,vlc"), que só aceita os nomes desta lista.
+// como texto (ex.: "libreoffice,vlc"), que só aceita os nomes desta lista. O navegador (Ora) e o e-mail
+// (Mail Box) do DuiaOS já vêm instalados com o sistema: não são escolhas desta página (ADR 073).
 import io.calamares.ui 1.0
 import io.calamares.core 1.0
 import QtQuick
@@ -9,14 +10,12 @@ Pagina {
     id: pagina
     simbolo: "programas"
     titulo: "Programas para começar"
-    texto: "Marque o que você quer usar. Com internet, eles chegam junto com o DuiaOS; sem internet, na primeira vez que o computador se conectar."
+    texto: "O Ora (navegador) e o Mail Box (e-mail) já vêm com o DuiaOS. Marque o que mais você quer usar: com internet, chega junto com o sistema; sem internet, na primeira vez que o computador se conectar."
     largura: 860
 
     Estilo { id: e }
 
     readonly property var programas: [
-        { id: "firefox", nome: "Firefox", texto: "Navegador da Mozilla", icone: "programas/firefox.png" },
-        { id: "chrome", nome: "Google Chrome", texto: "Navegador do Google", icone: "programas/chrome.png" },
         { id: "thunderbird", nome: "Thunderbird", texto: "E-mail e agenda", icone: "programas/thunderbird.png" },
         { id: "libreoffice", nome: "LibreOffice", texto: "Textos, planilhas e apresentações", icone: "programas/libreoffice.png" },
         { id: "vlc", nome: "VLC", texto: "Vídeos e músicas de qualquer formato", icone: "programas/vlc.png" },
