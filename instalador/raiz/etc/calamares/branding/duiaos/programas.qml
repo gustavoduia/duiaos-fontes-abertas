@@ -16,7 +16,6 @@ Pagina {
     Estilo { id: e }
 
     readonly property var programas: [
-        { id: "thunderbird", nome: "Thunderbird", texto: "E-mail e agenda", icone: "programas/thunderbird.png" },
         { id: "libreoffice", nome: "LibreOffice", texto: "Textos, planilhas e apresentações", icone: "programas/libreoffice.png" },
         { id: "vlc", nome: "VLC", texto: "Vídeos e músicas de qualquer formato", icone: "programas/vlc.png" },
         { id: "whatsapp", nome: "WhatsApp", texto: "O WhatsApp Web numa janela própria", icone: "programas/whatsapp.svg" },

@@ -4,7 +4,6 @@
 # um por linha). Roda no fim da instalação (--agora) e, para o que faltar, quando o sistema liga com
 # internet (duiaos-programas.service). Cada programa instalado sai da lista; lista vazia = arquivo apagado.
 #
-#   thunderbird   Thunderbird, em português
 #   libreoffice   LibreOffice Writer, Calc e Impress, em português
 #   vlc           VLC
 #   whatsapp      WhatsApp Web como aplicativo (não existe WhatsApp oficial para Linux)
@@ -26,7 +25,6 @@ instalar() { apt-get install -y -q --no-install-recommends "$@"; }
 
 um() {
   case "$1" in
-    thunderbird) instalar thunderbird thunderbird-l10n-pt-br ;;
     libreoffice) instalar libreoffice-writer libreoffice-calc libreoffice-impress libreoffice-gtk3 libreoffice-l10n-pt-br ;;
     vlc)         instalar vlc ;;
     telegram)
