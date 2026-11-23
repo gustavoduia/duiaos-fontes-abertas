@@ -131,8 +131,8 @@ empacotar() {
   local P="${B}/pacote/Qt"
   rm -rf "${B}/pacote"
   mkdir -p "${P}/lib" "${P}/qml" "${P}/translations" "${SAIDA}"
-  cp -a "${B}/inst"/lib/libQt6WebEngineCore.so* "${B}/inst"/lib/libQt6WebEngineQuick.so* "${P}/lib/"
-  cp -a "${B}/inst"/lib/libQt6WebEngineQuickDelegatesQml.so* "${P}/lib/" 2>/dev/null || true
+  # Todas as bibliotecas do Qt WebEngine (Core, Quick, Widgets...): elas usam partes internas umas das outras
+  cp -a "${B}/inst"/lib/libQt6WebEngine*.so* "${P}/lib/"
   cp -a "${B}/inst/qml/QtWebEngine" "${P}/qml/"
   cp -a "${B}/inst/libexec" "${B}/inst/resources" "${P}/"
   cp -a "${B}/inst/translations/qtwebengine_locales" "${P}/translations/"
