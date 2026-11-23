@@ -25,6 +25,11 @@
 Itens: dora, alex, santa (vozes naturais, modelo Kokoro), faber (voz leve, Piper) e ouvir (reconhecimento
 de fala Parakeet v3, da NVIDIA, com português). Tudo fica em ~/.local/share/duiaos/voz.
 
+Fala em tempo real (ADR 079 do DuiaOS): o Kokoro é o de precisão normal (fp32), 2,3x mais rápido que o int8 no
+processador; quem fala manda trechos curtos (o primeiro já na primeira vírgula) e eles tocam num fluxo só, sem
+reabrir o tocador, com a pausa de cada pontuação. A escuta termina 0,8 s depois da fala, mas, se o que foi dito
+até ali termina em "e", "mas", "porque"…, espera a pessoa continuar.
+
 Pedidos do modo servir (campo "cmd"):
   {"cmd": "falar", "id": "f1", "texto": "...", "voz": "dora", "velocidade": 1.0}   uma frase (entra na fila)
   {"cmd": "concluir", "id": "f1"}         não há mais frases dessa fala (o fim é avisado quando terminar)
@@ -56,9 +61,11 @@ PASTA = Path(os.environ.get("DUIAOS_VOZ_PASTA") or
 FONTE = "https://github.com/k2-fsa/sherpa-onnx/releases/download"
 # Pacotes de modelos (releases do sherpa-onnx no GitHub), com a soma conferida depois de baixar
 PACOTES = {
-    "kokoro": {"url": FONTE + "/tts-models/kokoro-int8-multi-lang-v1_0.tar.bz2", "tamanho": 132353410,
-               "sha256": "72c347230107ef8a31098ec4d468a605244beef5f1ed00db97efa13518800653", "raiz": "kokoro-int8-multi-lang-v1_0",
-               "manter": ("model.int8.onnx", "voices.bin", "tokens.txt", "espeak-ng-data", "lexicon-us-en.txt", "LICENSE"),
+    # Kokoro em precisão normal: medido no processador, sintetiza 2,3x mais rápido que o int8 (que usávamos),
+    # o que tira o "picotado" quando a IA local disputa o processador com a voz
+    "kokoro": {"url": FONTE + "/tts-models/kokoro-multi-lang-v1_0.tar.bz2", "tamanho": 349886476,
+               "sha256": "60703707bc05ccd48d60e1eb723f38b07d6e474795a0b6a588d7220400e0f7a4", "raiz": "kokoro-multi-lang-v1_0",
+               "manter": ("model.onnx", "voices.bin", "tokens.txt", "espeak-ng-data", "lexicon-us-en.txt", "LICENSE"),
                "licenca": "Apache-2.0 (Kokoro-82M)"},
     "faber": {"url": FONTE + "/tts-models/vits-piper-pt_BR-faber-medium.tar.bz2", "tamanho": 67183065,
               "sha256": "7add3f923ad6bc25ca8a192805fd1a64d1b3893e4611c4a9719545a825039a83", "raiz": "vits-piper-pt_BR-faber-medium",
@@ -77,6 +84,19 @@ VAD = {"url": FONTE + "/asr-models/silero_vad.onnx", "sha256": "9e2449e1087496d8
 VOZES = {"dora": ("kokoro", 43, "Dora — feminina, natural"), "alex": ("kokoro", 44, "Alex — masculina, natural"),
          "santa": ("kokoro", 45, "Santa — masculina, grave"), "faber": ("faber", 0, "Faber — masculina, leve e rápida")}
 NUCLEOS = max(1, min(4, (os.cpu_count() or 2) - 1))
+# A fala usa 2 linhas: com mais, ela disputa os núcleos com a IA local e as duas ficam mais lentas
+NUCLEOS_FALA = max(1, min(2, (os.cpu_count() or 2) - 1))
+# Pausa depois de cada trecho, pela pontuação do fim (segundos): é o que dá o ritmo de uma pessoa falando
+PAUSAS = {".": 0.2, "!": 0.22, "?": 0.24, "…": 0.32, ":": 0.14, ";": 0.1, ",": 0.05, "—": 0.08, "–": 0.08}
+PAUSA_SEM_PONTUACAO = 0.06
+TOCADOR_OCIOSO_S = 20               # sem fala por 20 s, o tocador fecha (abrir de novo custa ~0,1–0,3 s)
+# Fim da vez da pessoa: silêncio depois da fala. Se o que ela disse até ali termina numa palavra que pede
+# continuação, espera mais (como a detecção de turno dos assistentes de voz)
+SILENCIO_FIM_S = 0.8
+SILENCIO_CONTINUACAO_S = 2.0
+CONTINUACAO = {"e", "mas", "porque", "pois", "que", "então", "entao", "aí", "ai", "tipo", "de", "da", "do", "pra", "para",
+               "com", "o", "a", "os", "as", "um", "uma", "se", "quando", "como", "onde", "ou", "nem", "mais", "no", "na",
+               "em", "por", "é", "eh", "hum", "hmm", "ã", "éé", "tá", "ta"}
 TAXA_MICROFONE = 16000
 OCIOSO_S = 600                      # sem uso por 10 minutos, os modelos saem da memória
 # O que o Whisper (versões antigas) inventa quando só há ruído
@@ -97,7 +117,15 @@ def pasta_do(pacote):
 
 def instalado(pacote):
     info = PACOTES[pacote]
+    if pacote == "kokoro" and kokoro_antigo():
+        return True
     return all((pasta_do(pacote) / nome).exists() for nome in info["manter"] if nome not in ("LICENSE", "MODEL_CARD"))
+
+
+def kokoro_antigo():
+    """Kokoro int8 baixado por versões antigas (mais lento): continua funcionando até a pessoa baixar o rápido."""
+    pasta = pasta_do("kokoro")
+    return not (pasta / "model.onnx").exists() and (pasta / "model.int8.onnx").exists() and (pasta / "voices.bin").exists()
 
 
 def whisper_antigo():
@@ -121,7 +149,8 @@ def estado():
     return {"motor": motor, "pasta": str(PASTA),
             "vozes": [{"id": nome, "nome": descricao, "pacote": pacote, "instalada": instalado(pacote),
                        "tamanho": PACOTES[pacote]["tamanho"]} for nome, (pacote, _n, descricao) in VOZES.items()],
-            "pacotes": {nome: {"instalado": instalado(nome), "tamanho": info["tamanho"], "licenca": info["licenca"]}
+            "pacotes": {nome: {"instalado": instalado(nome), "tamanho": info["tamanho"], "licenca": info["licenca"],
+                               **({"rapido": not kokoro_antigo()} if nome == "kokoro" else {})}
                         for nome, info in PACOTES.items()},
             "ouvir": bool(reconhecimento), "reconhecimento": reconhecimento,
             "tocar": bool(tocador(24000, so_conferir=True)), "gravar": bool(gravador(so_conferir=True))}
@@ -158,7 +187,7 @@ def baixar(pacote):
         dizer(erro=f"item desconhecido: {pacote}")
         return 2
     info = PACOTES[pacote]
-    if instalado(pacote):
+    if instalado(pacote) and not (pacote == "kokoro" and kokoro_antigo()):     # o Kokoro antigo é trocado pelo rápido
         dizer(fracao=1.0, pronto=True)
         return 0
     arquivo = PASTA / "baixando" / (pacote + ".tar.bz2")
@@ -211,7 +240,8 @@ def tocador(taxa, so_conferir=False):
     """Processo que toca PCM de 16 bits, mono, vindo pela entrada (PipeWire, PulseAudio ou ALSA)."""
     candidatos = [["pw-cat", "--playback", "--raw", "--format", "s16", "--rate", str(taxa), "--channels", "1",
                    "--media-role", "Assistant", "--properties", "media.name=Wise", "-"],
-                  ["paplay", "--raw", f"--rate={taxa}", "--format=s16le", "--channels=1", "--client-name=Wise"],
+                  ["paplay", "--raw", f"--rate={taxa}", "--format=s16le", "--channels=1", "--client-name=Wise",
+                   "--latency-msec=120"],
                   ["aplay", "-q", "-t", "raw", "-f", "S16_LE", "-r", str(taxa), "-c", "1", "-"]]
     for comando in candidatos:
         if shutil.which(comando[0]):
@@ -245,13 +275,36 @@ def preparar_texto(texto):
     texto = re.sub(r"(^|\n)\s*(#{1,6}|[-*+•]|\d+[.)])\s+", r"\1", texto)
     texto = re.sub(r"[*_`#>|~]+", "", texto)
     texto = re.sub(r"[\U0001F000-\U0001FAFF☀-➿]", "", texto)            # emojis não são falados
-    texto = re.sub(r"(\d)\s*°C", r"\1 graus", texto)
+    texto = re.sub(r"(\d)\s*°C?", r"\1 graus", texto)
     texto = re.sub(r"(\d)\s*%", r"\1 por cento", texto)
+    texto = re.sub(r"\b(\d{1,3}(?:\.\d{3})+)(?!\d|\.\d)", lambda m: m.group(1).replace(".", ""), texto)   # 1.430 → 1430
+    texto = re.sub(r"R\$\s*(\d+),(\d{2})\b", lambda m: _reais(m.group(1), m.group(2)), texto)
+    texto = re.sub(r"R\$\s*(\d+)\b", lambda m: _reais(m.group(1), "00"), texto)
+    texto = re.sub(r"\b([01]?\d|2[0-3])(?::|h)([0-5]\d)\b", lambda m: _horas(m.group(1), m.group(2)), texto)
+    texto = re.sub(r"\b([01]?\d|2[0-3])h\b", lambda m: _horas(m.group(1), "00"), texto)
     for sigla, extenso in (("GB", "gigabytes"), ("MB", "megabytes"), ("KB", "kilobytes"), ("TB", "terabytes"),
                            ("km/h", "quilômetros por hora"), ("mm", "milímetros")):
         texto = re.sub(rf"(\d)\s*{re.escape(sigla)}\b", rf"\1 {extenso}", texto)
     texto = texto.replace("&", " e ")
     return " ".join(texto.split())
+
+
+def _reais(inteiro, centavos):
+    reais = "1 real" if int(inteiro) == 1 else f"{int(inteiro)} reais"
+    if int(centavos) == 0:
+        return reais
+    return f"{reais} e {int(centavos)} {'centavo' if int(centavos) == 1 else 'centavos'}"
+
+
+def _horas(hora, minuto):
+    hora = f"{int(hora)} {'hora' if int(hora) == 1 else 'horas'}"
+    return hora if int(minuto) == 0 else f"{hora} e {int(minuto)}"
+
+
+def pausa_depois(texto):
+    """Silêncio depois de um trecho, pela pontuação do fim (o ritmo da fala)."""
+    fim = texto.rstrip()[-1:] if texto.strip() else ""
+    return PAUSAS.get(fim, PAUSA_SEM_PONTUACAO)
 
 
 def criar_voz(nome):
@@ -261,15 +314,16 @@ def criar_voz(nome):
     if pacote == "kokoro":
         modelo = sherpa_onnx.OfflineTtsModelConfig(
             kokoro=sherpa_onnx.OfflineTtsKokoroModelConfig(
-                model=str(pasta / "model.int8.onnx"), voices=str(pasta / "voices.bin"), tokens=str(pasta / "tokens.txt"),
-                data_dir=str(pasta / "espeak-ng-data"), lexicon=str(pasta / "lexicon-us-en.txt"), lang="pt-br"),
-            num_threads=NUCLEOS)
+                model=str(pasta / ("model.int8.onnx" if kokoro_antigo() else "model.onnx")), voices=str(pasta / "voices.bin"),
+                tokens=str(pasta / "tokens.txt"), data_dir=str(pasta / "espeak-ng-data"),
+                lexicon=str(pasta / "lexicon-us-en.txt"), lang="pt-br"),
+            num_threads=NUCLEOS_FALA)
     else:
         modelo = sherpa_onnx.OfflineTtsModelConfig(
             vits=sherpa_onnx.OfflineTtsVitsModelConfig(
                 model=str(pasta / "pt_BR-faber-medium.onnx"), tokens=str(pasta / "tokens.txt"),
                 data_dir=str(pasta / "espeak-ng-data")),
-            num_threads=NUCLEOS)
+            num_threads=NUCLEOS_FALA)
     return sherpa_onnx.OfflineTts(sherpa_onnx.OfflineTtsConfig(model=modelo, max_num_sentences=1)), falante
 
 
@@ -289,8 +343,9 @@ def para_pcm(audio, numpy):
 
 
 class Falante:
-    """A fala do modo servir: uma fila de frases, sintetizadas numa linha e tocadas noutra (enquanto uma
-    frase toca, a próxima já está sendo preparada). Calar para na hora."""
+    """A fala do modo servir: uma fila de trechos, sintetizados numa linha e tocados noutra (enquanto um trecho
+    toca, o próximo já está sendo preparado). O tocador fica aberto entre os trechos e entre as falas (um fluxo
+    só de áudio, sem o atraso de reabrir), e cada trecho termina com a pausa da sua pontuação. Calar para na hora."""
 
     def __init__(self):
         import numpy
@@ -301,10 +356,13 @@ class Falante:
         self.geracao = 0                                 # muda ao calar: o que estava na fila é descartado
         self.processo = None
         self.taxa = 0
+        self.tocando_ate = 0.0                           # quando termina de sair o som já entregue ao tocador
         self.ultimo_uso = time.monotonic()
         self.contas = {}                                 # id → {"frases", "inicio", "primeira", "concluida"}
+        self._trava_tocador = threading.Lock()
         threading.Thread(target=self._sintetizar, daemon=True).start()
         threading.Thread(target=self._tocar, daemon=True).start()
+        threading.Thread(target=self._fechar_ocioso, daemon=True).start()
 
     def falar(self, ident, texto, voz, velocidade):
         texto = preparar_texto(texto)
@@ -321,7 +379,7 @@ class Falante:
             dizer(evento="fim_fala", id=ident, frases=0)
             return
         conta["concluida"] = True
-        self.frases.put((self.geracao, ident, None, "", 1.0))   # o fim passa pela mesma fila: chega depois da última frase
+        self.frases.put((self.geracao, ident, None, "", 1.0))   # o fim passa pela mesma fila: chega depois do último trecho
 
     def calar(self):
         self.geracao += 1
@@ -346,7 +404,8 @@ class Falante:
         if nome not in self.vozes:
             inicio = time.monotonic()
             self.vozes[nome] = criar_voz(nome)
-            dizer(evento="voz_carregada", voz=nome, segundos=round(time.monotonic() - inicio, 2))
+            dizer(evento="voz_carregada", voz=nome, segundos=round(time.monotonic() - inicio, 2),
+                  rapida=not (VOZES[nome][0] == "kokoro" and kokoro_antigo()))
         return self.vozes[nome]
 
     def _sintetizar(self):
@@ -355,7 +414,7 @@ class Falante:
             if geracao != self.geracao:
                 continue
             if texto is None:
-                self.audio.put((geracao, ident, None, 0))
+                self.audio.put((geracao, ident, None, 0, 0.0))
                 continue
             try:
                 modelo, falante = self._voz(nome)
@@ -365,24 +424,27 @@ class Falante:
                 if geracao != self.geracao:
                     continue
                 self.ultimo_uso = time.monotonic()
-                self.audio.put((geracao, ident, pcm, audio.sample_rate))
-                dizer(evento="frase", id=ident, segundos=round(len(pcm) / 2 / audio.sample_rate, 2),
-                      sintese=round(time.monotonic() - inicio, 2))
+                self.audio.put((geracao, ident, pcm, audio.sample_rate, pausa_depois(texto)))
+                duracao = len(pcm) / 2 / audio.sample_rate
+                dizer(evento="frase", id=ident, segundos=round(duracao, 2), sintese=round(time.monotonic() - inicio, 2),
+                      rtf=round((time.monotonic() - inicio) / duracao, 2) if duracao else None)
             except Exception as erro:  # noqa: BLE001 — modelo corrompido, falta de memória…
                 dizer(evento="erro", id=ident, mensagem=f"não consegui falar: {erro}"[:300])
-                self.audio.put((geracao, ident, b"", 0))
+                self.audio.put((geracao, ident, b"", 0, 0.0))
 
     def _abrir_tocador(self, taxa):
         if self.processo is not None and self.taxa == taxa and self.processo.poll() is None:
             return self.processo
         self._fechar_tocador()
         self.processo, self.taxa = tocador(taxa), taxa
+        self.tocando_ate = time.monotonic()
         if self.processo is None:
             raise RuntimeError("sem programa para tocar o som (pipewire, pulseaudio-utils ou alsa-utils)")
         return self.processo
 
     def _fechar_tocador(self, na_hora=False):
-        processo, self.processo = self.processo, None
+        with self._trava_tocador:
+            processo, self.processo = self.processo, None
         if processo is None:
             return
         try:
@@ -394,16 +456,25 @@ class Falante:
         except (OSError, ValueError, subprocess.TimeoutExpired):
             processo.kill()
 
-    def _tocar(self):
-        respiro = b"\x00\x00" * int(24000 * 0.16)
+    def _fechar_ocioso(self):
         while True:
-            geracao, ident, pcm, taxa = self.audio.get()
+            time.sleep(2)
+            if self.processo is not None and self.frases.empty() and self.audio.empty() and not self.contas \
+                    and time.monotonic() - max(self.tocando_ate, self.ultimo_uso) > TOCADOR_OCIOSO_S:
+                self._fechar_tocador()
+
+    def _tocar(self):
+        while True:
+            geracao, ident, pcm, taxa, pausa = self.audio.get()
             if geracao != self.geracao:
                 continue
             conta = self.contas.get(ident)
-            if pcm is None:                                # fim da fala: espera tocar tudo e avisa
-                self._fechar_tocador()
-                if conta is not None:
+            if pcm is None:
+                # Fim da fala: o tocador continua aberto; o aviso sai quando o último som termina de tocar
+                espera = self.tocando_ate - time.monotonic()
+                if espera > 0:
+                    time.sleep(min(espera, 120))
+                if geracao == self.geracao and conta is not None:
                     dizer(evento="fim_fala", id=ident, frases=conta["frases"],
                           primeira_s=round(conta["primeira"], 2) if conta["primeira"] is not None else None)
                     self.contas.pop(ident, None)
@@ -417,7 +488,10 @@ class Falante:
                     if conta["primeira"] is None:
                         conta["primeira"] = time.monotonic() - conta["inicio"]
                         dizer(evento="falando", id=ident, primeira_s=round(conta["primeira"], 2))
-                processo.stdin.write(pcm + respiro[: int(taxa * 0.16) * 2])
+                silencio = b"\x00\x00" * int(taxa * pausa)
+                agora = time.monotonic()
+                self.tocando_ate = max(self.tocando_ate, agora) + (len(pcm) + len(silencio)) / 2 / taxa
+                processo.stdin.write(pcm + silencio)
                 processo.stdin.flush()
             except (BrokenPipeError, OSError, ValueError, RuntimeError) as erro:
                 if geracao == self.geracao:
@@ -563,10 +637,27 @@ class Ouvido:
         return limpar_texto(" ".join(p for p in partes if p), self.motor)
 
 
-def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=False):
+def _recortar(tudo, trechos, numpy):
+    """Só a fala do áudio ouvido, com uma folga antes e depois de cada trecho (o detector corta o comecinho)."""
+    audio = numpy.concatenate(tudo) if tudo else numpy.zeros(0, dtype=numpy.float32)
+    folga = int(0.3 * TAXA_MICROFONE)
+    if not trechos:
+        return audio[:0]
+    return numpy.concatenate([audio[max(0, a - folga):min(len(audio), b + folga)] for a, b in trechos])
+
+
+def termina_em_continuacao(texto):
+    """A pessoa parou numa palavra que pede continuação ("Abre o VLC e…"): ainda não é a vez do Wise."""
+    palavras = re.findall(r"[\wÀ-ÿ]+", texto.lower())
+    # O Parakeet pontua tudo ("Abre o VLC e."): o ponto final não conta; pergunta e exclamação encerram
+    return bool(palavras) and palavras[-1] in CONTINUACAO and not re.search(r"[!?]\s*$", texto)
+
+
+def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=False, ao_pausa=None):
     """Lê o microfone (ou um arquivo) em blocos e devolve (áudio só com a fala, estatísticas).
     Usa o detector de fala (Silero) e guarda o áudio inteiro, para recortar cada fala com uma folga antes e
-    depois (o detector corta o comecinho das palavras)."""
+    depois (o detector corta o comecinho das palavras). Fim da vez da pessoa: SILENCIO_FIM_S depois da fala;
+    ao_pausa(fala até agora) pode pedir para esperar mais (até SILENCIO_CONTINUACAO_S)."""
     import sherpa_onnx
     config = sherpa_onnx.VadModelConfig()
     config.silero_vad.model = str(vad_modelo)
@@ -578,6 +669,7 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
     janela = config.silero_vad.window_size
     tudo, resto, trechos = [], numpy.zeros(0, dtype=numpy.float32), []
     total, falou, ultima_fala, soma_quadrados, pico, amostras = 0.0, False, None, 0.0, 0.0, 0
+    pausa_avaliada = None                             # a última pausa já avaliada (não avalia a mesma duas vezes)
     picos_recentes = []                               # ganho automático: microfones embutidos costumam ser baixos
     inicio = time.monotonic()
     for bloco in blocos:
@@ -604,16 +696,26 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
             vad.pop()
         rms = float(numpy.sqrt(numpy.mean(bloco ** 2))) if len(bloco) else 0.0
         ao_evento(nivel=round(min(1.0, rms * 4), 2), falando=bool(vad.is_speech_detected()))
-        # Termina 1,2 s depois de a pessoa parar de falar; sem fala nenhuma, depois de 7 s; ou no limite
-        if (falou and ultima_fala is not None and agora - ultima_fala > 1.2) or (not falou and agora > 7) or agora > limite:
+        # Termina SILENCIO_FIM_S depois de a pessoa parar de falar (ou mais, se ela parou no meio da ideia);
+        # sem fala nenhuma, depois de 7 s; ou no limite
+        if falou and ultima_fala is not None:
+            silencio = agora - ultima_fala
+            if silencio > SILENCIO_CONTINUACAO_S:
+                break
+            if silencio > SILENCIO_FIM_S and pausa_avaliada != ultima_fala:
+                pausa_avaliada = ultima_fala
+                while not vad.empty():
+                    trechos.append((vad.front.start, vad.front.start + len(vad.front.samples)))
+                    vad.pop()
+                if ao_pausa is None or ao_pausa(_recortar(tudo, trechos, numpy)):
+                    break
+        if (not falou and agora > 7) or agora > limite:
             break
     vad.flush()
     while not vad.empty():
         trechos.append((vad.front.start, vad.front.start + len(vad.front.samples)))
         vad.pop()
-    audio = numpy.concatenate(tudo) if tudo else numpy.zeros(0, dtype=numpy.float32)
-    folga = int(0.3 * TAXA_MICROFONE)
-    fala = numpy.concatenate([audio[max(0, a - folga):min(len(audio), b + folga)] for a, b in trechos]) if trechos else audio[:0]
+    fala = _recortar(tudo, trechos, numpy)
     media = (soma_quadrados / amostras) ** 0.5 if amostras else 0.0
     return fala, {"ouvido_s": round(total, 1), "fala_s": round(len(fala) / TAXA_MICROFONE, 1),
                   "nivel_medio_db": db(media), "pico_db": db(pico), "mudo": pico == 0.0}
@@ -667,8 +769,23 @@ def ouvir_uma_vez(ouvido, argumentos_ou_pedido, ao_evento, parar):
             return {"erro": "sem programa para gravar o microfone (pipewire, pulseaudio-utils ou alsa-utils)"}
         blocos = blocos_do_microfone(processo, parar, numpy)
     ao_evento(ouvindo=True)
+    previa = {"amostras": -1, "texto": "", "segundos": 0.0}
+
+    def ao_pausa(fala_ate_agora):
+        """Na pausa: transcreve o que já foi dito (rápido no Parakeet). Se terminou numa palavra que pede
+        continuação, espera; senão, é o fim — e o texto já está pronto."""
+        if len(fala_ate_agora) < int(0.25 * TAXA_MICROFONE):
+            return True
+        inicio = time.monotonic()
+        try:
+            texto = ouvido.transcrever(fala_ate_agora, numpy)
+        except Exception:  # noqa: BLE001 — a transcrição final tenta de novo
+            return True
+        previa.update(amostras=len(fala_ate_agora), texto=texto, segundos=time.monotonic() - inicio)
+        return not termina_em_continuacao(texto)
     try:
-        fala, estatisticas = escutar(blocos, PASTA / "silero_vad.onnx", limite, parar, numpy, ao_evento, eh_arquivo=bool(arquivo))
+        fala, estatisticas = escutar(blocos, PASTA / "silero_vad.onnx", limite, parar, numpy, ao_evento,
+                                     eh_arquivo=bool(arquivo), ao_pausa=None if argumentos_ou_pedido.get("sem_pausa") else ao_pausa)
     finally:
         if processo is not None:
             processo.kill()
@@ -678,11 +795,17 @@ def ouvir_uma_vez(ouvido, argumentos_ou_pedido, ao_evento, parar):
         return {"texto": "", "motivo": explicar_silencio(estatisticas), **estatisticas}
     ao_evento(transcrevendo=True)
     inicio = time.monotonic()
-    try:
-        texto = ouvido.transcrever(fala, numpy)
-    except Exception as erro:  # noqa: BLE001
-        return {"erro": f"o reconhecimento falhou: {erro}"[:300], **estatisticas}
-    final = {"texto": texto, "motor": ouvido.motor, "transcricao_s": round(time.monotonic() - inicio, 2), **estatisticas}
+    if previa["amostras"] == len(fala):
+        texto = previa["texto"]                     # já transcrito na pausa: o pedido sai na hora
+        transcricao_s = 0.0
+    else:
+        try:
+            texto = ouvido.transcrever(fala, numpy)
+        except Exception as erro:  # noqa: BLE001
+            return {"erro": f"o reconhecimento falhou: {erro}"[:300], **estatisticas}
+        transcricao_s = round(time.monotonic() - inicio, 2)
+    final = {"texto": texto, "motor": ouvido.motor, "transcricao_s": transcricao_s,
+             "previa_s": round(previa["segundos"], 2), **estatisticas}
     if not texto:
         final["motivo"] = explicar_silencio(estatisticas)
     return final
