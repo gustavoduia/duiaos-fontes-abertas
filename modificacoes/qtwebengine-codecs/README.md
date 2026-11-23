@@ -11,7 +11,7 @@ só ligando a opção que o próprio Qt oferece.
 | Código-fonte | <https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/qtwebengine-everywhere-src-6.140.0.tar.xz> (conferido pelo `md5sums.txt` publicado ao lado) |
 | Licença | LGPL-3.0-only (Qt WebEngine); os componentes do Chromium seguem as licenças deles, que vão junto |
 | Alterações no código | nenhuma |
-| Opções de compilação | `-DQT_FEATURE_webengine_proprietary_codecs=ON` (FFmpeg embutido do Chromium com H.264, AAC e MP3), `-DQT_FEATURE_webengine_system_ffmpeg=OFF`, `-DQT_FEATURE_qtpdf_build=OFF` |
+| Opções de compilação | `-DFEATURE_webengine_proprietary_codecs=ON` (FFmpeg embutido do Chromium com H.264, AAC e MP3), `-DFEATURE_webengine_system_ffmpeg=OFF`, `-DFEATURE_qtpdf_build=OFF` |
 | Para | Qt 6.12.0 (o das rodas do PySide6 6.12.0), Debian 13, amd64 e arm64 |
 | Receita | [`construir.sh`](construir.sh) e o workflow [`motor-web-codecs.yml`](../../.github/workflows/motor-web-codecs.yml) |
 | Resultado | Releases `motor-web-codecs-*` deste repositório |

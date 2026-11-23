@@ -90,4 +90,4 @@ jobs:
           [ "$(ls saida/*.tar.xz | wc -l)" = 2 ] || { echo "Faltam pacotes (amd64 e arm64)"; exit 1; }
           TAG="motor-web-codecs-6.140.0-qt6.12.0-r${{ inputs.revisao }}"
           gh release create "$TAG" saida/* --repo "${{ github.repository }}" --title "Motor web com codecs (Qt WebEngine 6.140.0, Qt 6.12.0) r${{ inputs.revisao }}" \
-            --notes "Qt WebEngine 6.140.0 (Chromium) compilado do código-fonte oficial, sem alterações, com -DQT_FEATURE_webengine_proprietary_codecs=ON (H.264, AAC, MP3), para o Qt 6.12.0 do PySide6, em Debian 13. Usado pelo pacote duiaos-motor-web do DuiaOS. Receita e código-fonte: modificacoes/qtwebengine-codecs. Licença: LGPL-3.0-only."
+            --notes "Qt WebEngine 6.140.0 (Chromium) compilado do código-fonte oficial, sem alterações, com -DFEATURE_webengine_proprietary_codecs=ON (H.264, AAC, MP3), para o Qt 6.12.0 do PySide6, em Debian 13. Usado pelo pacote duiaos-motor-web do DuiaOS. Receita e código-fonte: modificacoes/qtwebengine-codecs. Licença: LGPL-3.0-only."

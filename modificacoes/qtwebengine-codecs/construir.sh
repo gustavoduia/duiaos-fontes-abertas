@@ -5,7 +5,7 @@
 # O Qt WebEngine das rodas oficiais do PySide6 (o motor web do Ora e do Mail Box) vem sem os
 # codecs proprietários: vídeos em H.264 não tocam. Aqui ele é compilado do código-fonte oficial,
 # SEM nenhuma alteração no código, só com a opção do próprio Qt:
-#     -DQT_FEATURE_webengine_proprietary_codecs=ON   (FFmpeg embutido do Chromium com H.264/AAC/MP3)
+#     -DFEATURE_webengine_proprietary_codecs=ON   (FFmpeg embutido do Chromium com H.264/AAC/MP3)
 # e sem o Qt PDF (o do PySide6 continua). O resultado substitui no pacote duiaos-motor-web as
 # bibliotecas do Qt WebEngine (Core e Quick), o módulo QML, o QtWebEngineProcess e os recursos.
 #
@@ -67,13 +67,14 @@ preparar() {
     cmake -S "${B}/src" -B "${B}/obj" -G Ninja \
       -DCMAKE_TOOLCHAIN_FILE="${QTDIR}/lib/cmake/Qt6/qt.toolchain.cmake" \
       -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="${B}/inst" \
-      -DQT_FEATURE_webengine_proprietary_codecs=ON \
-      -DQT_FEATURE_webengine_system_ffmpeg=OFF \
-      -DQT_FEATURE_qtpdf_build=OFF \
-      -DQT_FEATURE_use_lld_linker=ON \
+      -DFEATURE_webengine_proprietary_codecs=ON \
+      -DFEATURE_webengine_system_ffmpeg=OFF \
+      -DFEATURE_qtpdf_build=OFF \
+      -DQT_SHOW_EXTRA_IDE_SOURCES=OFF \
       -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF
   fi
-  grep -q 'webengine_proprietary_codecs:BOOL=ON\|FEATURE_webengine_proprietary_codecs:BOOL=ON' "${B}/obj/CMakeCache.txt" \
+  cat "${B}/obj/config.summary" 2>/dev/null || true
+  grep -q '^QT_FEATURE_webengine_proprietary_codecs:INTERNAL=ON\|^FEATURE_webengine_proprietary_codecs:BOOL=ON' "${B}/obj/CMakeCache.txt" \
     || { echo "O cmake não ligou os codecs proprietários" >&2; exit 1; }
 }
 
@@ -150,7 +151,7 @@ empacotar() {
   {
     echo "Qt WebEngine ${QTWEBENGINE} (Chromium), compilado pelo DuiaOS para Qt ${QT}, Debian 13 ${ARQ}."
     echo "Código-fonte sem alterações: ${FONTE_URL}"
-    echo "Opções: -DQT_FEATURE_webengine_proprietary_codecs=ON -DQT_FEATURE_webengine_system_ffmpeg=OFF -DQT_FEATURE_qtpdf_build=OFF"
+    echo "Opções: -DFEATURE_webengine_proprietary_codecs=ON -DFEATURE_webengine_system_ffmpeg=OFF -DFEATURE_qtpdf_build=OFF"
     echo "Receita: https://github.com/gustavoduia/duiaos-fontes-abertas/tree/main/modificacoes/qtwebengine-codecs"
     echo "Licença: LGPL-3.0-only (Qt WebEngine) e as licenças do Chromium em resources/ e na documentação do Qt."
   } > "${B}/pacote/LEIA-ME.txt"
