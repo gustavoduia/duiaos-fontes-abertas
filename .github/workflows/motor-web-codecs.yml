@@ -1,0 +1,93 @@
+# Qt WebEngine com os codecs H.264, AAC e MP3 para o motor web do Ora e do Mail Box (ADR 078 do DuiaOS).
+# Compila o código-fonte oficial do Qt WebEngine num Debian 13, em amd64 e arm64, em até 6 etapas de ~5 h
+# cada (o limite de um job é 6 h; a compilação do Chromium passa disso nas máquinas do GitHub), e publica
+# o resultado numa Release deste repositório, de onde o pacote duiaos-motor-web o baixa.
+# Rodar: Actions › "Motor web com codecs" › Run workflow.
+name: Motor web com codecs
+
+on:
+  workflow_dispatch:
+    inputs:
+      revisao:
+        description: "Revisão da Release (motor-web-codecs-6.140.0-qt6.12.0-rN)"
+        default: "1"
+
+permissions:
+  contents: write
+
+jobs:
+  amd64-1:
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 1 }
+  amd64-2:
+    needs: amd64-1
+    if: needs.amd64-1.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 2 }
+  amd64-3:
+    needs: amd64-2
+    if: needs.amd64-2.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 3 }
+  amd64-4:
+    needs: amd64-3
+    if: needs.amd64-3.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 4 }
+  amd64-5:
+    needs: amd64-4
+    if: needs.amd64-4.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 5 }
+  amd64-6:
+    needs: amd64-5
+    if: needs.amd64-5.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 6 }
+  arm64-1:
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 1 }
+  arm64-2:
+    needs: arm64-1
+    if: needs.arm64-1.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 2 }
+  arm64-3:
+    needs: arm64-2
+    if: needs.arm64-2.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 3 }
+  arm64-4:
+    needs: arm64-3
+    if: needs.arm64-3.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 4 }
+  arm64-5:
+    needs: arm64-4
+    if: needs.arm64-4.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 5 }
+  arm64-6:
+    needs: arm64-5
+    if: needs.arm64-5.outputs.pronto == 'false'
+    uses: ./.github/workflows/motor-web-codecs-etapa.yml
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 6 }
+  publicar:
+    needs: [amd64-1, amd64-2, amd64-3, amd64-4, amd64-5, amd64-6, arm64-1, arm64-2, arm64-3, arm64-4, arm64-5, arm64-6]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pacote-*
+          path: saida
+          merge-multiple: true
+      - name: Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -la saida
+          [ "$(ls saida/*.tar.xz | wc -l)" = 2 ] || { echo "Faltam pacotes (amd64 e arm64)"; exit 1; }
+          TAG="motor-web-codecs-6.140.0-qt6.12.0-r${{ inputs.revisao }}"
+          gh release create "$TAG" saida/* --repo "${{ github.repository }}" --title "Motor web com codecs (Qt WebEngine 6.140.0, Qt 6.12.0) r${{ inputs.revisao }}" \
+            --notes "Qt WebEngine 6.140.0 (Chromium) compilado do código-fonte oficial, sem alterações, com -DQT_FEATURE_webengine_proprietary_codecs=ON (H.264, AAC, MP3), para o Qt 6.12.0 do PySide6, em Debian 13. Usado pelo pacote duiaos-motor-web do DuiaOS. Receita e código-fonte: modificacoes/qtwebengine-codecs. Licença: LGPL-3.0-only."

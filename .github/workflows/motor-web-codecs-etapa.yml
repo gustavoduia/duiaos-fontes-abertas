@@ -1,0 +1,101 @@
+# Uma etapa da compilação do Qt WebEngine com codecs (modificacoes/qtwebengine-codecs/construir.sh).
+# Continua do estado deixado pela etapa anterior (/build/obj e /build/qt, guardados como artefato) e, se a
+# compilação terminar, empacota. Chamado por motor-web-codecs.yml.
+name: Motor web com codecs — etapa
+on:
+  workflow_call:
+    inputs:
+      arq: { type: string, required: true }        # amd64 | arm64
+      runner: { type: string, required: true }
+      etapa: { type: number, required: true }
+    outputs:
+      pronto:
+        value: ${{ jobs.etapa.outputs.pronto }}
+
+jobs:
+  etapa:
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 355
+    outputs:
+      pronto: ${{ steps.compilar.outputs.pronto }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Espaço em disco
+        run: |
+          sudo rm -rf /usr/local/lib/android /opt/hostedtoolcache /usr/share/dotnet /opt/ghc /usr/local/share/boost \
+                      /usr/local/.ghcup /usr/share/swift /usr/local/lib/node_modules || true
+          sudo docker image prune -af >/dev/null 2>&1 || true
+          # A maior partição livre vira /build
+          LIVRE_MNT=$(df -BG --output=avail /mnt 2>/dev/null | tail -1 | tr -dc 0-9 || echo 0)
+          LIVRE_RAIZ=$(df -BG --output=avail / | tail -1 | tr -dc 0-9)
+          if [ "${LIVRE_MNT:-0}" -gt "${LIVRE_RAIZ}" ]; then sudo mkdir -p /mnt/build && sudo ln -sfn /mnt/build /build
+          else sudo mkdir -p /build; fi
+          df -h / /mnt 2>/dev/null || true
+          nproc; free -g
+
+      - name: Estado da etapa anterior
+        if: inputs.etapa > 1
+        uses: actions/download-artifact@v4
+        with:
+          name: estado-${{ inputs.arq }}-${{ inputs.etapa - 1 }}
+          path: /tmp/estado
+
+      - name: Restaurar o estado
+        if: inputs.etapa > 1
+        run: |
+          sudo tar -C /build/ -I 'zstd -T0' -xf /tmp/estado/estado.tar.zst
+          rm -rf /tmp/estado
+          sudo du -sh /build/* || true
+
+      - name: Compilar (Debian 13)
+        id: compilar
+        run: |
+          set +e
+          # 5 h para compilar; o resto do job guarda o estado
+          LIMITE=$(( 300 * 60 ))
+          sudo docker run --rm -v "$(readlink -f /build)":/build -v "$PWD":/receita debian:trixie bash -c "
+            set -e
+            bash /receita/modificacoes/qtwebengine-codecs/construir.sh preparar
+            bash /receita/modificacoes/qtwebengine-codecs/construir.sh compilar ${LIMITE}
+          "
+          CODIGO=$?
+          set -e
+          if [ "${CODIGO}" = 0 ]; then echo "pronto=true" >> "$GITHUB_OUTPUT"
+          elif [ "${CODIGO}" = 99 ]; then echo "pronto=false" >> "$GITHUB_OUTPUT"
+          else exit "${CODIGO}"; fi
+
+      - name: Empacotar
+        if: steps.compilar.outputs.pronto == 'true'
+        run: |
+          mkdir -p saida
+          sudo docker run --rm -v "$(readlink -f /build)":/build -v "$PWD":/receita debian:trixie bash -c "
+            set -e
+            apt-get update -qq && apt-get install -y -qq --no-install-recommends cmake ninja-build patchelf binutils xz-utils file >/dev/null
+            bash /receita/modificacoes/qtwebengine-codecs/construir.sh empacotar /receita/saida
+          "
+          sudo chown -R "$(id -u)" saida
+
+      - name: Guardar o pacote
+        if: steps.compilar.outputs.pronto == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: pacote-${{ inputs.arq }}
+          path: saida/*
+          retention-days: 7
+          compression-level: 0
+
+      - name: Guardar o estado para a próxima etapa
+        if: steps.compilar.outputs.pronto == 'false'
+        run: |
+          sudo tar -C /build -I 'zstd -T0 -3' -cf /tmp/estado.tar.zst obj qt
+          ls -la /tmp/estado.tar.zst
+
+      - name: Enviar o estado
+        if: steps.compilar.outputs.pronto == 'false'
+        uses: actions/upload-artifact@v4
+        with:
+          name: estado-${{ inputs.arq }}-${{ inputs.etapa }}
+          path: /tmp/estado.tar.zst
+          retention-days: 2
+          compression-level: 0

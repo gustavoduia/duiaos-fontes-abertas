@@ -11,4 +11,7 @@ modificacoes/
     *.patch          as alterações
 ```
 
-Até agora não há nenhuma modificação.
+Componentes:
+
+- [`qtwebengine-codecs/`](qtwebengine-codecs/) — Qt WebEngine (LGPL-3) compilado com os codecs H.264, AAC e
+  MP3 para o navegador Ora e o Mail Box. Sem alterações no código, só opções de compilação.
