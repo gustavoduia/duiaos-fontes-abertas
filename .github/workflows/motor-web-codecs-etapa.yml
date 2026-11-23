@@ -8,6 +8,7 @@ on:
       arq: { type: string, required: true }        # amd64 | arm64
       runner: { type: string, required: true }
       etapa: { type: number, required: true }
+      anterior: { type: number, required: true }     # etapa - 1 (as expressões não fazem contas)
     outputs:
       pronto:
         value: ${{ jobs.etapa.outputs.pronto }}
@@ -38,7 +39,7 @@ jobs:
         if: inputs.etapa > 1
         uses: actions/download-artifact@v4
         with:
-          name: estado-${{ inputs.arq }}-${{ inputs.etapa - 1 }}
+          name: estado-${{ inputs.arq }}-${{ inputs.anterior }}
           path: /tmp/estado
 
       - name: Restaurar o estado

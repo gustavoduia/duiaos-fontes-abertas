@@ -18,60 +18,60 @@ permissions:
 jobs:
   amd64-1:
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 1 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 1, anterior: 0 }
   amd64-2:
     needs: amd64-1
     if: needs.amd64-1.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 2 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 2, anterior: 1 }
   amd64-3:
     needs: amd64-2
     if: needs.amd64-2.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 3 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 3, anterior: 2 }
   amd64-4:
     needs: amd64-3
     if: needs.amd64-3.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 4 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 4, anterior: 3 }
   amd64-5:
     needs: amd64-4
     if: needs.amd64-4.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 5 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 5, anterior: 4 }
   amd64-6:
     needs: amd64-5
     if: needs.amd64-5.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: amd64, runner: ubuntu-24.04, etapa: 6 }
+    with: { arq: amd64, runner: ubuntu-24.04, etapa: 6, anterior: 5 }
   arm64-1:
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 1 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 1, anterior: 0 }
   arm64-2:
     needs: arm64-1
     if: needs.arm64-1.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 2 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 2, anterior: 1 }
   arm64-3:
     needs: arm64-2
     if: needs.arm64-2.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 3 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 3, anterior: 2 }
   arm64-4:
     needs: arm64-3
     if: needs.arm64-3.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 4 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 4, anterior: 3 }
   arm64-5:
     needs: arm64-4
     if: needs.arm64-4.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 5 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 5, anterior: 4 }
   arm64-6:
     needs: arm64-5
     if: needs.arm64-5.outputs.pronto == 'false'
     uses: ./.github/workflows/motor-web-codecs-etapa.yml
-    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 6 }
+    with: { arq: arm64, runner: ubuntu-24.04-arm, etapa: 6, anterior: 5 }
   publicar:
     needs: [amd64-1, amd64-2, amd64-3, amd64-4, amd64-5, amd64-6, arm64-1, arm64-2, arm64-3, arm64-4, arm64-5, arm64-6]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
