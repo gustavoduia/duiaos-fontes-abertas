@@ -34,12 +34,13 @@ Pedidos do modo servir (campo "cmd"):
   {"cmd": "falar", "id": "f1", "texto": "...", "voz": "dora", "velocidade": 1.0}   uma frase (entra na fila)
   {"cmd": "concluir", "id": "f1"}         não há mais frases dessa fala (o fim é avisado quando terminar)
   {"cmd": "calar"}                        para de falar na hora e esvazia a fila
-  {"cmd": "ouvir", "id": "o1", "segundos": 30}
+  {"cmd": "ouvir", "id": "o1", "segundos": 30, "salvar_audio": "/run/user/1000/fala.wav"}
+                                          (salvar_audio: grava a fala e avisa com o evento "audio" antes do texto)
   {"cmd": "parar_ouvir"}                  para de ouvir e transcreve o que já ouviu
   {"cmd": "cancelar_ouvir"}               para de ouvir e descarta
   {"cmd": "preparar", "voz": "dora", "ouvir": true}   carrega os modelos antes (a primeira fala sai sem espera)
   {"cmd": "descarregar"}                  tira os modelos da memória
-Respostas (campo "evento"): pronto, falando, frase, fim_fala, ouvindo, nivel, transcrevendo, texto, erro.
+Respostas (campo "evento"): pronto, falando, frase, fim_fala, ouvindo, nivel, transcrevendo, audio, texto, erro.
 """
 import hashlib
 import json
@@ -670,12 +671,21 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
     tudo, resto, trechos = [], numpy.zeros(0, dtype=numpy.float32), []
     total, falou, ultima_fala, soma_quadrados, pico, amostras = 0.0, False, None, 0.0, 0.0, 0
     pausa_avaliada = None                             # a última pausa já avaliada (não avalia a mesma duas vezes)
+    # Fim da fala também pela energia (ADR 081): com o microfone alto ou ruído de ventoinha, o detector de fala
+    # chegava a achar que a pessoa ainda falava por vários segundos. O ruído de fundo é o menor nível visto
+    # (média de 3 blocos); fala é o que passa dele em ~8 dB.
+    ruido, ultima_energia, recentes_rms, clipadas = None, None, [], 0
     picos_recentes = []                               # ganho automático: microfones embutidos costumam ser baixos
     inicio = time.monotonic()
     for bloco in blocos:
         if parar.is_set():
             break
         bloco = bloco - float(numpy.mean(bloco)) if len(bloco) else bloco
+        rms_bruto = float(numpy.sqrt(numpy.mean(bloco ** 2))) if len(bloco) else 0.0
+        clipadas += int(numpy.count_nonzero(numpy.abs(bloco) >= 0.98)) if len(bloco) else 0
+        recentes_rms = (recentes_rms + [rms_bruto])[-3:]
+        suave = sorted(recentes_rms)[len(recentes_rms) // 2]
+        ruido = suave if ruido is None else min(ruido, suave)
         picos_recentes = (picos_recentes + [float(numpy.max(numpy.abs(bloco))) if len(bloco) else 0.0])[-15:]
         ganho = min(30.0, max(1.0, 0.35 / max(max(picos_recentes), 1e-4)))
         bloco = numpy.clip(bloco * ganho, -1.0, 1.0).astype(numpy.float32)
@@ -691,6 +701,8 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
         agora = total if eh_arquivo else time.monotonic() - inicio
         if vad.is_speech_detected():
             falou, ultima_fala = True, agora
+        if rms_bruto > max(ruido * 2.5, 0.003):
+            ultima_energia = agora
         while not vad.empty():
             trechos.append((vad.front.start, vad.front.start + len(vad.front.samples)))
             vad.pop()
@@ -699,7 +711,8 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
         # Termina SILENCIO_FIM_S depois de a pessoa parar de falar (ou mais, se ela parou no meio da ideia);
         # sem fala nenhuma, depois de 7 s; ou no limite
         if falou and ultima_fala is not None:
-            silencio = agora - ultima_fala
+            # O que disser silêncio primeiro vale: o detector de fala ou a energia
+            silencio = agora - (min(ultima_fala, ultima_energia) if ultima_energia is not None else ultima_fala)
             if silencio > SILENCIO_CONTINUACAO_S:
                 break
             if silencio > SILENCIO_FIM_S and pausa_avaliada != ultima_fala:
@@ -718,7 +731,23 @@ def escutar(blocos, vad_modelo, limite, parar, numpy, ao_evento, eh_arquivo=Fals
     fala = _recortar(tudo, trechos, numpy)
     media = (soma_quadrados / amostras) ** 0.5 if amostras else 0.0
     return fala, {"ouvido_s": round(total, 1), "fala_s": round(len(fala) / TAXA_MICROFONE, 1),
-                  "nivel_medio_db": db(media), "pico_db": db(pico), "mudo": pico == 0.0}
+                  "nivel_medio_db": db(media), "pico_db": db(pico), "mudo": pico == 0.0,
+                  "ruido_db": db(ruido or 0.0), "clipado": round(clipadas / amostras, 4) if amostras else 0.0}
+
+
+def salvar_wav(caminho, audio, numpy):
+    """Fala (float32, 16 kHz) num WAV de 16 bits, só para a própria pessoa ler (0600)."""
+    import wave
+    caminho = Path(caminho)
+    caminho.parent.mkdir(parents=True, exist_ok=True)
+    temporario = caminho.with_suffix(".parcial")
+    descritor = os.open(temporario, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+    with os.fdopen(descritor, "wb") as arquivo, wave.open(arquivo, "wb") as saida:
+        saida.setnchannels(1)
+        saida.setsampwidth(2)
+        saida.setframerate(TAXA_MICROFONE)
+        saida.writeframes((numpy.clip(audio, -1, 1) * 32767).astype(numpy.int16).tobytes())
+    os.replace(temporario, caminho)
 
 
 def blocos_do_arquivo(arquivo, numpy):
@@ -793,6 +822,14 @@ def ouvir_uma_vez(ouvido, argumentos_ou_pedido, ao_evento, parar):
         return {"texto": "", "cancelado": True, **estatisticas}
     if len(fala) < int(0.25 * TAXA_MICROFONE):
         return {"texto": "", "motivo": explicar_silencio(estatisticas), **estatisticas}
+    if argumentos_ou_pedido.get("salvar_audio"):
+        # Quem pediu (o Wise) pode mandar a fala para o reconhecimento na nuvem, se a pessoa permitiu (ADR 081):
+        # o arquivo sai antes da transcrição local, que continua como reserva
+        try:
+            salvar_wav(argumentos_ou_pedido["salvar_audio"], fala, numpy)
+            ao_evento(audio=str(argumentos_ou_pedido["salvar_audio"]), fala_s=round(len(fala) / TAXA_MICROFONE, 2))
+        except OSError:
+            pass
     ao_evento(transcrevendo=True)
     inicio = time.monotonic()
     if previa["amostras"] == len(fala):
@@ -854,6 +891,8 @@ def servir():
                 dizer(evento="ouvindo", id=ident)
             elif dados.get("transcrevendo"):
                 dizer(evento="transcrevendo", id=ident)
+            elif dados.get("audio"):
+                dizer(evento="audio", id=ident, arquivo=dados["audio"], fala_s=dados.get("fala_s"))
         final = ouvir_uma_vez(ouvido, pedido, ao_evento, escuta["parar"])
         escuta["linha"] = None
         if "erro" in final:

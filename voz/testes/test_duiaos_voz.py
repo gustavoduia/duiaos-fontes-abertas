@@ -115,6 +115,18 @@ class TestFalante(unittest.TestCase):
         self.assertGreaterEqual(duracao, som - 0.05)                      # o fim espera o som tocar
 
 
+class TestAudioParaANuvem(unittest.TestCase):
+    def test_fala_gravada_so_para_a_pessoa(self):
+        import numpy
+        import wave
+        with tempfile.TemporaryDirectory() as pasta:
+            caminho = Path(pasta) / "fala.wav"
+            dv.salvar_wav(caminho, numpy.full(16000, 0.5, dtype=numpy.float32), numpy)
+            self.assertEqual(os.stat(caminho).st_mode & 0o777, 0o600)
+            with wave.open(str(caminho)) as wav:
+                self.assertEqual((wav.getframerate(), wav.getnframes(), wav.getsampwidth()), (16000, 16000, 2))
+
+
 class TestKokoroAntigo(unittest.TestCase):
     def test_int8_continua_valendo_ate_baixar_o_rapido(self):
         with tempfile.TemporaryDirectory() as pasta, mock.patch.object(dv, "PASTA", Path(pasta)):
