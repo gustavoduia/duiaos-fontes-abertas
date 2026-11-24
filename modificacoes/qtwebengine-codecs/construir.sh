@@ -101,10 +101,13 @@ compilar() {
   [ -f "${B}/obj/build.ninja" ] || { echo "Rode 'preparar' antes" >&2; exit 1; }
   local JOBS
   JOBS="$(nproc)"
-  # Cada processo do compilador do Chromium chega a ~2 GB: não passar da memória
+  # Os arquivos "jumbo" do Blink passam de 4 GB por compilador (com 4 de uma vez, numa máquina de 16 GB, o
+  # GitHub desligou a máquina em 23/11): um compilador a cada 5 GB de memória. O NINJAJOBS vale para o ninja
+  # de dentro (o do Chromium), que não segue o --parallel do cmake.
   local MEMORIA_GB=$(( $(awk '/MemTotal/ {print $2}' /proc/meminfo) / 1024 / 1024 ))
-  [ $(( MEMORIA_GB / 2 )) -lt "${JOBS}" ] && JOBS=$(( MEMORIA_GB / 2 > 0 ? MEMORIA_GB / 2 : 1 ))
-  echo "==> compilando com ${JOBS} processos por até ${LIMITE} s"
+  [ $(( MEMORIA_GB / 5 )) -lt "${JOBS}" ] && JOBS=$(( MEMORIA_GB / 5 > 0 ? MEMORIA_GB / 5 : 1 ))
+  export NINJAJOBS="-j${JOBS}"
+  echo "==> compilando com ${JOBS} processos por até ${LIMITE} s (memória: ${MEMORIA_GB} GB)"
   # Em grupo de processos próprio: ao fim do tempo, o Ctrl+C vai para o ninja de fora e o de dentro (Chromium)
   setsid cmake --build "${B}/obj" --parallel "${JOBS}" &
   local PID=$! FIM=$(( SECONDS + LIMITE ))

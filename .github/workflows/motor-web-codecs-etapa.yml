@@ -32,6 +32,9 @@ jobs:
           LIVRE_RAIZ=$(df -BG --output=avail / | tail -1 | tr -dc 0-9)
           if [ "${LIVRE_MNT:-0}" -gt "${LIVRE_RAIZ}" ]; then sudo mkdir -p /mnt/build && sudo ln -sfn /mnt/build /build
           else sudo mkdir -p /build; fi
+          # Folga de memória para os picos do compilador (sem ela, a máquina é desligada e a etapa se perde)
+          sudo swapoff -a || true
+          sudo fallocate -l 16G /swap-duiaos && sudo chmod 600 /swap-duiaos && sudo mkswap /swap-duiaos >/dev/null && sudo swapon /swap-duiaos
           df -h / /mnt 2>/dev/null || true
           nproc; free -g
 
