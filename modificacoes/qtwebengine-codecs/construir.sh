@@ -47,6 +47,8 @@ dependencias() {
     libx11-dev libx11-xcb-dev libxcb1-dev libxcomposite-dev libxcursor-dev libxdamage-dev libxext-dev libxfixes-dev \
     libxi-dev libxrandr-dev libxrender-dev libxtst-dev libxshmfence-dev libxkbfile-dev libxkbcommon-dev \
     libxkbcommon-x11-dev libdrm-dev libgbm-dev libegl-dev libgl-dev libgles-dev libudev-dev \
+    libxcb-dri3-dev libxcb-glx0-dev libxcb-present-dev libxcb-randr0-dev libxcb-shm0-dev libxcb-xfixes0-dev \
+    libxcb-xkb-dev libxcb-sync-dev libxcb-render0-dev libxcb-shape0-dev \
     libasound2-dev libpulse-dev libcups2-dev libkrb5-dev >/dev/null
 }
 
@@ -71,7 +73,16 @@ preparar() {
       -DFEATURE_webengine_system_ffmpeg=OFF \
       -DFEATURE_qtpdf_build=OFF \
       -DQT_SHOW_EXTRA_IDE_SOURCES=OFF \
-      -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF
+      -DQT_BUILD_EXAMPLES=OFF -DQT_BUILD_TESTS=OFF 2>&1 | tee "${B}/configurar.log"
+    [ "${PIPESTATUS[0]}" = 0 ] || exit 1
+  fi
+  # Aviso de peça faltando vira erro: em 24/11 o "Could not find xcbdri3" deixou o Chromium compilar 5 h e
+  # só falhar na ligação final (GbmBufferFactory sem o GLXHelper)
+  if grep -q "Could not find" "${B}/configurar.log" 2>/dev/null; then
+    grep "Could not find" "${B}/configurar.log" >&2
+    rm -rf "${B}/obj"
+    echo "Falta biblioteca para o Qt WebEngine (acima): acrescente a -dev em dependencias()" >&2
+    exit 1
   fi
   cat "${B}/obj/config.summary" 2>/dev/null || true
   grep -q '^QT_FEATURE_webengine_proprietary_codecs:INTERNAL=ON\|^FEATURE_webengine_proprietary_codecs:BOOL=ON' "${B}/obj/CMakeCache.txt" \
@@ -100,7 +111,7 @@ compilar() {
   fonte
   [ -f "${B}/obj/build.ninja" ] || { echo "Rode 'preparar' antes" >&2; exit 1; }
   local JOBS
-  JOBS="$(nproc)"
+  JOBS="${COMPILADORES:-$(nproc)}"
   # Os arquivos "jumbo" do Blink passam de 4 GB por compilador (com 4 de uma vez, numa máquina de 16 GB, o
   # GitHub desligou a máquina em 23/11): um compilador a cada 5 GB de memória. O NINJAJOBS vale para o ninja
   # de dentro (o do Chromium), que não segue o --parallel do cmake.
@@ -109,7 +120,7 @@ compilar() {
   export NINJAJOBS="-j${JOBS}"
   echo "==> compilando com ${JOBS} processos por até ${LIMITE} s (memória: ${MEMORIA_GB} GB)"
   # Em grupo de processos próprio: ao fim do tempo, o Ctrl+C vai para o ninja de fora e o de dentro (Chromium)
-  setsid cmake --build "${B}/obj" --parallel "${JOBS}" &
+  setsid nice -n 10 cmake --build "${B}/obj" --parallel "${JOBS}" &
   local PID=$! FIM=$(( SECONDS + LIMITE ))
   while kill -0 "${PID}" 2>/dev/null; do
     if [ "${SECONDS}" -ge "${FIM}" ]; then

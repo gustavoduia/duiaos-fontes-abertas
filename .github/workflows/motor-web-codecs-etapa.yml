@@ -7,6 +7,7 @@ on:
     inputs:
       arq: { type: string, required: true }        # amd64 | arm64
       runner: { type: string, required: true }
+      compiladores: { type: number, required: true }  # processos do compilador (cada um passa de 4 GB)
       etapa: { type: number, required: true }
       anterior: { type: number, required: true }     # etapa - 1 (as expressões não fazem contas)
     outputs:
@@ -58,7 +59,10 @@ jobs:
           set +e
           # 5 h para compilar; o resto do job guarda o estado
           LIMITE=$(( 300 * 60 ))
-          sudo docker run --rm -v "$(readlink -f /build)":/build -v "$PWD":/receita debian:trixie bash -c "
+          # Memória do container limitada: se faltar, quem cai é um compilador (a etapa guarda o estado e
+          # continua na próxima), não a máquina inteira, como em 24/11 no amd64
+          sudo docker run --rm --memory=13g --memory-swap=28g -e COMPILADORES=${{ inputs.compiladores }} \
+            -v "$(readlink -f /build)":/build -v "$PWD":/receita debian:trixie bash -c "
             set -e
             bash /receita/modificacoes/qtwebengine-codecs/construir.sh preparar
             bash /receita/modificacoes/qtwebengine-codecs/construir.sh compilar ${LIMITE}
@@ -67,7 +71,7 @@ jobs:
           set -e
           if [ "${CODIGO}" = 0 ]; then echo "pronto=true" >> "$GITHUB_OUTPUT"
           elif [ "${CODIGO}" = 99 ]; then echo "pronto=false" >> "$GITHUB_OUTPUT"
-          else exit "${CODIGO}"; fi
+          else echo "falhou=${CODIGO}" >> "$GITHUB_OUTPUT"; echo "pronto=erro" >> "$GITHUB_OUTPUT"; fi
 
       - name: Empacotar
         if: steps.compilar.outputs.pronto == 'true'
@@ -90,16 +94,25 @@ jobs:
           compression-level: 0
 
       - name: Guardar o estado para a próxima etapa
-        if: steps.compilar.outputs.pronto == 'false'
+        # Também quando a compilação deu erro: corrigida a receita, uma nova execução pode continuar daqui
+        if: steps.compilar.outputs.pronto == 'false' || steps.compilar.outputs.pronto == 'erro'
         run: |
+          [ -f /build/obj/build.ninja ] || { echo "Nada a guardar"; exit 0; }
           sudo tar -C /build -I 'zstd -T0 -3' -cf /tmp/estado.tar.zst obj qt
           ls -la /tmp/estado.tar.zst
 
       - name: Enviar o estado
-        if: steps.compilar.outputs.pronto == 'false'
+        if: steps.compilar.outputs.pronto == 'false' || steps.compilar.outputs.pronto == 'erro'
         uses: actions/upload-artifact@v4
         with:
           name: estado-${{ inputs.arq }}-${{ inputs.etapa }}
           path: /tmp/estado.tar.zst
-          retention-days: 2
+          retention-days: 5
           compression-level: 0
+          if-no-files-found: ignore
+
+      - name: Resultado
+        if: steps.compilar.outputs.pronto == 'erro'
+        run: |
+          echo "A compilação falhou (código ${{ steps.compilar.outputs.falhou }}); o estado foi guardado como estado-${{ inputs.arq }}-${{ inputs.etapa }}."
+          exit 1
