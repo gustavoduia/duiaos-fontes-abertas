@@ -1,0 +1,1033 @@
+{
+ "formato": 1,
+ "atualizacoes": [
+  {
+   "codigo": "DUIA-2026-0040",
+   "titulo": "Vídeos em H.264 no Ora e no Mail Box (como no Chrome)",
+   "data": "2026-11-24",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-motor-web",
+    "duiaos-motor-web-chromium"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "O motor web do Ora e do Mail Box passa a tocar vídeos em H.264 com som AAC e áudio em MP3 — o formato da maioria dos vídeos da internet, que antes davam erro. O motor também sobe para o Chromium 140 com as correções de segurança mais recentes do Qt WebEngine.",
+   "publicada": "20261124124207",
+   "descricao": "**Vídeos que não tocavam agora tocam.** Muitos sites usam vídeos em H.264 (com som AAC), e no Ora eles davam erro ou ficavam pretos. Agora tocam como no Chrome. Áudio em MP3 também.\n\n**Motor mais novo.** O Chromium do Ora e do Mail Box vai para a versão do Qt WebEngine 6.140.0, com as correções de segurança mais recentes.\n\nFeche e abra de novo o Ora e o Mail Box depois da atualização.",
+   "detalhes": [
+    "Qt WebEngine 6.140.0 compilado pelo DuiaOS a partir do código-fonte oficial, sem alterações, com a opção de",
+    "Conferido num Debian 13 limpo: vídeo H.264 + AAC decodificado e tocando; MP3 reconhecido.",
+    "Pacotes `duiaos-motor-web` e `duiaos-motor-web-chromium` 6.12.0-duiaos4."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0039",
+   "titulo": "Voz do sistema: escuta que termina na hora e voz do computador mais rápida",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-voz"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O Wise percebe na hora que você parou de falar, mesmo com barulho de fundo, e a voz do computador fica mais rápida e fluida. Com o reconhecimento pela nuvem ligado, ele já manda o que você disse assim que você termina.",
+   "publicada": "20261123230228",
+   "descricao": "**A escuta termina quando você termina.** Antes, com o microfone alto ou barulho de ventoinha, o Wise continuava \"ouvindo\" por vários segundos depois que você parava. Agora ele percebe o silêncio pelo volume da sua voz em relação ao barulho do ambiente e manda o pedido logo. Se você parar no meio de uma ideia (\"Abre o VLC e…\"), ele espera você continuar.\n\n**Reconhecimento pela nuvem completo.** A opção **Entender a fala pela nuvem** passa a funcionar de verdade: a sua fala vai para a OpenAI ou o Gemini assim que você termina, e o computador entende ao mesmo tempo, de reserva.\n\n**Voz do computador mais rápida.** A voz natural que roda no computador (sem internet) ganhou uma versão 2,3 vezes mais rápida, sem pausas entre as palavras. Em **Configurações › Wise › Voz**, toque em **Atualizar** na linha \"Voz mais rápida e fluida\" (cerca de 350 MB, uma vez só). Números, horas e valores saem falados direito.",
+   "detalhes": [
+    "Depois de instalar, saia e entre de novo na sessão."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0038",
+   "titulo": "Voz do Wise junto com o texto, mais fluida, e com o seu jeito",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-wise",
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Quando o Wise responde falando, o texto aparece junto com a voz, no ritmo dela, como no modo voz do ChatGPT. A voz natural sai emendada, sem os silêncios entre um pedaço e outro, e nas Configurações dá para escolher a voz, o estilo e a velocidade.",
+   "publicada": "20261123225758",
+   "descricao": "**Texto e voz juntos.** Quando a resposta é falada, as palavras aparecem na tela no mesmo momento em que o Wise as diz — o texto não corre mais na frente da voz. Respostas só escritas continuam aparecendo como antes.\n\n**Fala mais fluida.** A voz natural (OpenAI ou Gemini) não tem mais o silêncio que vinha no começo e no fim de cada pedaço: a fala sai emendada, com só a pausa da pontuação. O jeito de falar também pede frases ligadas e sem arrastar as palavras.\n\n**Do seu jeito.** Em **Configurações › Wise › Voz**: - **Voz natural** — escolha entre as vozes do motor que você ligou (por exemplo, Aoede, Kore, Puck ou Charon no Gemini; Marin, Cedar ou Coral na OpenAI). - **Estilo da fala** — Natural, Animado, Calmo, Profissional ou **Do meu jeito**, em que você descreve como ele deve falar (\"bem-humorado, como um amigo carioca\"). - **Velocidade da fala** — Devagar, Normal, Ágil, Rápida ou Muito rápida. - **Ouvir** — testa a voz com as suas escolhas.",
+   "detalhes": [
+    "Se a voz demorar mais de 5 segundos para começar, o texto aparece sozinho.",
+    "O estilo vale para a voz natural; a velocidade vale também para a voz do computador."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0037",
+   "titulo": "O Wise entende melhor o que você fala e responde assim que você termina",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-wise",
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Com a OpenAI ou o Google Gemini ligado, o Wise entende a sua fala pela nuvem, com muito mais precisão. O volume do microfone se ajusta sozinho quando o som chega estourado, e as atualizações que só mexem em documentos internos deixam de aparecer para você.",
+   "publicada": "20261123203930",
+   "descricao": "**Entende o que você disse.** Se a OpenAI ou o Google Gemini estiver ligado em **Configurações › Inteligência Artificial**, a gravação do que você fala vai para eles virar texto — bem mais preciso em português, com as palavras do sistema (\"agenda\", \"Wi-Fi\", \"VLC\"…). O computador entende ao mesmo tempo e vale se a internet faltar. Dá para desligar em **Configurações › Wise › Voz › Entender a fala pela nuvem**.\n\n**Microfone no volume certo.** Quando o som do microfone chega estourado (o que faz uma palavra virar outra), o Wise abaixa o volume de entrada sozinho; quando chega baixo demais, ele sobe. Os ajustes ficam guardados.\n\n**Sem atualizações vazias.** Mudanças só em documentos internos do projeto não aparecem mais como \"9 pacotes para atualizar\" sem descrição.",
+   "detalhes": [
+    "A gravação da sua fala vai só para o provedor que você ligou, com a mesma permissão do motor, e é apagada deste",
+    "O uso conta na sua conta do provedor.",
+    "O fim da escuta mais rápido chega junto com a próxima atualização da voz do sistema."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0036",
+   "titulo": "Voz natural do Wise pela nuvem e medição dos modelos de IA",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-wise",
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Com a OpenAI ou o Google Gemini ligado em Inteligência Artificial, o Wise passa a falar com a voz natural deles, em português do Brasil, começando enquanto ainda escreve a resposta. Sem internet ou sem esses motores, ele continua com a voz do computador.",
+   "publicada": "20261123195238",
+   "descricao": "**Voz natural.** Se a OpenAI ou o Google Gemini estiver ligado em **Configurações › Inteligência Artificial**, o Wise fala com a voz deles: entonação de conversa, sotaque brasileiro e sem soar como leitura. A fala começa no primeiro pedaço da resposta e continua enquanto ele escreve o resto.\n\n**Sempre funciona.** Se a internet cair ou a nuvem recusar, a fala continua pela voz do computador no mesmo instante, sem perder o que faltava dizer.\n\n**Você escolhe.** Em **Configurações › Wise › Voz › Voz natural pela nuvem** dá para desligar: o Wise volta a falar só com a voz do computador.",
+   "detalhes": [
+    "Só o texto que o Wise vai falar vai para o provedor que você ligou (OpenAI ou Google), com a mesma permissão",
+    "O uso da voz conta na sua conta do provedor, como as respostas da IA na nuvem.",
+    "Para quem testa o DuiaOS: `duiaos-wise --medir-modelos --baixar` mede os modelos de IA locais neste computador"
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0035",
+   "titulo": "Wise mais rápido e conversa por voz fluida, como num bate-papo",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-wise",
+    "duiaos-voz",
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O Wise fica pronto para responder mesmo depois de um tempo parado, e a voz começa a falar logo na primeira palavra da resposta, sem pausas entre as palavras. Quando você fala com ele, ele responde falando e volta a ouvir sozinho, como numa conversa.",
+   "publicada": "20261123193738",
+   "descricao": "**Resposta na hora, mesmo depois de um tempo parado.** O Wise se prepara antes de você perguntar: ao ligar o computador, quando o modelo de IA volta para a memória e assim que você abre a janela ou clica no microfone — enquanto você ainda está falando, ele já está se preparando. Com modelos grandes, que não ficam sempre na memória, a primeira pergunta deixa de esperar minutos.\n\n**A voz começa logo.** O Wise começa a falar já na primeira parte da resposta (\"Claro!\", ou até a primeira vírgula) e continua enquanto escreve o resto, num fluxo só, com as pausas de quem fala: curtas na vírgula, um pouco maiores no ponto e na pergunta.\n\n**Sem pausas entre as palavras.** A voz natural do Wise ganhou uma versão bem mais rápida. Em **Configurações › Wise › Voz**, toque em **Atualizar** na linha \"Voz mais rápida e fluida\" (download de cerca de 350 MB, uma vez só).\n\n**Conversa por voz.** Clique no microfone e fale: o Wise responde falando, de um jeito curto e natural, e volta a ouvir sozinho quando termina — não precisa clicar de novo. Para encerrar, fique em silêncio, escreva algo, cancele ou feche a janela. Para interromper enquanto ele fala, clique no microfone. Dá para desligar em **Configurações › Wise › Voz › Conversa por voz**.\n\n**Ele espera você terminar.** Se você para no meio de uma ideia (\"Abre o VLC e…\"), o Wise espera você continuar; quando termina, ele responde mais rápido do que antes.\n\n**Números como se fala.** Horas, dinheiro e números grandes saem falados direito (\"14 horas e 30\", \"10 reais e 50 centavos\", \"mil quatrocentos e trinta\").",
+   "detalhes": [
+    "Tudo continua no seu computador: o áudio não sai dele (a não ser que você use um motor de IA na nuvem para as",
+    "Para conversar por voz com fluidez, prefira o modelo **Qwen 3.5 4B** em Configurações › Inteligência",
+    "Depois de instalar, saia e entre de novo na sessão."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0034",
+   "titulo": "Ora mais compacto e sem a barra do sistema, Alt+Tab com ícones, Mail Box com texto formatado, avisos na hora e contador no ícone",
+   "data": "2026-11-23",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-ora",
+    "duiaos-mailbox"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O Ora ocupa menos espaço no alto, desenha a própria barra com as abas e os botões de fechar, minimizar e expandir à direita, e abre as ferramentas do desenvolvedor ao lado da página. O Alt+Tab mostra os aplicativos abertos com ícones e o nome. O Mail Box ganha um editor com formatação e imagens no meio do texto, avisa das mensagens novas na hora em que chegam e mostra as não lidas num balão vermelho no ícone.",
+   "publicada": "20261123182109",
+   "descricao": "**Ora mais compacto.** As abas, o endereço e os botões ficaram mais baixos e mais perto do alto da janela: sobra mais espaço para o site.\n\n**Sem a barra de título do sistema no Ora.** A barra que repetia \"nome do site — Ora\" saiu. Os botões de expandir, minimizar e fechar ficam à direita, na faixa das abas (com as abas na lateral ou embaixo, no fim da barra do endereço). Para mover a janela, arraste a faixa das abas ou a barra do endereço; duplo clique expande. Pelas bordas dá para mudar o tamanho.\n\n**Ferramentas do desenvolvedor ao lado da página.** O F12 abre as ferramentas à direita do site, como no Chrome. Puxe a borda para mudar a largura. O botão no canto superior direito delas abre numa janela separada (e, de lá, um botão as encaixa de novo). F12 de novo fecha.\n\n**Alt+Tab com ícones.** Segure o Alt e aperte Tab: aparecem os aplicativos abertos, o usado por último primeiro, com o nome num balão sobre o escolhido. Solte o Alt para trocar; Shift+Tab ou as setas voltam; Esc cancela; dá também para clicar.\n\n**Mail Box: escrever com formatação.** A janela de escrever tem uma barra com negrito, itálico, sublinhado, tamanho e cor da letra, listas, citação, link e \"limpar a formatação\". Imagens podem ir **no meio do texto**: pelo botão de imagem, colando ou arrastando para dentro do texto. O botão **Anexar** continua mandando os arquivos como anexo, separados do texto.\n\n**Mail Box: mensagens novas na hora.** Nas contas IMAP (Gmail, Outlook, a maioria dos provedores), o Mail Box fica esperando o servidor avisar e mostra a notificação assim que a mensagem chega, sem esperar o tempo de procurar. Clicar na notificação abre a mensagem.\n\n**Contador no ícone.** O ícone do Mail Box na Ilha mostra um balão vermelho com o número de não lidas. Dá para desligar em Configurações › Geral do Mail Box.\n\n**Um menu só com o nome do aplicativo.** Na Barra de Recursos, o menu com o nome do aplicativo junta as opções dele com Minimizar, Expandir, Fechar janela e Encerrar, em vez de aparecer duas vezes.\n\n**Tela preta ao voltar de outro programa.** O Mail Box e o Ora redesenham a página quando a janela volta para a frente; antes ela podia ficar preta até rolar.\n\nPara valer, saia da sessão e entre de novo.",
+   "detalhes": [
+    "Ora: faixa das abas 40 px, barra do endereço 44 px; botões da janela em `ControlesDaJanela.qml`; regra do labwc",
+    "Alternador: atalhos `A-Tab` e `A-S-Tab` no `rc.xml`, `alternar-janelas.sh`, camada `AlternadorDeJanelas.qml` da",
+    "Contador: sinal `com.canonical.Unity.LauncherEntry` (também vale para aplicativos de fora que já o usam).",
+    "Mail Box: imagens do texto vão embutidas (`multipart/related`), anexos como anexo; avisos na hora por IMAP IDLE,",
+    "Ainda a conferir no Dell: o Alt+Tab, a tela preta e a barra própria do Ora com o labwc de verdade."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0033",
+   "titulo": "Mail Box envia pelo Gmail e ganha Configurações completas; Ora com abas onde você quiser e menus em português",
+   "data": "2026-11-23",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-ora",
+    "duiaos-mailbox"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "O Mail Box volta a enviar e responder pelo Gmail e por outras contas com SSL (antes dava \"530 Authentication Required\"), ganha Configurações de verdade (contas, servidores, senhas, assinaturas em texto ou HTML, pastas) e menus no botão direito. No Ora, as abas podem ficar à esquerda, à direita, em cima ou embaixo; o menu do botão direito está em português; a estrela de favorito deixa escolher a pasta.",
+   "publicada": "20261123171129",
+   "descricao": "**Mail Box enviando de novo.** Em contas com envio por SSL (como o Gmail, na porta 465), o Mail Box não fazia o login no servidor de envio, e o envio falhava com \"530 Authentication Required\". Agora o login é sempre feito. Não é preciso configurar nada de novo: a senha de app que você já colocou vale para receber e para enviar.\n\n**Configurações do Mail Box.** Na engrenagem do rodapé (ou Ctrl+vírgula): - **Geral:** de quanto em quanto tempo procurar mensagens novas, avisos, quando marcar como lida e o que o duplo clique faz. - **Leitura e privacidade:** bloquear ou mostrar as imagens de fora da mensagem. - **Contas:** seu nome, os servidores de recebimento e de envio (porta, segurança, usuário), as senhas e o botão \"Testar a conexão\". - **Assinaturas:** em texto ou em HTML, com quatro modelos prontos, prévia e o código para ajustar. Escolha se ela vai nas respostas e se fica antes ou depois da mensagem citada. Na janela de escrever dá para tirar a assinatura de uma mensagem. - **Pastas:** criar, renomear e apagar.\n\n**Botão direito no Mail Box.** Nas mensagens: abrir numa janela, responder, encaminhar, marcar como lida ou importante, mover, arquivar, spam e lixeira. Nas pastas: nova pasta, renomear e apagar.\n\n**Duplo clique abre a mensagem numa janela** só dela (antes abria a resposta). Dá para voltar ao jeito antigo em Configurações › Geral.\n\n**A lista não pula mais para o começo** quando você abre uma mensagem, e a mensagem aparece como lida na hora.\n\n**Ora: abas onde você quiser.** Em Configurações › Aparência: à esquerda, à direita, em cima ou embaixo. Nas laterais, o trilho pode ficar recolhido (só os ícones); com ele recolhido, o fechar aparece no canto da aba quando o mouse passa por cima. Clique com o botão direito numa aba para duplicar, silenciar ou fechar as outras.\n\n**Ora: menu do botão direito em português**, com as opções de cada coisa: link, imagem, vídeo, texto selecionado, campos de texto (com as sugestões do corretor) e a página.\n\n**Ora: favoritos com pasta.** A estrela fica azul quando a página é favorita e abre um quadro para mudar o nome, escolher a pasta ou criar uma pasta nova.\n\n**Ora: mais detalhes.** - Links abertos em nova aba já mostram a aba. - Fechar a última aba deixa o Ora aberto, com uma nova aba. - Na nova aba, os mais visitados podem ser tirados um a um, limpos ou ocultados. - O endereço completo aparece desde o começo quando você clica na barra de endereço.\n\n**Dicas nos botões.** Todo botão de ícone do sistema mostra o que faz quando o mouse para em cima.",
+   "detalhes": [
+    "Entrar com chave de segurança USB (FIDO2) no Ora agora funciona, com PIN. Usar a chave de acesso guardada no",
+    "Vídeos em H.264 (o formato de muitos sites, como redes sociais e portais de notícias) ainda não tocam no Ora. O"
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0032",
+   "titulo": "Ora de cara nova, boas-vindas no Ora e no Mail Box, e os dois abrindo em computadores ARM",
+   "data": "2026-11-23",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-motor-web",
+    "duiaos-motor-web-chromium",
+    "duiaos-ora",
+    "duiaos-mailbox"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O Ora ganhou um visual próprio, com as abas numa coluna ao lado. Na primeira abertura, o Ora e o Mail Box apresentam a marca e ajudam a deixar tudo pronto: programa padrão e trazer favoritos ou contas de outros programas. Também corrige o Ora e o Mail Box, que não abriam em computadores ARM (como máquinas virtuais no Mac), e o Tab, que não passava de um campo para o outro.",
+   "publicada": "20261123144916",
+   "descricao": "**O Ora de cara nova.** As abas saem do alto e vão para um trilho do lado esquerdo, com o título inteiro de cada página. No alto do trilho ficam os sites fixados (os favoritos da antiga barra) e, embaixo, Histórico, Favoritos, Downloads e Configurações. A página fica num cartão de cantos arredondados, e a barra de endereço mostra o site em destaque. Prefere mais espaço? Deixe o trilho compacto, só com os ícones (botão no alto do trilho ou em Configurações › Aparência).\n\n**Boas-vindas na primeira abertura.** O Ora e o Mail Box mostram a marca sendo desenhada e, depois, perguntam se você quer usá-los como padrão e se quer trazer seus favoritos (Chrome, Firefox, Edge, Brave) ou suas contas de e-mail (Thunderbird). Dá para pular a qualquer momento e mudar tudo depois.\n\n**Contas do Thunderbird.** O Mail Box acha as contas do Thunderbird e já preenche o endereço e os servidores. Você só digita a senha (as senhas não são copiadas, por segurança).\n\n**Ora e Mail Box no ARM.** Em computadores ARM (como as máquinas virtuais do UTM no Mac), o Ora e o Mail Box começavam a abrir e fechavam. Agora eles abrem normalmente.\n\n**Tab funcionando.** Nos campos de texto do sistema e do Mail Box, o Tab passa para o próximo campo e o Shift+Tab volta para o anterior. Os botões também podem ser acionados pelo teclado (Enter ou Espaço).\n\n**Links do Mail Box abrem na frente.** Clicar num link de um e-mail abre a página no Ora e traz o Ora para a frente. Antes, era preciso minimizar o Mail Box para ver a página.",
+   "detalhes": [
+    "As boas-vindas também aparecem uma vez para quem já usava o Ora e o Mail Box.",
+    "No ARM, esta atualização instala algumas bibliotecas do sistema que o motor do Ora usa (snappy, webp, opus, lcms2"
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0031",
+   "titulo": "Atualização acumulada para todos: seu DuiaOS recebe tudo o que foi publicado, de qualquer versão",
+   "data": "2026-11-23",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "critica",
+   "importanciaNome": "Crítica",
+   "pacotes": [
+    "duiaos-identidade",
+    "duiaos-shell",
+    "duiaos-desktop",
+    "duiaos-motor-web",
+    "duiaos-motor-web-chromium",
+    "duiaos-ora",
+    "duiaos-mailbox"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Computadores instalados com a ISO de uma versão lançada (como a 0.3.1) não recebiam as atualizações publicadas depois dela. Agora todo computador recebe tudo, numa atualização acumulada, e as Configurações mostram até onde o sistema está atualizado. Esta atualização também instala o Ora e o Mail Box.",
+   "publicada": "20261123125544",
+   "descricao": "**Tudo chega a todos.** Antes, quem instalou o DuiaOS pela ISO de uma versão lançada só recebia atualizações na versão seguinte. Agora existe um fluxo só: toda atualização publicada chega a todos os computadores, não importa de qual ISO eles vieram.\n\n**Atualização acumulada.** Se o seu computador ficou para trás, a próxima busca por atualizações traz de uma vez tudo o que saiu desde a sua instalação (as fichas aparecem todas na Central de Atualizações).\n\n**Até onde está atualizado.** Em Configurações › Atualizações, a linha \"Nível de atualização\" mostra a última ficha instalada (por exemplo, \"Atualizado até DUIA-2026-0031\") e a compilação do sistema.\n\n**Ora e Mail Box para todos.** O navegador e o programa de e-mail do DuiaOS agora fazem parte do sistema e chegam com esta atualização nos computadores que ainda não os tinham.",
+   "detalhes": [
+    "O download desta atualização é maior que o normal (cerca de 140 MB), por causa do motor web do Ora e do Mail",
+    "Nada que você configurou muda. Se você usava outro navegador como padrão, a troca para o Ora acontece uma vez;",
+    "A instalação não oferece mais o Thunderbird: o Mail Box já vem com o DuiaOS. Ele continua na Duia App Store."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0030",
+   "titulo": "O Ora agora é o navegador do DuiaOS e o Mail Box, o programa de e-mail",
+   "data": "2026-11-18",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-desktop",
+    "duiaos-ora",
+    "duiaos-mailbox"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Links abertos em qualquer programa agora vão para o Ora, e links de e-mail abrem o Mail Box. Os dois ficam fixados na Ilha e vêm instalados com o DuiaOS. O Ora também abre sites como aplicativos, numa janela própria, como o WhatsApp Web.",
+   "publicada": "20261118233712",
+   "descricao": "**O Ora é o navegador do sistema.** Links que você abre em outros programas (num documento, numa mensagem, nas Configurações) agora abrem no Ora. A busca continua no Google.\n\n**O Mail Box é o programa de e-mail.** Clicar num endereço de e-mail num site ou documento abre a janela de escrever do Mail Box.\n\n**Na Ilha.** O Ora e o Mail Box ficam fixados na Ilha. Se você tinha o Firefox ou o Chrome fixado, o lugar dele passa para o Ora.\n\n**Sites como aplicativos.** O WhatsApp Web (que você pode escolher na instalação) e outros sites abertos como aplicativo agora usam o Ora: numa janela só deles, sem abas nem barra de endereço.\n\n**Na instalação.** O Ora e o Mail Box já vêm com o DuiaOS, por isso a instalação não oferece mais o Firefox e o Chrome.",
+   "detalhes": [
+    "A troca para o Ora e o Mail Box acontece uma vez, na próxima vez que você entrar na sessão. Depois disso, quem",
+    "Se o Firefox ou o Chrome já estiverem instalados, eles continuam no computador e na Central de Aplicativos."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0029",
+   "titulo": "Novos aplicativos: Ora, o navegador do DuiaOS, e Mail Box, o e-mail do DuiaOS (versão 0.1)",
+   "data": "2026-11-18",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-motor-web",
+    "duiaos-desktop"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "Chegaram dois aplicativos próprios do DuiaOS. O Ora é o navegador, com o motor Chromium, abas, favoritos, histórico, downloads e janela privada. O Mail Box é o e-mail: você digita o endereço e ele descobre sozinho as configurações do Gmail, Outlook, iCloud, Yahoo e de outros provedores. Os dois estão na Central de Aplicativos. Esta é a primeira versão (0.1).",
+   "publicada": "20261118202554",
+   "descricao": "**Ora, o navegador.** Abra pela Central de Aplicativos. Ele usa o motor Chromium, o mesmo do Chrome, numa versão que o DuiaOS mantém atualizada. - **Abas e endereço:** digite um site ou o que quer buscar. Enquanto você digita, aparecem os seus favoritos e os sites que você já visitou. - **Favoritos:** a estrela na barra de endereço guarda a página. Eles aparecem na barra de favoritos e em Favoritos, com pastas. Dá para trazer os favoritos do Chrome e do Firefox (Favoritos › Importar). - **Histórico e downloads:** o histórico tem busca e pode ser apagado por período. Os downloads podem ser pausados, continuados e abertos. - **Janela privada:** nada fica guardado (histórico, cookies, formulários). - **Privacidade e segurança:** o Ora pede aos sites que não rastreiem você, avisa quando um site não é seguro e pergunta antes de um site usar a câmera, o microfone ou a sua localização. - **Nas Configurações do Ora:** o buscador (Google, DuckDuckGo, Bing, Brave ou Ecosia), o que abrir ao iniciar, o zoom e onde salvar os downloads.\n\n**Mail Box, o e-mail.** Abra pela Central de Aplicativos e adicione a sua conta: - **Gmail, iCloud e Yahoo:** escolha o provedor, e o Mail Box mostra o passo a passo para criar a senha de app, com o link da página certa. - **Provedores brasileiros e e-mail da empresa:** digite o endereço e a senha. O Mail Box descobre os servidores sozinho; se não conseguir, dá para preencher à mão. - **Ler com segurança:** as imagens externas ficam bloqueadas até você clicar em \"Mostrar imagens\". Isso impede que quem enviou saiba quando você abriu a mensagem. - **Escrever, responder e encaminhar,** com anexos, Cc e Cco. Também dá para arquivar, mover para pastas, sinalizar e buscar. - **Avisos:** o Mail Box avisa quando chega e-mail novo.",
+   "detalhes": [
+    "Esta é a primeira versão (0.1) dos dois aplicativos. O Firefox, o Chrome e o Thunderbird continuam disponíveis.",
+    "Contas do **Outlook.com, Hotmail e Microsoft 365** ainda não entram no Mail Box: a Microsoft exige um login",
+    "As senhas das contas de e-mail ficam no cofre do sistema, nunca num arquivo.",
+    "Alguns vídeos de redes sociais e os serviços de filme por assinatura ainda não tocam no Ora (formatos de vídeo",
+    "O motor do navegador ocupa cerca de 520 MB e chega pelo pacote \"duiaos-motor-web\"."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0028",
+   "titulo": "Rede e Internet: firewall, internet do celular, modem 4G, diagnóstico e conexões avançadas",
+   "data": "2026-11-18",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente",
+    "duiaos-wise"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O DuiaOS agora tem firewall ligado, que bloqueia conexões vindas de fora nas redes públicas. Você diz se cada rede é privada (casa, trabalho) ou pública (café, aeroporto). Também dá para usar a internet do celular pelo cabo ou pelo Bluetooth, configurar um modem 4G/5G, diagnosticar problemas de internet e criar VLAN, ponte e agregação de placas.",
+   "publicada": "20261118171742",
+   "descricao": "**Firewall.** O firewall vem ligado. Nas redes **públicas** (café, aeroporto, hotel), nenhum aparelho consegue se conectar ao seu computador. Nas redes **privadas** (casa, trabalho), o computador aparece para os outros aparelhos e aceita o acesso remoto (SSH), que você pode desligar em Configurações › Rede e Internet › Firewall.\n\n**Privada ou pública?** Na primeira vez que você entra numa rede, o DuiaOS pergunta se ela é de confiança. Até você responder, ela fica como pública. Dá para mudar depois em Detalhes › Tipo de rede.\n\n**Internet do celular.** - **Pelo cabo USB:** ligue a Ancoragem USB (Android) ou o Acesso Pessoal (iPhone) e o celular aparece em Conexões. - **Pelo Bluetooth:** com o celular pareado, escolha ele em Internet do celular › Pelo Bluetooth. - **Modem 4G/5G (chip):** escolha a operadora (Vivo, Claro, TIM, Oi) ou digite o APN, e o PIN se o chip pedir. A página mostra a operadora, a tecnologia (4G, 5G) e o sinal.\n\n**Diagnosticar a rede.** Em \"Problemas com a internet?\", o DuiaOS confere a conexão, o endereço, o roteador, o DNS e a internet, mostra onde parou e diz o que fazer.\n\n**Conexões avançadas.** Crie VLAN, ponte (para máquinas virtuais aparecerem na rede da casa) e agregação de placas (uma de reserva da outra, ou mais velocidade).\n\n**Wise.** Peça \"minha internet não funciona\" para o Wise diagnosticar, ou \"liga a VPN\" para ele ligar uma VPN que já está configurada.",
+   "detalhes": [
+    "Quem já usava o computador antes desta atualização não perde nada: as redes que já existiam ficam como privadas,",
+    "Ligar ou desligar o firewall e o acesso remoto pede autorização de administrador (sem senha para quem é",
+    "O ponto de acesso Wi-Fi (Compartilhar a internet) continua funcionando com o firewall ligado."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0027",
+   "titulo": "Rede e Internet: VPN, Wi-Fi corporativo, proxy e compartilhar a internet",
+   "data": "2026-11-18",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Agora dá para usar VPN (WireGuard, OpenVPN e VPNs de empresa como Cisco AnyConnect, GlobalProtect e Fortinet), entrar em Wi-Fi de empresa ou faculdade (eduroam), configurar proxy, transformar o computador num ponto de acesso Wi-Fi e mostrar um QR code para o celular entrar na sua Wi-Fi.",
+   "publicada": "20261118170412",
+   "descricao": "**VPN.** Em Configurações › Rede e Internet, o grupo **VPN** lista as suas VPNs com um interruptor para ligar e desligar. Você pode: - **Importar arquivo de VPN…**: o arquivo `.conf` (WireGuard) ou `.ovpn` (OpenVPN) que a empresa ou o serviço de VPN mandou. - **Adicionar VPN…**: WireGuard preenchido à mão, com **Gerar chaves** (mande a chave pública para quem cuida do servidor), ou VPN de empresa pelo OpenConnect (Cisco AnyConnect, Palo Alto GlobalProtect, Fortinet, Juniper/Pulse e Ivanti).\n\n**Senhas na hora certa.** Quando uma rede pede senha (uma Wi-Fi que mudou de senha, o login da VPN, o PIN do chip), aparece uma janela do DuiaOS pedindo. Marque \"Lembrar\" para não ser perguntado de novo (as VPNs sempre perguntam).\n\n**Wi-Fi de empresa ou faculdade.** Redes que pedem usuário e senha (WPA2/WPA3-Enterprise, como a eduroam) abrem um formulário próprio: PEAP, TTLS ou certificado (TLS), com opções avançadas para o certificado da rede.\n\n**Proxy.** Não, Manual (HTTP, HTTPS, SOCKS e exceções) ou Automático (endereço PAC). Vale para os programas abertos depois de salvar e para as atualizações do sistema.\n\n**Compartilhar a internet.** Ligue o **Ponto de acesso Wi-Fi** para o celular e outros aparelhos usarem a internet do computador (o ideal é o computador estar no cabo).\n\n**QR code da Wi-Fi.** Em Detalhes de uma Wi-Fi salva, **Compartilhar esta Wi-Fi** mostra um código: aponte a câmera do celular e ele entra na rede sem digitar a senha.",
+   "detalhes": [
+    "As senhas lembradas ficam guardadas na própria conexão de rede, que só o administrador do computador consegue ler.",
+    "Login pelo navegador (SSO) das VPNs de empresa ainda não funciona; usuário e senha funcionam.",
+    "Mudar o proxy das atualizações do sistema pede autorização de administrador (sem senha para quem é administrador neste computador).",
+    "Programas que já estavam abertos passam a usar o proxy quando forem abertos de novo."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0026",
+   "titulo": "Rede e Internet: cabo, IP fixo, DNS e detalhes de cada conexão",
+   "data": "2026-11-18",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "A página Wi-Fi das Configurações virou Rede e Internet. Dá para ver e configurar o cabo de rede, pôr IP fixo e DNS próprio, ver os detalhes de cada conexão e entrar numa Wi-Fi oculta. A Barra mostra a rede mesmo sem Wi-Fi (máquinas virtuais) e avisa quando a rede pede login.",
+   "publicada": "20261118164632",
+   "descricao": "**Rede e Internet.** A página Wi-Fi das Configurações agora mostra todas as conexões: cabo de rede, Wi-Fi e as conexões salvas. No topo, uma frase diz como você está conectado e se a internet está funcionando.\n\n**Detalhes de cada conexão.** O botão **Detalhes** abre a conexão em abas: - **Geral:** conectar automaticamente, preferir esta rede, rede limitada, senha da Wi-Fi e MTU. - **Endereço:** IPv4 e IPv6 automáticos (DHCP) ou manuais, com endereço, máscara e gateway, e rotas extras. - **DNS:** o do roteador ou servidores escolhidos (com atalhos para Cloudflare, Google e Quad9). - **Informações:** o endereço IP, o gateway, o DNS em uso, o endereço físico e a velocidade do cabo. - **Privacidade:** endereço físico diferente para cada rede, novo a cada conexão ou o do equipamento.\n\n**Segurança ao mudar o endereço.** Depois de salvar uma mudança de endereço, o DuiaOS pergunta se quer manter. Se a conexão caiu e você não responder em 20 segundos, a configuração anterior volta sozinha.\n\n**Perfis para o cabo.** Crie um perfil com IP fixo (por exemplo, \"Escritório\" ou uma máquina virtual sem DHCP) e troque entre perfis em Conexões salvas.\n\n**Barra de Recursos.** O ícone de rede aparece sempre que houver qualquer placa de rede, não só Wi-Fi, e mostra cabo, Wi-Fi ou \"sem internet\". O painel lista o cabo, as VPNs e a Wi-Fi juntos.",
+   "detalhes": [
+    "Wi-Fi oculta: botão **Conectar a uma rede oculta…**.",
+    "Quando a rede pede login (hotel, aeroporto, café), chega um aviso que abre a página com o botão **Fazer login na rede**.",
+    "Numa rede marcada como limitada (ou no celular compartilhando a internet), a atualização automática só procura e avisa; ela baixa quando você estiver em outra rede.",
+    "As conexões feitas no DuiaOS do pendrive passam para o sistema instalado."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0025",
+   "titulo": "Lixeira de pastas do sistema, listas de limpeza só com arquivos seus, retângulo fluido e ícones mais nítidos",
+   "data": "2026-11-17",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Arquivos em pastas do sistema agora vão para a Lixeira (com autorização de administrador), as listas do Armazenamento só mostram arquivos seus que podem ser apagados, o retângulo de seleção ficou fluido e ícones e textos ficaram mais nítidos. A Lixeira da Ilha mostra quando está cheia.",
+   "publicada": "20261117203550",
+   "descricao": "**Mover para a Lixeira arquivos de pastas do sistema.** Quando um arquivo seu está numa pasta criada pelo sistema (por exemplo, por um programa que rodou como administrador), o DuiaOS dizia \"Sem permissão\". No Linux, quem decide se um arquivo sai de uma pasta é o dono da pasta, mesmo que o arquivo seja seu. Agora o DuiaOS pede a autorização de administrador e move o arquivo para a sua Lixeira, como o macOS faz. Vale para o Armazenamento, o Explorador de Arquivos e a Área de Trabalho.\n\n**Listas de limpeza só com o que pode ser apagado.** Em Configurações › Armazenamento, as listas (Arquivos grandes, por tipo, repetidos e Downloads antigos) mostram só arquivos seus que vão e vêm: vídeos, fotos, música, documentos, compactados, instaladores e cópias de segurança. Programas, bibliotecas (como as do Node e do Python), configurações, bancos de dados e o código de projetos não aparecem mais.\n\n**Retângulo de seleção fluido.** Selecionar vários arquivos arrastando o mouse não trava mais, mesmo em pastas com milhares de arquivos.\n\n**Lixeira cheia ou vazia.** O ícone da Lixeira na Ilha mostra papéis saindo quando há algo nela e volta a ficar vazio ao esvaziar, na hora.\n\n**Mais nitidez.** Os ícones são desenhados no tamanho exato dos pixels da tela, com traços mais firmes nos tamanhos pequenos, e os textos passam a ser desenhados encaixados nos pixels. Os ícones da Ilha (Configurações, Lixeira e as pastas) ficam inteiros e definidos.",
+   "detalhes": [
+    "Antes de mover um arquivo de uma pasta do sistema, o DuiaOS confere que ele está na sua pasta pessoal e não é uma configuração; o que vai para a Lixeira passa a ser seu, para você conseguir esvaziá-la.",
+    "Nos projetos com git, só entram nas listas os arquivos gerados (por exemplo, uma ISO de teste), nunca o código.",
+    "Correção: a mensagem de \"sem permissão\" agora diz de quem é a pasta."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0024",
+   "titulo": "Selecionar vários arquivos arrastando o mouse e descompactar arquivos .zip",
+   "data": "2026-11-17",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "No Explorador de Arquivos e na Área de Trabalho, segurar o botão esquerdo no espaço vazio e arrastar seleciona vários arquivos de uma vez. Arquivos compactados (.zip, .tar.gz, .7z…) abrem com dois cliques e ganham a opção Descompactar no botão direito.",
+   "publicada": "20261117195914",
+   "descricao": "**Selecionar arrastando.** No Explorador de Arquivos e na Área de Trabalho, segure o botão esquerdo do mouse num espaço vazio e arraste: aparece um retângulo azul e tudo o que ele toca fica selecionado. Com **Ctrl**, o retângulo inverte a seleção (marca o que estava desmarcado e desmarca o que estava marcado); com **Shift**, soma à seleção que já existia. No Explorador, se o retângulo chega à borda de cima ou de baixo, a pasta rola sozinha.\n\n**Descompactar.** Clique com o botão direito num arquivo compactado e escolha **Descompactar**. Dois cliques no arquivo fazem o mesmo, como no macOS. O conteúdo aparece na mesma pasta: se dentro há uma pasta só, ela aparece direto; se há vários itens, eles vão para uma pasta com o nome do arquivo (\"Fotos.zip\" vira \"Fotos\"). Nada é sobrescrito, e o arquivo compactado continua lá.",
+   "detalhes": [
+    "Formatos: .zip, .tar, .tar.gz, .tgz, .tar.bz2, .tar.xz, .gz, .bz2, .xz e .7z (este pelo 7-Zip).",
+    "Arquivos .zip feitos no Windows mantêm os acentos dos nomes.",
+    "Arquivos abertos por outros programas (por exemplo, um .zip baixado no navegador) também são descompactados ao lado e mostrados no Explorador.",
+    "Arquivos com senha ainda não abrem: o DuiaOS avisa.",
+    "O andamento aparece no rodapé do Explorador, com o botão para cancelar.",
+    "Correção: a seleção e o filtro da busca não se perdem mais quando a pasta muda sozinha (um arquivo novo nela, o fim de uma cópia)."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0023",
+   "titulo": "Aviso de atualizações num balão junto do relógio",
+   "data": "2026-11-17",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Quando chegam atualizações, o ícone ao lado do relógio mostra um balão com o que há. Um clique no ícone mostra o balão de novo; dois cliques abrem as Atualizações já com o resumo.",
+   "publicada": "20261117175844",
+   "descricao": "**Um balão no ícone de atualizações.** Quando o DuiaOS encontra atualizações novas, o ícone ao lado do relógio mostra um balão dizendo quantas são e se trazem novidades do DuiaOS. O balão some sozinho depois de alguns segundos (enquanto o mouse está em cima dele, ele espera).\n\n**Um clique ou dois.** Um clique no ícone mostra o balão de novo. Dois cliques abrem **Configurações › Atualizações** já com o resumo do que vai ser atualizado, sem precisar clicar em \"Procurar atualizações\". O botão **Ver resumo** do balão faz o mesmo.",
+   "detalhes": [
+    "O balão fica no lugar da notificação de \"Atualizações disponíveis\". Com a Barra de Recursos na vertical, onde o ícone não aparece, continua a notificação.",
+    "Quando falta reiniciar depois de uma atualização, o balão diz isso.",
+    "Abrir as Atualizações por uma notificação também já mostra o resumo."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0022",
+   "titulo": "Wise ouve e fala melhor; microfone dos notebooks Intel; instalador novo e menu do pendrive com duas opções",
+   "data": "2026-11-17",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-voz",
+    "duiaos-wise",
+    "duiaos-shell",
+    "duiaos-desktop"
+   ],
+   "reiniciar": "computador",
+   "reiniciarNome": "Reinicie o computador",
+   "resumo": "O Wise passa a entender a fala com um reconhecimento novo, que não inventa frases quando há só barulho e ajusta sozinho o volume de microfones baixos; a voz fica carregada e a primeira frase sai logo. Chega o firmware do microfone embutido dos notebooks Intel recentes. Nas ISOs, o instalador foi refeito, com uma página por assunto, e o menu do pendrive tem só duas opções.",
+   "publicada": "20261117121617",
+   "descricao": "**O Wise entende melhor o que você fala.** O reconhecimento de fala agora é o Parakeet, da NVIDIA, que entende português. Antes, com o microfone baixo ou com barulho, o Wise às vezes \"ouvia\" frases que ninguém disse. Agora, quando só há barulho, ele não inventa nada e explica o que houve: microfone sem som, som muito baixo ou fala que não deu para entender. Microfones baixos, comuns nos notebooks, são ajustados sozinhos.\n\nNa primeira vez que você clicar no microfone, o Wise baixa o reconhecimento novo (cerca de 490 MB, uma vez só) e começa a ouvir quando terminar.\n\n**O Wise fala sem demora.** A voz fica carregada enquanto o Wise está aberto. Antes, cada resposta carregava a voz de novo, o que atrasava alguns segundos o começo da fala. Quando você clica no microfone, ele para de falar.\n\n**Testar o microfone.** Em **Configurações › Wise › Voz**, o botão **Testar** ouve uma frase, mostra o nível do som enquanto você fala e, depois, o que o Wise entendeu.\n\n**Microfone embutido dos notebooks Intel.** Chega o pacote `firmware-sof-signed`. Sem ele, o microfone embutido de muitos notebooks Intel recentes (como o Dell Latitude 3420) simplesmente não aparece.\n\n**Instalador e menu do pendrive (nas ISOs novas).** Ao ligar pelo pendrive aparecem só duas opções: **Instalar o DuiaOS neste computador**, que abre o instalador em tela cheia, e **Carregar o DuiaOS a partir da ISO**, para experimentar. O instalador foi refeito, com uma página para cada assunto (idioma e região, teclado, disco, conta, programas, aparência e revisão), os ícones dos programas e o símbolo do DuiaOS em destaque. O Google Chrome também pode ser escolhido em computadores ARM, e o Telegram passa a vir do Flathub.",
+   "detalhes": [
+    "Reinicie o computador depois de atualizar, para o firmware do microfone ser carregado.",
+    "O reconhecimento antigo (Whisper) continua funcionando até você baixar o novo; ao baixar, ele é apagado e libera o espaço.",
+    "A voz e o reconhecimento ficam na memória enquanto são usados e saem depois de 10 minutos parados.",
+    "Os tempos da voz e o nível do microfone passam a ir para o registro do sistema, para o suporte entender o que aconteceu.",
+    "O Wise não abre mais o cofre de senhas quando nenhum motor na nuvem está ligado. Antes, num computador sem chaveiro criado, aparecia uma janela em inglês pedindo uma senha para um \"chaveiro novo\".",
+    "Os avisos de espaço não falam mais da mídia do pendrive (a ISO e o sistema do modo live, que são só leitura e aparecem sempre cheios).",
+    "No DuiaOS carregado do pendrive, a tela não bloqueia mais sozinha. Antes, durante a instalação, que leva vários minutos sem mexer no mouse, aparecia a Tela de Bloqueio pedindo uma senha que ninguém sabia.",
+    "O instalador e o menu do pendrive só mudam em quem baixar uma ISO nova; quem já instalou recebe o resto pela atualização."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0021",
+   "titulo": "Wise com texto fluido, rosto novo e voz; Inteligência Artificial e Wise nas Configurações; papéis de parede novos",
+   "data": "2026-11-16",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-ia",
+    "duiaos-identidade",
+    "duiaos-desktop",
+    "duiaos-wise",
+    "duiaos-voz"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "As respostas do Wise passam a aparecer de forma contínua, ele ganha um rosto novo e pode falar e ouvir. A Central de IA deixa de existir, e tudo o que ela fazia vai para Configurações › Inteligência Artificial, junto com os motores na nuvem. As opções do Wise ficam em Configurações › Wise. O ícone do Wise na barra ganha um menu no botão direito, com Desligar o Wise. Chegam dois papéis de parede novos.",
+   "publicada": "20261117001922",
+   "descricao": "**Texto fluido.** As respostas do Wise aparecem letra a letra, de forma contínua, em vez de palavra por palavra.\n\n**Rosto novo.** O Wise tem um rosto de vidro com dois olhos de luz. Ele mostra quando está pensando, ouvindo, falando ou descansando.\n\n**Voz.** O Wise pode falar as respostas e ouvir os seus pedidos pelo microfone. Tudo acontece no próprio computador. As vozes são baixadas na primeira vez, em **Configurações › Wise › Voz**. Há três vozes naturais (Dora, Alex e Santa) e uma leve (Faber), para computadores mais fracos.\n\n**Configurações › Inteligência Artificial.** A Central de IA deixa de existir. Escolher, baixar e remover os modelos de IA local agora fica nesta página. Abaixo ficam os motores na nuvem (Gemini e OpenAI): você informa a chave, escolhe os modelos que quer usar e liga ou desliga cada motor.\n\n**Configurações › Wise.** Previsão do Tempo, Agenda, Usar o Computador, Saudação ao Entrar, Voz e o motor e o modelo padrão do Wise.\n\n**Janela do Wise.** A página de configurações saiu da janela. No alto ficam duas listas: o motor (Local ou um motor na nuvem que você configurou) e o modelo da conversa.\n\n**Ícone do Wise na barra.** O ícone do Wise fica junto do Wi-Fi e pode ser escondido, como os outros. O botão direito abre um menu: Abrir o Wise, Configurações, Configurar IA e Desligar o Wise. Desligar fecha o Wise e tira o modelo de IA local da memória, para o computador ficar mais leve. Abrir o Wise liga tudo de novo.\n\n**Papéis de parede.** A paisagem colorida passa a ser o papel de parede padrão, e a Lua aparece na Tela de Entrada e na Tela de Bloqueio. Quem já escolheu um papel de parede continua com o dele.",
+   "detalhes": [
+    "A voz depende do pacote novo `duiaos-voz`, que chega junto com esta atualização. Os arquivos das vozes (de 60 a 350 MB) e do reconhecimento da fala (de 150 a 600 MB) são baixados só quando você pede.",
+    "As chaves dos motores na nuvem ficam no cofre de senhas da sua conta. A chave do Gemini que já estava no Wise continua valendo.",
+    "Com um motor na nuvem, o texto dos seus pedidos sai do computador para a empresa do motor. Com o motor Local, nada sai.",
+    "O atalho da Central de IA some da Ilha e da Central de Aplicativos.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0020",
+   "titulo": "Barra do Armazenamento com todas as partes e o espaço livre; arrastar na Ilha como no Dock do macOS",
+   "data": "2026-11-16",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "A barra do Armazenamento passa a mostrar todas as partes da legenda e o espaço livre, com cores bem diferentes entre si; arrastar um ícone na Ilha fica como no Dock do macOS — ele continua ampliado debaixo do mouse, todos os ícones deslizam para abrir espaço e, ao soltar, ele desliza até a vaga.",
+   "publicada": "20261116201539",
+   "descricao": "**Barra do Armazenamento.** Todas as partes da legenda aparecem na barra, e o espaço livre aparece no fim dela, em tom claro, com o item **Livre** na legenda. As cores ficaram mais diferentes entre si (Downloads em rosa, Documentos em amarelo, arquivos temporários em laranja, Lixeira em vermelho).\n\n**Arrastar na Ilha.** O ícone que você arrasta continua ampliado e sempre debaixo do mouse. Todos os ícones entre a posição antiga e a nova deslizam para abrir espaço enquanto você passa, e a ampliação acompanha o mouse. Ao soltar, o ícone desliza até a vaga. Um aplicativo aberto que ainda não estava na Ilha também pode ser arrastado para junto dos fixados: ele passa a ficar na Ilha naquela posição.",
+   "detalhes": [
+    "Causa da barra incompleta: os aplicativos do Flathub instalados na sua conta ficam dentro da pasta pessoal e eram contados duas vezes (em Aplicativos e em Outros arquivos seus). A soma passava do espaço usado e a barra cortava as últimas partes e o espaço livre. Arquivos com mais de um nome (o Flathub guarda os aplicativos assim) agora contam uma vez só.",
+    "Causa do ícone pequeno: a ampliação era desligada enquanto você arrastava. Causa dos ícones que não se mexiam: o espaço aberto era calculado com o tamanho sem ampliação, e o ponto do ícone debaixo do mouse mudava quando ele crescia.",
+    "O Wise e o Explorador de Arquivos continuam fixos no começo da Ilha.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0019",
+   "titulo": "Menu do botão ☰ dos aplicativos do GNOME na barra, Ilha que reorganiza ao arrastar e listas das Configurações que voltam a abrir",
+   "data": "2026-11-16",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente",
+    "duiaos-wise"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Aplicativos do GNOME, como o Gedit, passam a mostrar o menu do botão ☰ na barra do alto; a Ilha abre espaço enquanto você arrasta um ícone e não trava mais depois de soltar; as listas de opções das Configurações (como \"Quando houver atualizações\") voltam a abrir; o DuiaOS procura atualizações a cada hora; e a limpeza do Armazenamento mostra o andamento.",
+   "publicada": "20261116195417",
+   "descricao": "**Menus do GNOME na barra do alto.** O Gedit e outros aplicativos do GNOME não têm barra de menus: o menu deles fica no botão ☰ da barra de título. Agora esse menu aparece na barra do alto, com o nome **Menu**. Itens que abrem outra página dentro do ☰ (como **Exibir** no Gedit) abrem o ☰ do aplicativo nessa página na primeira vez; depois, aparecem como submenu na barra do alto.\n\n**Ilha de Aplicativos.** Ao arrastar um ícone fixado, os outros abrem espaço em tempo real, mostrando onde ele vai ficar. Ao soltar, ele fica no lugar. A Ilha não trava mais depois de mudar um ícone de lugar.\n\n**Listas das Configurações.** As listas de opções (como \"Quando houver atualizações\", o fuso horário e os aplicativos padrão) não abriam. Agora abrem e mudam normalmente.\n\n**Atualizações.** O DuiaOS procura atualizações a cada hora (antes, a cada 6 horas), além de 10 minutos depois de ligar.\n\n**Armazenamento.** Enquanto uma limpeza roda, a página mostra o que está fazendo, quantos itens já foram e há quanto tempo começou, e os outros botões esperam.\n\n**Wise.** A preparação do modelo de IA antes do login voltou a funcionar.",
+   "detalhes": [
+    "Causa das listas que não abriam: a lista de opções tinha uma propriedade com o mesmo nome do campo de busca da lateral; o QML usava o campo, dava erro e a lista nunca aparecia.",
+    "Causa da Ilha travada: a lista nova de ícones chegava no meio do próprio clique de soltar e recriava o ícone que estava sendo solto; o resto do código não rodava e a Ilha ficava presa no modo de arrastar, recebendo cliques na janela inteira.",
+    "Causa do aviso de atualização que não veio: a procura automática rodou às 15h39 (ainda sem a DUIA-2026-0018) e a próxima seria só 6 horas depois.",
+    "Causa da preparação do Wise: o serviço roda com um usuário temporário, sem pasta pessoal, e o Wise caía ao procurar a pasta das configurações.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0018",
+   "titulo": "Armazenamento nas Configurações, avisos de disco cheio, menus nos aplicativos do DuiaOS e tamanho na loja",
+   "data": "2026-11-16",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-agente"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "As Configurações ganham a página Armazenamento, com os discos, o que ocupa espaço e o que dá para liberar; o DuiaOS avisa quando o disco está com pouco espaço ou cheio; o Explorador, as Configurações e a loja passam a mostrar os menus na barra do alto; e a Duia App Store mostra o tamanho de cada aplicativo.",
+   "publicada": "20261116191506",
+   "descricao": "**Armazenamento.** Em Configurações › Armazenamento você vê quanto o disco do sistema tem livre e uma barra com o que ocupa cada parte: aplicativos, vídeos, imagens, downloads, documentos, música, o modelo de IA do Wise, arquivos temporários, a Lixeira e o sistema. Também aparecem os outros discos, a partição do Windows e os pendrives, cada um com o espaço livre.\n\n**Liberar espaço.** A página sugere o que dá para apagar, com o tamanho de cada coisa: esvaziar a Lixeira, os arquivos temporários dos aplicativos, os downloads sem uso há mais de 90 dias, os arquivos grandes, os pacotes de instalação que o sistema já usou, os registros antigos do sistema, as partes do Flathub que nenhum aplicativo usa e os arquivos repetidos.\n\n**Por tipo.** Em \"Gerenciar por tipo\", escolha vídeos, imagens, música, documentos, compactados, instaladores, cópias de segurança, arquivos grandes ou repetidos: a lista vem do maior para o menor, você marca o que quer e os arquivos vão para a Lixeira. Em \"Aplicativos instalados\", cada aplicativo mostra o tamanho e abre na Duia App Store para remover.\n\n**Avisos de espaço.** O DuiaOS confere o disco a cada 5 minutos. Com menos de 10 GB livres, avisa que o espaço está acabando (de novo a cada dia, se continuar assim). Com menos de 1 GB, avisa que o disco está cheio (de novo a cada 4 horas). Clicar no aviso abre Configurações › Armazenamento.\n\n**Menus na barra do alto.** O Explorador de Arquivos, as Configurações e a Duia App Store mostram os menus deles (Arquivo, Editar, Exibir…) na barra do alto, como os aplicativos com barra de menus.\n\n**Tamanho na loja.** A Duia App Store mostra quanto cada aplicativo baixa e quanto ocupa depois de instalado, contando o que mais ele precisa trazer junto.",
+   "detalhes": [
+    "Nada é apagado sem você escolher. Arquivos vão para a Lixeira (dá para voltar atrás); só os arquivos temporários dos aplicativos são apagados de vez, porque os aplicativos os refazem.",
+    "Limpar os pacotes de instalação e os registros do sistema exige ser administrador do computador.",
+    "Pendrives não geram avisos de espaço.",
+    "Menus: o VLC não aparece na barra porque não entrega os menus pela acessibilidade (o caminho que o DuiaOS usa para ler os menus de qualquer aplicativo). Aplicativos GTK e Qt com barra de menus (por exemplo, o Gedit e o Kate) entregam. Quando um aplicativo não entrega os menus, o motivo fica nos relatórios.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0017",
+   "titulo": "Atualização automática, notificações com cara do DuiaOS e o Chrome com a barra do sistema",
+   "data": "2026-11-16",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-agente",
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O DuiaOS passa a procurar atualizações sozinho, com cinco modos e um ícone ao lado do relógio; as notificações ganham um desenho próprio; o Chrome e os aplicativos com barra própria ganham os botões de minimizar e expandir; e o ícone que pula na Ilha não é mais cortado.",
+   "publicada": "20261116183550",
+   "descricao": "**Atualização automática.** Em Configurações › Atualizações, escolha o que o DuiaOS faz quando há atualizações: desativada, só avisar, avisar e baixar, avisar, baixar e instalar, ou baixar e instalar sem avisar. O padrão é avisar e baixar. O DuiaOS procura 10 minutos depois de ligar e a cada 6 horas.\n\n**Ícone e aviso.** Quando há atualizações, aparece um ícone ao lado do relógio e um aviso. Clicar em qualquer um dos dois abre Configurações › Atualizações. O ícone também aparece quando falta reiniciar para concluir uma atualização.\n\n**Notificações.** Os avisos ganharam um desenho próprio: uma faixa de luz à esquerda, uma linha embaixo que mostra quanto falta para o aviso sumir (ela para com o mouse em cima) e os botões no rodapé. O aviso desce da barra do alto ao chegar.\n\n**Botões das janelas.** O Google Chrome (e o Chromium, o Brave, o Edge e o Vivaldi) passa a usar a barra de título do DuiaOS, com as bolinhas azuis. Os aplicativos que desenham a própria barra, como o Firefox e os aplicativos do GNOME, passam a ter expandir, minimizar e fechar à direita, em vez de só o botão de fechar.\n\n**Ilha de Aplicativos.** O ícone que pula enquanto o aplicativo abre não é mais cortado no alto.\n\n**Menus dos aplicativos.** O leitor dos menus da barra do alto ficou mais robusto no Wayland e passa a registrar nos relatórios quando um aplicativo não entrega os menus.",
+   "detalhes": [
+    "A atualização automática vale para o computador todo; só um administrador muda o modo.",
+    "No modo \"baixar e instalar sem avisar\", o DuiaOS só avisa quando é preciso reiniciar.",
+    "O Chrome muda na próxima vez que você entrar na sessão com ele fechado.",
+    "Causa do ícone cortado: a janela da Ilha tinha espaço para a ampliação ou para o pulo, nunca para os dois juntos. Quando o ícone clicado estava ampliado (o mouse estava em cima dele) e pulava, o topo passava do limite.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0016",
+   "titulo": "Os menus de cada aplicativo na Barra de Recursos",
+   "data": "2026-11-16",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "A barra do alto passa a mostrar os menus do aplicativo em uso (Arquivo, Editar, Exibir…), com submenus e atalhos, e um menu com o nome do aplicativo para minimizar, expandir, fechar ou encerrar.",
+   "publicada": "20261116174853",
+   "descricao": "Ao lado do símbolo do DuiaOS, a Barra de Recursos mostra o nome do aplicativo em uso e os menus dele: Arquivo, Editar, Exibir e os outros que ele tiver. Clique num menu para abri-lo; com um menu aberto, passe o mouse nos outros títulos para trocar de menu, como no macOS. Os submenus abrem ao lado, e cada item mostra o atalho de teclado e se está marcado ou desativado.\n\nO nome do aplicativo abre um menu com **Minimizar**, **Expandir**, **Fechar janela** e **Encerrar**, que vale para qualquer aplicativo.",
+   "detalhes": [
+    "Funciona com os aplicativos que têm barra de menus e se descrevem pela acessibilidade do sistema: os feitos em GTK (como o Gedit e o GIMP), em Qt (como o Kate e o VLC), o LibreOffice e outros.",
+    "O Firefox, os aplicativos feitos em Electron (como o VS Code e o Discord) e os aplicativos do próprio DuiaOS não entregam os menus por esse caminho: para eles, a Barra mostra só o menu com o nome do aplicativo, e os menus continuam dentro da janela de cada um.",
+    "Os menus só aparecem com a Barra no alto ou embaixo da tela.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0015",
+   "titulo": "Entrar sem tela preta, gênio suave, modo Automático e ajustes das telas de bloqueio e de entrada",
+   "data": "2026-11-16",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Depois da senha, o papel de parede aparece na hora; o efeito gênio ficou suave e sem piscar; há o modo Automático (claro de dia, escuro à noite); e dá para ajustar o tom azul e o brilho das Telas de Bloqueio e de Entrada.",
+   "publicada": "20261116173447",
+   "descricao": "**Entrar na sessão.** Depois da senha, o papel de parede aparece na hora, e a Barra e a Ilha entram em seguida. Não há mais a espera em tela preta nem o clarão branco antes do papel de parede.\n\n**Efeito gênio.** Ao minimizar, a janela não pisca mais antes do efeito. Os lados dela se curvam e ela escorre para dentro do ícone na Ilha, com bordas lisas em vez de degraus.\n\n**Modo Automático.** Em Configurações › Aparência e estilos, o modo ganhou a opção **Automático**: claro de dia e escuro à noite, pelo nascer e pôr do sol.\n\n**Telas de Bloqueio e de Entrada.** O nome e o símbolo do DuiaOS saíram do canto dessas telas. Em Configurações › Papel de parede, com a Tela de Bloqueio ou a Tela de Entrada escolhida, há três ajustes novos: a transparência do tom azul (0 a 100%), o brilho perto da senha (radial, linear ou desligado) e o brilho atrás do relógio das outras telas.",
+   "detalhes": [
+    "Causa da espera ao entrar: a área de trabalho só aparecia depois de vários programas abrirem, e o Wise aquecia o modelo de IA no mesmo momento, ocupando o processador por quase um minuto. Agora o papel de parede vem primeiro e o Wise começa 8 segundos depois.",
+    "O clarão branco era a cor de fundo mostrada enquanto a imagem do papel de parede carregava.",
+    "O modo Automático usa a cidade do fuso horário do computador para calcular o nascer e o pôr do sol. Não usa a sua localização nem a internet.",
+    "O tom azul e o brilho aparecem no estilo Futurista. Os ajustes da Tela de Entrada valem para todas as contas e só um administrador muda.",
+    "Saia e entre de novo na sessão depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0014",
+   "titulo": "A Tela de Entrada volta a abrir ao ligar",
+   "data": "2026-11-16",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "critica",
+   "importanciaNome": "Crítica",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "computador",
+   "reiniciarNome": "Reinicie o computador",
+   "resumo": "Corrige a atualização DUIA-2026-0013, depois da qual o computador podia ligar no login em modo texto em vez da Tela de Entrada.",
+   "publicada": "20261116165346",
+   "descricao": "Depois da atualização DUIA-2026-0013, o computador podia terminar de ligar numa tela preta pedindo o usuário em modo texto, sem a Tela de Entrada. Esta atualização corrige isso.\n\nSe o seu computador está nessa tela, digite o seu usuário e a senha ali mesmo e rode: `sudo apt update && sudo apt full-upgrade -y && sudo systemctl restart greetd`",
+   "detalhes": [
+    "Causa: para tirar o texto de terminal da tela, a 0013 passou a abrir a interface por meio de um programa de registro. Quando esse programa falha, a interface não abre.",
+    "Agora a interface abre direto, e as mensagens dos programas vão para um arquivo temporário.",
+    "Os testes do DuiaOS passam a conferir que a tela gráfica abre mesmo quando o registro não está disponível.",
+    "O resto da 0013 continua valendo: ligar direto na logomarca, F12 para escolher o sistema e nenhum texto ao sair ou desligar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0013",
+   "titulo": "Ligar direto na logomarca, janelas com identidade própria e Futurista como estilo inicial",
+   "data": "2026-11-16",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-identidade",
+    "duiaos-shell"
+   ],
+   "reiniciar": "computador",
+   "reiniciarNome": "Reinicie o computador",
+   "resumo": "O computador liga direto na logomarca do DuiaOS (F12 para escolher outro sistema), sem texto de terminal ao ligar, sair ou desligar; a Ilha amplia sem piscar; os botões das janelas vão para a direita em tons de azul; ícones mais finos; e o estilo Futurista passa a ser o inicial.",
+   "publicada": "20261116162321",
+   "descricao": "**Ao ligar.** O menu para escolher o sistema não aparece mais sozinho: o DuiaOS começa direto, com a logomarca em fundo preto (sem o nome escrito). Para escolher outro sistema (por exemplo, o Windows), aperte **F12** assim que a logomarca do DuiaOS aparecer — ela espera 2 segundos por essa tecla.\n\n**Sem texto de terminal.** Ao ligar, sair da sessão, reiniciar ou desligar, a tela mostra só a logomarca ou fica preta, sem as linhas de texto que apareciam por um instante.\n\n**Ilha de Aplicativos.** Os ícones crescem ao passar o mouse sem piscar nem tremer, e a onda entra e sai suavemente.\n\n**Janelas.** Os três botões foram para o canto direito e ganharam cores próprias: no canto, **fechar** (azul escuro); depois **minimizar** (azul médio) e **expandir** (azul claro).\n\n**Ícones.** O traço ficou mais fino e não engrossa nos ícones grandes; as pastas do Explorador de Arquivos e da Área de Trabalho ficaram sem contorno.\n\n**Estilo.** O Futurista passa a ser o estilo inicial. O visual anterior continua em Configurações › Aparência e estilos, com o nome **Clássico**.",
+   "detalhes": [
+    "O F12 vale enquanto a logomarca aparece logo depois da logo do fabricante. Na logo do fabricante (Dell), o F12 abre o menu do próprio computador, que é outro.",
+    "A tecla Esc também abre a escolha do sistema.",
+    "Para voltar ao menu de sempre, um administrador muda `GRUB_TIMEOUT_STYLE=menu` em `/etc/default/grub.d/duiaos.cfg` e roda `sudo update-grub`.",
+    "As mensagens dos programas da sessão, que antes iam para a tela, agora ficam no registro do sistema.",
+    "Causa do pisca-pisca da Ilha: a cada mudança de tamanho o desenho do ícone era refeito, e ele sumia enquanto isso.",
+    "Quem já escolheu um estilo em Configurações continua com ele. Quem nunca escolheu passa a ver o Futurista.",
+    "Reinicie o computador depois de atualizar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0012",
+   "titulo": "\"Procurar atualizações\" sempre consulta os repositórios de novo",
+   "data": "2026-11-16",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-agente",
+    "duiaos-shell"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "Corrige o botão Procurar das Configurações, que podia dizer \"o sistema já está atualizado\" mesmo com uma atualização nova publicada.",
+   "publicada": "20261116113453",
+   "descricao": "Ao clicar em **Procurar** em Configurações › Atualizações, o DuiaOS agora consulta os repositórios na hora, sem reaproveitar a lista de poucos minutos antes. Antes, se a lista tivesse sido lida logo antes de uma atualização ser publicada, o botão dizia que o sistema já estava atualizado.",
+   "detalhes": [
+    "Causa: o agente só consultava os repositórios a cada 5 minutos, e abrir a página de Atualizações já faz uma busca automática. O clique em Procurar logo depois usava a lista guardada.",
+    "Agora o botão Procurar pede a consulta forçada, inclusive ignorando cópias guardadas no caminho; a busca automática continua respeitando o intervalo.",
+    "Se aparecer \"já está atualizado\" logo depois de uma publicação nova, espere alguns minutos e clique em Procurar de novo."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0011",
+   "titulo": "Novo estilo futurista para a interface, com Telas de Entrada e de Bloqueio redesenhadas",
+   "data": "2026-11-16",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Em Configurações › Aparência e estilos dá para escolher entre o estilo padrão e o novo estilo futurista, com vidro, brilho, cantos mais redondos e um degradê de ciano a violeta.",
+   "publicada": "20261116112528",
+   "descricao": "O DuiaOS ganhou um segundo visual, o estilo futurista. Ele troca as cores por um azul-noite profundo (no modo escuro) ou um tom pérola (no modo claro), deixa a Barra, a Ilha e os painéis com cara de vidro, arredonda mais os cantos e pinta os botões principais, os interruptores e os itens selecionados com um degradê que vai do ciano ao violeta.\n\nAs Telas de Entrada e de Bloqueio foram redesenhadas nesse estilo: o papel de parede escurece, o relógio fica grande no canto de baixo, a foto da conta aparece dentro de uma órbita e a senha é digitada numa cápsula de vidro, com um botão para mostrar a senha e o botão de entrar dentro dela.\n\nO estilo padrão continua igual. Você escolhe em Configurações › Aparência e estilos, e a mudança vale na hora.",
+   "detalhes": [
+    "Estilos: Padrão ou Futurista, cada um nos modos Claro e Escuro.",
+    "O estilo vale para a Barra de Recursos, a Ilha, as barras de título das janelas, as Configurações, o Explorador de Arquivos, a Duia App Store e os menus.",
+    "Tela de Bloqueio: muda no próximo bloqueio.",
+    "Tela de Entrada: muda na próxima vez que o computador ligar; como vale para todas as contas, só muda quando quem escolhe o estilo é administrador.",
+    "Novo botão para mostrar ou esconder a senha enquanto digita (no estilo futurista).",
+    "Depois da atualização, saia e entre de novo na sessão."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0010",
+   "titulo": "Papel de parede para cada monitor, para a Tela de Bloqueio e para a Tela de Entrada",
+   "data": "2026-11-14",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Configurações › Papel de parede ficou completa: um papel para cada monitor ou uma imagem espalhada por todos, papéis próprios para as Telas de Bloqueio e de Entrada, como a imagem ocupa a tela, desfoque e troca automática.",
+   "publicada": "20261114234430",
+   "descricao": "Em Configurações › Papel de parede, escolha no alto o que vai mudar: a área de trabalho, a Tela de Bloqueio ou a Tela de Entrada (a de quando o computador liga).\n\nCom dois monitores, dá para usar o mesmo papel em todos, um papel para cada monitor ou uma imagem só, espalhada pelos monitores como se fossem uma tela grande. Um desenho mostra os monitores como estão na mesa, cada um com o seu papel.\n\nPara cada papel dá para escolher como a imagem ocupa a tela: preencher (cortando o que sobra), ajustar (a imagem inteira, com uma cor nas bordas), esticar, centralizar ou repetir lado a lado. A página mostra o tamanho da imagem e o da tela.",
+   "detalhes": [
+    "Área de trabalho: o mesmo em todas as telas, um para cada tela ou uma imagem por todas.",
+    "Troca automática: a cada 15 ou 30 minutos, a cada hora, a cada 3 horas ou uma vez por dia, entre as imagens do DuiaOS e as importadas.",
+    "Tela de Bloqueio: o mesmo da área de trabalho ou um próprio; pode desfocar o fundo.",
+    "Tela de Entrada: o do DuiaOS, uma cópia do da área de trabalho ou outra imagem, com ajuste e desfoque; vale para todas as contas e só um administrador muda.",
+    "Cor em volta da imagem nos modos Ajustar e Centralizar.",
+    "As Telas de Bloqueio e de Entrada usam fotos (JPG, PNG, WebP); vídeos e GIFs ficam na área de trabalho."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0009",
+   "titulo": "A Ilha de Aplicativos volta a aparecer, e a Barra fica sem o botão do Wise",
+   "data": "2026-11-14",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "critica",
+   "importanciaNome": "Crítica",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Corrige a Ilha de Aplicativos, que sumia depois da atualização DUIA-2026-0008, e tira o botão \"Wise\" do lado do menu na barra do alto.",
+   "publicada": "20261114234430",
+   "descricao": "Depois da atualização anterior (DUIA-2026-0008), a Ilha de Aplicativos não aparecia mais. Um erro no arquivo que desenha a janela da Ilha impedia que ela abrisse. Agora ela volta, com tudo o que a atualização anterior trouxe (ampliação, tamanho, posição e efeitos ao minimizar). Se a Ilha ou a Barra de Recursos fecharem por qualquer motivo, elas voltam sozinhas em 3 segundos.\n\nO botão azul \"Wise\" do lado do menu, na barra do alto, saiu. O Wise continua no ícone dele, à direita da barra, no Menu do DuiaOS, na Ilha e no atalho Super + W.",
+   "detalhes": [
+    "Causa: uma propriedade da janela da Ilha estava marcada como \"só leitura\" e recebia uma animação, o que o Qt não aceita; a janela inteira deixava de carregar.",
+    "Os testes do DuiaOS agora abrem as janelas de verdade da sessão (Ilha, Área de Trabalho, Barra de Recursos e Notificações), e não só as de demonstração, para que um erro assim não passe de novo.",
+    "A Ilha e a Barra de Recursos voltam sozinhas se fecharem.",
+    "Depois da atualização, saia e entre de novo na sessão (ou reinicie) para a Ilha aparecer."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0008",
+   "titulo": "Ilha de Aplicativos com ampliação, tamanho, posição e efeitos gênio e escala ao minimizar",
+   "data": "2026-11-14",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Os ícones da Ilha crescem quando o mouse passa por cima, como no macOS; dá para mudar o tamanho, a posição e ocultar a Ilha, e as janelas minimizam com o efeito gênio ou escala.",
+   "publicada": "20261114232356",
+   "descricao": "A Ilha de Aplicativos ficou parecida com o Dock do macOS. Quando o mouse passa pelos ícones, eles crescem suavemente, e os vizinhos crescem um pouco menos. Em Configurações › Barra e Ilha dá para escolher o tamanho dos ícones e o tamanho da ampliação (ou desligá-la), colocar a Ilha embaixo, à esquerda ou à direita, e fazer ela se esconder sozinha e aparecer quando o mouse encosta na borda da tela.\n\nAo minimizar uma janela (bolinha amarela ou Super + M), ela \"escorre\" até o ícone do aplicativo na Ilha, no efeito gênio, ou encolhe até ele, no efeito escala. Um clique no ícone traz a janela de volta, com o mesmo efeito ao contrário.",
+   "detalhes": [
+    "Botão direito num aplicativo: Abrir ou Mostrar, Nova janela, Minimizar, Manter na Ilha ou Tirar da Ilha, Fechar.",
+    "Botão direito no fundo da Ilha: ligar ou desligar a ampliação e o ocultar automático, posição na tela, efeito ao minimizar e Opções da Ilha.",
+    "Arraste um ícone fixado para mudar a ordem, ou para fora da Ilha para tirá-lo dela.",
+    "O ícone pula enquanto o aplicativo abre (dá para desligar).",
+    "Opcional: até 3 aplicativos usados há pouco aparecem depois dos fixados.",
+    "Opcional: clicar no aplicativo que já está na frente minimiza a janela, como na barra de tarefas do Windows.",
+    "Também dá para desligar o ponto embaixo dos aplicativos abertos.",
+    "O espaço da ampliação não bloqueia cliques nas janelas que ficam atrás da Ilha.",
+    "Depois da atualização, saia e entre de novo na sessão para o botão amarelo e o Super + M usarem o efeito."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0007",
+   "titulo": "Chegou a Duia App Store, a loja de aplicativos do DuiaOS",
+   "data": "2026-11-14",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "Uma loja para encontrar, instalar, abrir, atualizar e remover milhares de aplicativos do Flathub e do Debian, com capturas de tela, descrição e licença de cada um.",
+   "publicada": "20261114225021",
+   "descricao": "O DuiaOS ganhou a Duia App Store, com um ícone de sacola na Ilha de Aplicativos. Ela funciona como as lojas do macOS e do Windows: a página Descobrir traz destaques e coleções (Essenciais, Criatividade, Jogos, Para estudar e outras), há categorias e uma busca, e cada aplicativo tem a sua página com capturas de tela, descrição, desenvolvedor, licença e de onde ele vem. Um clique em \"Obter\" instala; depois o mesmo botão vira \"Abrir\". Em Instalados ficam os aplicativos do computador, e em Atualizações, as versões novas.\n\nOs aplicativos vêm de dois lugares. Os do Flathub, o maior catálogo de aplicativos para Linux, ficam só na sua conta, não pedem senha e rodam isolados do resto do sistema. Os do Debian ficam para todas as contas e são instalados pelo mesmo serviço que atualiza o sistema, que antes mostra o que vai mudar e quanto vai baixar. A loja se mantém atualizada sozinha: sempre que um aplicativo novo entra no Flathub ou no Debian, ele aparece na loja.",
+   "detalhes": [
+    "Descobrir: destaques, coleções escolhidas pelo DuiaOS e todas as categorias.",
+    "Busca sem acento (\"video\" acha \"Vídeo\"), com os nomes parecidos primeiro.",
+    "Página do aplicativo: capturas de tela, descrição, desenvolvedor (com selo de verificado no Flathub), licença (e se é software livre), versão, site e de onde vem.",
+    "Instalar, abrir, atualizar e remover, com o andamento em porcentagem; dá para cancelar.",
+    "Aplicativos do Debian: a loja mostra antes o que vai ser instalado ou removido, quanto vai baixar e o espaço usado; partes essenciais do sistema nunca são removidas.",
+    "Os aplicativos instalados pela loja aparecem na Central de Aplicativos e podem ser fixados na Ilha.",
+    "Configurações › Atualizações avisa quando há versões novas de aplicativos do Flathub e abre a loja.",
+    "Quem já tinha a Ilha configurada ganha o ícone da loja uma vez, ao lado das Configurações.",
+    "Depois da atualização, saia e entre de novo na sessão para a loja aparecer na Ilha e os aplicativos instalados aparecerem na Central."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0006",
+   "titulo": "Atualização do sistema não para mais no meio quando o próprio serviço de atualização é atualizado",
+   "data": "2026-11-14",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "critica",
+   "importanciaNome": "Crítica",
+   "pacotes": [
+    "duiaos-agente",
+    "duiaos-shell"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "Corrige a atualização que parava em \"Installed linux-image…\" e terminava com erro no ca-certificates.",
+   "publicada": "20261114221829",
+   "descricao": "Quando uma atualização trazia uma versão nova do próprio serviço que instala as atualizações, esse serviço era reiniciado no meio do caminho. A instalação continuava sem ninguém acompanhando, a tela parava sem avisar, e a pasta temporária usada pelos pacotes sumia, fazendo um deles (ca-certificates) falhar. Agora o serviço nunca é reiniciado durante uma atualização: ele termina o trabalho e só então dá lugar à versão nova.",
+   "detalhes": [
+    "O serviço de atualização deixa de ser reiniciado pelo próprio pacote; a versão nova entra na próxima atualização.",
+    "O serviço usa as pastas de verdade do sistema (sem a pasta temporária separada que sumia no meio).",
+    "Pedidos para parar o serviço esperam a atualização em andamento terminar.",
+    "A tela de Atualizações confere o andamento a cada 10 segundos e, se o serviço parar sem dizer como terminou, mostra isso em vez de ficar parada."
+   ],
+   "observacoes": "Se a sua última atualização terminou com erro no ca-certificates, abra Configurações › Atualizações e procure de novo: o DuiaOS conclui o que ficou pela metade."
+  },
+  {
+   "codigo": "DUIA-2026-0005",
+   "titulo": "Atualizações com tempo previsto, andamento ao vivo, motivo dos erros e registros",
+   "data": "2026-11-14",
+   "tipo": "correcao",
+   "tipoNome": "Correção",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-agente",
+    "duiaos-shell"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "A tela de Atualizações mostra quanto falta, o que está sendo feito agora e, se algo travar, o motivo; uma instalação que ficou pela metade é concluída sozinha.",
+   "publicada": "20261114220126",
+   "descricao": "Durante uma atualização, a tela não fica mais parada: um sinal gira enquanto o sistema trabalha, aparecem o tempo decorrido e quanto falta, e a etapa de agora, em português (por exemplo, \"Preparando a inicialização do sistema\"). Se nada acontecer por 5 minutos, a tela avisa. Se uma etapa ficar parada por 30 minutos, o DuiaOS interrompe só essa etapa, conserta o que ficou pela metade e mostra o motivo.",
+   "detalhes": [
+    "Tempo previsto antes de começar; durante a atualização, tempo decorrido, porcentagem e quanto falta.",
+    "Etapa atual: baixando, instalando, initramfs, menu de inicialização (GRUB), procurando o Windows, serviços.",
+    "Aviso \"Está demorando\" depois de 5 minutos sem novidade; com 30 minutos, a etapa parada é interrompida e o sistema é reparado.",
+    "Motivo do erro em português: outro programa instalando, sem internet, sem espaço no disco, pacote corrompido ou o pacote que falhou.",
+    "Registros: a saída completa de cada atualização, em Configurações › Atualizações › Registros, e \"Ver o que está acontecendo\" ao vivo.",
+    "Uma instalação que ficou pela metade (computador desligado no meio) é concluída antes da próxima.",
+    "A mesma atualização nunca roda duas vezes: um clique só, e se não houver mais nada a instalar o sistema não reinstala nada.",
+    "Ao abrir a tela com uma atualização em andamento (pelo Wise ou por outra janela), ela mostra essa atualização em vez de começar outra."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0004",
+   "titulo": "Central de Atualizações com código, descrição e detalhes de cada atualização",
+   "data": "2026-11-14",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-identidade"
+   ],
+   "reiniciar": "nao",
+   "reiniciarNome": "Não é preciso reiniciar",
+   "resumo": "Cada atualização do DuiaOS agora tem um código (DUIA-AAAA-NNNN), descrição completa e lista de mudanças; as do Debian mostram o que é de segurança.",
+   "publicada": "20261114214443",
+   "descricao": "Antes de atualizar, você vê exatamente o que vai chegar. Cada atualização do DuiaOS tem um código, um título, o tipo (novidade, melhoria, correção ou segurança), a importância, a descrição completa e os detalhes. As atualizações do Debian aparecem separadas, com a descrição de cada pacote, as versões e um selo nas de segurança.",
+   "detalhes": [
+    "Configurações › Atualizações: atualizações do DuiaOS com código DUIA-AAAA-NNNN e \"Ver detalhes\".",
+    "Atualizações do Debian: pacote, versão atual e nova, descrição, selo \"Segurança\" e \"O que mudou\" (registro de mudanças do pacote).",
+    "Histórico: as atualizações do DuiaOS já instaladas neste computador.",
+    "O tamanho do download e se é preciso reiniciar aparecem antes de você confirmar."
+   ],
+   "observacoes": ""
+  },
+  {
+   "codigo": "DUIA-2026-0003",
+   "titulo": "O Wise passa a ser atualizado junto com o sistema",
+   "data": "2026-11-14",
+   "tipo": "melhoria",
+   "tipoNome": "Melhoria",
+   "importancia": "importante",
+   "importanciaNome": "Importante",
+   "pacotes": [
+    "duiaos-wise"
+   ],
+   "reiniciar": "sessao",
+   "reiniciarNome": "Saia e entre de novo na sessão",
+   "resumo": "O Wise, o assistente do DuiaOS, chega e se mantém atualizado pela mesma Central de Atualizações do sistema.",
+   "publicada": "20261114161951",
+   "descricao": "O Wise é o cérebro do DuiaOS e agora é publicado junto com cada atualização do sistema. Quem ainda não tem o Wise passa a recebê-lo, e quem já tem recebe as melhorias dele sem fazer nada a mais.",
+   "detalhes": [
+    "O pacote do Wise (duiaos-wise) entra no repositório de atualizações do DuiaOS.",
+    "Cada atualização do sistema leva a versão do Wise feita no mesmo dia."
+   ],
+   "observacoes": "Depois de atualizar, saia e entre de novo na sessão para o Wise novo abrir."
+  },
+  {
+   "codigo": "DUIA-2026-0002",
+   "titulo": "Modo escuro, notificações, ícones na área de trabalho e janelas com as bolinhas do macOS",
+   "data": "2026-11-14",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-identidade"
+   ],
+   "reiniciar": "computador",
+   "reiniciarNome": "Reinicie o computador",
+   "resumo": "Área de trabalho com ícones e botão direito, modo escuro, notificações, Tela de Descanso, papel de parede com vídeo, foto da conta e atualizações pelas Configurações.",
+   "publicada": "20261114161951",
+   "descricao": "A área de trabalho passa a mostrar os seus arquivos e a responder ao botão direito do mouse, as janelas ganham as bolinhas vermelha, amarela e verde no canto e o sistema inteiro pode ficar escuro. Os avisos dos aplicativos aparecem no canto da tela e ficam guardados no relógio.",
+   "detalhes": [
+    "Área de Trabalho: ícones da pasta Área de Trabalho; o botão esquerdo seleciona e abre, o direito abre o menu (Nova pasta, Colar, Mudar o papel de parede…). Acabou o menu \"Reconfigurar/Sair\".",
+    "Janelas: bolinhas à esquerda (fechar, minimizar, maximizar), título no centro e menu da janela em português.",
+    "Modo escuro em Configurações › Aparência.",
+    "Notificações no canto de cima, histórico debaixo do calendário e Não perturbe na Central de Controle.",
+    "Papel de parede e Tela de Descanso com fotos, GIFs e vídeos importados.",
+    "Configurações: Notificações, Aparência, Tela de Descanso, Atualizações e foto da conta (que aparece na Tela de Entrada).",
+    "Botão direito na Ilha de Aplicativos: Mostrar, Nova janela, Manter na Ilha, Fechar e Esvaziar a Lixeira."
+   ],
+   "observacoes": "Reinicie o computador depois de atualizar: a área de trabalho e o visual das janelas só mudam numa sessão nova."
+  },
+  {
+   "codigo": "DUIA-2026-0001",
+   "titulo": "Interface completa no estilo do macOS",
+   "data": "2026-11-14",
+   "tipo": "novidade",
+   "tipoNome": "Novidade",
+   "importancia": "recomendada",
+   "importanciaNome": "Recomendada",
+   "pacotes": [
+    "duiaos-shell",
+    "duiaos-identidade"
+   ],
+   "reiniciar": "computador",
+   "reiniciarNome": "Reinicie o computador",
+   "resumo": "Barra de Recursos nova com Menu do DuiaOS e Central de Controle, Ilha com Downloads e Lixeira, Explorador de Arquivos e Configurações.",
+   "publicada": "20261114153434",
+   "descricao": "A área de trabalho foi refeita para ficar completa e familiar a quem vem do macOS. O símbolo do DuiaOS abre o Menu do DuiaOS, os controles do computador ficam na Central de Controle e chegam dois aplicativos novos: o Explorador de Arquivos, para abrir e organizar seus arquivos, e as Configurações, com tudo o que dá para ajustar no sistema.",
+   "detalhes": [
+    "Menu do DuiaOS: Sobre este computador, Configurações, Central de Aplicativos, Explorador de Arquivos, Repousar, Reiniciar, Desligar, Bloquear tela e Encerrar sessão (com confirmação).",
+    "Barra de Recursos: nome do aplicativo em uso, até 4 ícones de controle à vista e os outros num balão, relógio com calendário.",
+    "Central de Controle: Wi-Fi, Bluetooth, modo avião, luz noturna, bloquear, capturar tela, brilho, som, bateria e modo de energia.",
+    "Ilha de Aplicativos: Explorador de Arquivos e Configurações fixos, pasta Aplicativos, pilha de Downloads e Lixeira.",
+    "Central de Aplicativos em tela cheia.",
+    "Explorador de Arquivos: favoritos, pendrives, Lixeira, ícones ou lista, copiar, mover, renomear, busca, Abrir com e Informações (Super + E).",
+    "Configurações: Wi-Fi, Bluetooth, Som, Tela, Bateria e energia, Papel de parede, Barra e Ilha, Usuário e senha, Data e hora, Teclado, Aplicativos padrão, Privacidade, IA e Sobre.",
+    "\"Suspender\" passa a se chamar \"Repousar\"."
+   ],
+   "observacoes": "Reinicie o computador depois de atualizar para a interface nova aparecer."
+  }
+ ]
+}

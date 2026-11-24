@@ -1,0 +1,660 @@
+Package: duiaos-agente
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 188
+Depends: python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, apt, firewalld
+Filename: pool/main/duiaos-agente_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 25708
+MD5sum: 8a2ecc710df2cbc3e963b94b4d4c3a4a
+SHA1: 4683ba90fd21c9a9a4b9fdafa5095539c97711b0
+SHA256: fa86fcb3d93bed5330f4b2afe28105b5f1bceb2b8ee5e32fbac172753e1ffab0
+SHA512: 0b753725b6e980449229470626630f427f30e3428244db193b500f17757145475d6ef431d0fd63e94a448351cb59e8bd259dea00a2491fa3d874f1a21a6edf54
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — agente do sistema (ações com aprovação)
+ Serviço duiaos-agente (D-Bus org.duiaos.Agente1): faz, com a aprovação da
+ pessoa e a autorização do polkit, só as ações de uma lista fechada —
+ atualizar o sistema, instalar e remover aplicativos pelo apt. Sempre simula
+ antes, nunca remove partes essenciais e registra tudo em
+ /var/log/duiaos-agente.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-agente
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 188
+Depends: python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, apt, firewalld
+Filename: pool/main/duiaos-agente_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 25700
+MD5sum: d2bc0bb60d4994a41c23d801b55758ca
+SHA1: d4b22d3cdfd1497fde3aa106c8d81d975795e4ae
+SHA256: 4508b49f2f7fff0887b4d9b989dd70ff72ce43f46e5a9aa7c0d7cf2ce0ff9a35
+SHA512: cf3ebf17a7e2712d098cf6934ecec06d1909d0bdbfbb88c63b19b38c9e21f62f6ed39de33c408a67ad3e223523d263c73fb370ab1fcbcab4037412934b573975
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — agente do sistema (ações com aprovação)
+ Serviço duiaos-agente (D-Bus org.duiaos.Agente1): faz, com a aprovação da
+ pessoa e a autorização do polkit, só as ações de uma lista fechada —
+ atualizar o sistema, instalar e remover aplicativos pelo apt. Sempre simula
+ antes, nunca remove partes essenciais e registra tudo em
+ /var/log/duiaos-agente.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-agente
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 188
+Depends: python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, apt, firewalld
+Filename: pool/main/duiaos-agente_0.3.1+git20261124124207.171d18e_all.deb
+Size: 25708
+MD5sum: 4c0b953917f91f3b7a7bff03f3ed16ce
+SHA1: f2f8ed6a068695847139ea0fa63b1f21cdd38fea
+SHA256: 62e3d7cdde116dc0e5ea88ffed55c2d6f5c9e4509f72d7cd1121500b9839f1a6
+SHA512: 0720b36458b0f8ccdae349646d0a474e92951f63c4cd417ab1ba989b8f68f1f89a665ede0b25aca68948acc9d4e7633bc199a2fe04434f036b6c54d5950bf6ba
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — agente do sistema (ações com aprovação)
+ Serviço duiaos-agente (D-Bus org.duiaos.Agente1): faz, com a aprovação da
+ pessoa e a autorização do polkit, só as ações de uma lista fechada —
+ atualizar o sistema, instalar e remover aplicativos pelo apt. Sempre simula
+ antes, nunca remove partes essenciais e registra tudo em
+ /var/log/duiaos-agente.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-desktop
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: metapackages
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 4
+Depends: duiaos-identidade (= 0.3.1+git20261123225758.657c1c5), duiaos-shell (= 0.3.1+git20261123225758.657c1c5), duiaos-ia (= 0.3.1+git20261123225758.657c1c5), duiaos-agente (= 0.3.1+git20261123225758.657c1c5), duiaos-relatorios (= 0.3.1+git20261123225758.657c1c5), duiaos-ollama, duiaos-motor-web, duiaos-ora, duiaos-mailbox
+Recommends: duiaos-wise, duiaos-voz, firmware-sof-signed, alsa-ucm-conf
+Filename: pool/main/duiaos-desktop_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 1000
+MD5sum: 18a20e0d0852bace9493435c4f8d4e07
+SHA1: 4f79920abf857bca58a2796a8c846764567f6c72
+SHA256: 6ea2b91729aa0e2a4f6372a367d2b7a4e4ac9fb466d1d5323ab7aa430c312203
+SHA512: 3061f5ef577ca30e541d05c89801b702292a45d5140a65f92305ff14cbd17963a9c3e4fbcd266392fb97f7f99a1cf118d1ede7f4b8db4295f8af2a6ec557d858
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — sistema completo (metapacote)
+ Instala e mantém atualizados todos os componentes próprios do DuiaOS.
+ Para atualizar o DuiaOS: sudo apt update && sudo apt full-upgrade
+
+Package: duiaos-desktop
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: metapackages
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 4
+Depends: duiaos-identidade (= 0.3.1+git20261123230228.7b090e2), duiaos-shell (= 0.3.1+git20261123230228.7b090e2), duiaos-ia (= 0.3.1+git20261123230228.7b090e2), duiaos-agente (= 0.3.1+git20261123230228.7b090e2), duiaos-relatorios (= 0.3.1+git20261123230228.7b090e2), duiaos-ollama, duiaos-motor-web, duiaos-ora, duiaos-mailbox
+Recommends: duiaos-wise, duiaos-voz, firmware-sof-signed, alsa-ucm-conf
+Filename: pool/main/duiaos-desktop_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 1004
+MD5sum: 79549abb8ae775a0d58f9c0ec8ccebf8
+SHA1: 7ea30bb70df5c32737cd974b6999e3e49aa28f87
+SHA256: e43c1f935c3a2ac54183d8e6609cbfcdccf3c79e401a043f2aa0e830ba7babf2
+SHA512: f96affd8000fa1fc9da389d6e6ac4439b98f693d3e6d5ebadf3b0cc8083abf9cc3d5c4fe07d973118432a110ee5aaa624822e88d0c5673f3f56e3b209de8c36a
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — sistema completo (metapacote)
+ Instala e mantém atualizados todos os componentes próprios do DuiaOS.
+ Para atualizar o DuiaOS: sudo apt update && sudo apt full-upgrade
+
+Package: duiaos-desktop
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: metapackages
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 4
+Depends: duiaos-identidade (= 0.3.1+git20261124124207.171d18e), duiaos-shell (= 0.3.1+git20261124124207.171d18e), duiaos-ia (= 0.3.1+git20261124124207.171d18e), duiaos-agente (= 0.3.1+git20261124124207.171d18e), duiaos-relatorios (= 0.3.1+git20261124124207.171d18e), duiaos-ollama, duiaos-motor-web, duiaos-ora, duiaos-mailbox
+Recommends: duiaos-wise, duiaos-voz, firmware-sof-signed, alsa-ucm-conf
+Filename: pool/main/duiaos-desktop_0.3.1+git20261124124207.171d18e_all.deb
+Size: 1000
+MD5sum: 3d8c83ff081f548dd39ea12bbe1809b9
+SHA1: 6793a337dd880ba98ff1b877859823caaf144ec0
+SHA256: 17c172a0f2b11a7051fcb8179c670c5de26dcaf938caf98afaa22a89ecd731c0
+SHA512: 749d1584004d6e118a89d340ede6814d45e5bbf3384cee5a04cab8b8508204f964d67a495c1d8fec927df3f06efd53dcab1afe46a4ead427400623d1fd981851
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — sistema completo (metapacote)
+ Instala e mantém atualizados todos os componentes próprios do DuiaOS.
+ Para atualizar o DuiaOS: sudo apt update && sudo apt full-upgrade
+
+Package: duiaos-ia
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 144
+Depends: duiaos-ollama, python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, adduser, python3-pyside6.qtdbus, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, qml6-module-qtquick-controls, qml6-module-qtquick-window
+Filename: pool/main/duiaos-ia_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 19936
+MD5sum: c2e8fc25841159a63c2fd68b1c2aea8e
+SHA1: 61969d1b81165276782f334c31f830a3c3604dd4
+SHA256: 919cd25fb69a1ed51c020787c382b9a788585429df9e0d1ac06e776531f3b3af
+SHA512: e08566d9b765f8ee0b43ef10e0968de1acf8d9d59555e9f2ddf4c31dd7138e32d3e0b0d2890f462216c9f2fe604a2c1926ab5b4532dfab235c4d233757266ea3
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — IA do sistema
+ Serviço duiaos-ia (D-Bus org.duiaos.IA1): um só modelo de IA local ativo
+ para o sistema inteiro, catálogo de modelos (Qwen, Gemma, Llama, Phi),
+ download com progresso e conferência de memória. As telas ficam em
+ Configurações › Inteligência Artificial. Inclui o comando duiaos-ia.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-ia
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 144
+Depends: duiaos-ollama, python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, adduser, python3-pyside6.qtdbus, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, qml6-module-qtquick-controls, qml6-module-qtquick-window
+Filename: pool/main/duiaos-ia_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 19948
+MD5sum: 4634302db6ee18e2477c2ca7ff650ad7
+SHA1: 148d83daa5b783fcc1263493d898852a271788df
+SHA256: 9f7026c20e23b035b11863c52804d82c9c19a0c63677ad0630f6b4a410fd3a21
+SHA512: ca1e364183dd726d548630ad030df253db6fd0cf385a67c9c7a5637fb9c07e00350d56c617d5bbf8b4cf302a62435833f37acb8010a84546a071db6ac6fc56b1
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — IA do sistema
+ Serviço duiaos-ia (D-Bus org.duiaos.IA1): um só modelo de IA local ativo
+ para o sistema inteiro, catálogo de modelos (Qwen, Gemma, Llama, Phi),
+ download com progresso e conferência de memória. As telas ficam em
+ Configurações › Inteligência Artificial. Inclui o comando duiaos-ia.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-ia
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 144
+Depends: duiaos-ollama, python3, python3-gi, gir1.2-glib-2.0, dbus, polkitd, adduser, python3-pyside6.qtdbus, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, qml6-module-qtquick-controls, qml6-module-qtquick-window
+Filename: pool/main/duiaos-ia_0.3.1+git20261124124207.171d18e_all.deb
+Size: 19944
+MD5sum: ab33e30e030af5899a3179681fa1148d
+SHA1: 4809204e5365ee92f1e50f466303fd540c205353
+SHA256: 47ebc04d49d23b993b7a3fb38d18ae1fe90de179cf0cffc6affa89c57a9d66a9
+SHA512: 8d7814a3d436e84b92fe776c99f1fb579eaf398756713184ed31bc68edd2680e9bff8d596e856e86d2c695dcce24af753d06402655dc762d84132574be6a1a3e
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — IA do sistema
+ Serviço duiaos-ia (D-Bus org.duiaos.IA1): um só modelo de IA local ativo
+ para o sistema inteiro, catálogo de modelos (Qwen, Gemma, Llama, Phi),
+ download com progresso e conferência de memória. As telas ficam em
+ Configurações › Inteligência Artificial. Inclui o comando duiaos-ia.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-identidade
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: misc
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 1728
+Depends: base-files, plymouth, efibootmgr, console-setup, keyboard-configuration, kbd, systemd
+Filename: pool/main/duiaos-identidade_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 1335552
+MD5sum: db7acd14c2d6792af06956b9a0d632d8
+SHA1: 924894b6be80952254120c69f228e7085d23cd09
+SHA256: cd5cbb20583436596bcf4f70c3581180f167b783f4a64372cd689a91f0f7057d
+SHA512: f591cc8bb136b297d5977ab234bd6527e212d38f125ef2c6635aaa51d4279c37e7e8004bef87661d6673f9ba0ce27ad66bea23f96523e6ec40bd0f7932ba7108
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — identidade e padrões do sistema
+ Nome e versão do sistema (os-release), animação de boot, tema do menu de
+ boot, papel de parede, teclado ABNT2, scripts do DuiaOS e o repositório de
+ atualizações do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-identidade
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: misc
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 1728
+Depends: base-files, plymouth, efibootmgr, console-setup, keyboard-configuration, kbd, systemd
+Filename: pool/main/duiaos-identidade_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 1335812
+MD5sum: 17c3d37553125d054548de14ab48c4f7
+SHA1: 3a5d8c678a2e94787bf168baebf2bf67d780c6dd
+SHA256: 394a52b5e377b800f22afc5125c579a938954ba74196fe20e8adeefbe9536a51
+SHA512: 8c64bd640670d71a79de78b922a750b46a4ddb3f4d273b015b9568174bca406b01e25d6b1144c0dfeb703ed16965c6407ffb1aed3678b677068588ca8a522ba8
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — identidade e padrões do sistema
+ Nome e versão do sistema (os-release), animação de boot, tema do menu de
+ boot, papel de parede, teclado ABNT2, scripts do DuiaOS e o repositório de
+ atualizações do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-identidade
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: misc
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 1728
+Depends: base-files, plymouth, efibootmgr, console-setup, keyboard-configuration, kbd, systemd
+Filename: pool/main/duiaos-identidade_0.3.1+git20261124124207.171d18e_all.deb
+Size: 1336224
+MD5sum: 259fb886d90da1d9964b9f6d4909f96f
+SHA1: 1f2a2a38900564c4ef54e548d229b2ea6d0c37e3
+SHA256: 6778a3762510a31face492fb55407b0601bc00a2385deea7b52b80b10ff733bf
+SHA512: 8190dfb2500615db02b6d321062749aa95dbe6448d56003bfcd5388cd187de0b0be502d9f480c9839c80490cd36208f424cad75c20d6470f5bd7e94707d81925
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — identidade e padrões do sistema
+ Nome e versão do sistema (os-release), animação de boot, tema do menu de
+ boot, papel de parede, teclado ABNT2, scripts do DuiaOS e o repositório de
+ atualizações do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-mailbox
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: mail
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 396
+Provides: mail-reader
+Depends: duiaos-shell, duiaos-motor-web, python3, python3-dnspython, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-mailbox_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 64816
+MD5sum: 99f66a0ac8310ebbc4e865d8f9b8f4da
+SHA1: 860131d150a31097f00c28072cd1b9fc02d1ff6a
+SHA256: 5cb7dae4973f523d73952961f75806ee4a2c6a83f34f5bdc62947b7792fb75a6
+SHA512: b3f5c93f844e448be977b559ba823208c832f416624cee4d8f42b2f5969c644443e665c68b6eac9b570801f42e124a381fcf394cf5483264143bd82d652c73a9
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Mail Box, o gerenciador de e-mails
+ O e-mail do DuiaOS: wizard que descobre os servidores do Gmail, Outlook,
+ iCloud e outros provedores, IMAP, POP3 e SMTP, leitura segura e escrever,
+ responder e encaminhar com anexos. Programa de e-mail padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-mailbox
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: mail
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 396
+Provides: mail-reader
+Depends: duiaos-shell, duiaos-motor-web, python3, python3-dnspython, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-mailbox_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 64824
+MD5sum: 0a3a4e0626c0b4234f5c5250745e4d14
+SHA1: ae11d8121a879eb36b3ed7b773d2fd7a59970a2a
+SHA256: 238a84ef894b7906d7801faa431ad20fbb3b4a9d4bd2f4f31136bda98b9c2c36
+SHA512: dd21cde571fed6dedf9f5f91644551db14df98158acc1a679fed78a7a88234e2ca0212f8fbad664671d387eb81763014552bd06cddf5533e90d88eead23952ad
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Mail Box, o gerenciador de e-mails
+ O e-mail do DuiaOS: wizard que descobre os servidores do Gmail, Outlook,
+ iCloud e outros provedores, IMAP, POP3 e SMTP, leitura segura e escrever,
+ responder e encaminhar com anexos. Programa de e-mail padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-mailbox
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: mail
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 396
+Provides: mail-reader
+Depends: duiaos-shell, duiaos-motor-web, python3, python3-dnspython, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-mailbox_0.3.1+git20261124124207.171d18e_all.deb
+Size: 64816
+MD5sum: bba5a736b1f7cb28dcb67459b47c726f
+SHA1: 09b23a29a7c5df968a87bf9520106995212865c4
+SHA256: 6110d66e2961062cba237a101fb542f1a0d292c1430580b6aba6433d95d4b746
+SHA512: 88a7ad1947f3f0c624be8a2e56e20dffdd097d22c5adb70b413c4228d00d1004b7e83532645c8bd23baa9c969e19e1760bd02c35439cc825c3a597765ac75279
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Mail Box, o gerenciador de e-mails
+ O e-mail do DuiaOS: wizard que descobre os servidores do Gmail, Outlook,
+ iCloud e outros provedores, IMAP, POP3 e SMTP, leitura segura e escrever,
+ responder e encaminhar com anexos. Programa de e-mail padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-ora
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: web
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 340
+Provides: www-browser
+Depends: duiaos-shell, duiaos-motor-web, python3
+Filename: pool/main/duiaos-ora_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 50136
+MD5sum: 1efd93b79506976c49720bafe3f6f5ff
+SHA1: 8904c1f94023ad6df07f3f8e988efe7895b9612e
+SHA256: 9944d98e01ef31a0d3cc6fff38fe526b42b660664eca393ffb6bf0b0445613d6
+SHA512: cd0a834b79d6405b4ca43c7d4c8d2cbd96cd07d2909d0d6197fb6bc1b13e54b6a5e042b59917944675d900cce306444104bce57ce5b581c01ded8c384dad62b3
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Ora, o navegador
+ O navegador do DuiaOS: abas, barra de endereço com sugestões, favoritos,
+ histórico, downloads, janela privada e configurações, sobre o motor Chromium
+ do Qt WebEngine (pacote duiaos-motor-web). Navegador padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-ora
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: web
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 340
+Provides: www-browser
+Depends: duiaos-shell, duiaos-motor-web, python3
+Filename: pool/main/duiaos-ora_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 50136
+MD5sum: 9ac72c00e7c66bc3cc3589664493b308
+SHA1: 21e42dbaf496e69dd24c4da06f33d140750b6781
+SHA256: cec3058764cea2f18a2b5f965decf4136e1c6cce029606792166fa002ab858b4
+SHA512: 9a646abc7109c7d25a80f097d0698a6da576bf7749c4b925613ad565f5c2b314221685ec9102aa24e797d298641d11cf5aab4f81eeae242b3ce9e2d1b8b40b05
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Ora, o navegador
+ O navegador do DuiaOS: abas, barra de endereço com sugestões, favoritos,
+ histórico, downloads, janela privada e configurações, sobre o motor Chromium
+ do Qt WebEngine (pacote duiaos-motor-web). Navegador padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-ora
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: web
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 340
+Provides: www-browser
+Depends: duiaos-shell, duiaos-motor-web, python3
+Filename: pool/main/duiaos-ora_0.3.1+git20261124124207.171d18e_all.deb
+Size: 50168
+MD5sum: e1bf22f13bab7deaac2da37ef260f093
+SHA1: 6f7be6611b8c0ea6dea158ebdd9705b021f183be
+SHA256: ea82beaabb103f747b74ae74341369970d6c25513f7d70ecc55eb7efa22fb4f5
+SHA512: d292c186835bbe8fa514e1217a0280b4e996367d99798cc1a0f6a23795ac828b49e08deba29fc33e3a49a4b366a2495c49cec4591d31120da5a4bd19d431a255
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — Ora, o navegador
+ O navegador do DuiaOS: abas, barra de endereço com sugestões, favoritos,
+ histórico, downloads, janela privada e configurações, sobre o motor Chromium
+ do Qt WebEngine (pacote duiaos-motor-web). Navegador padrão do DuiaOS.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-relatorios
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 260
+Depends: python3, systemd, systemd-coredump
+Recommends: git, openssh-client, pciutils, pkexec, python3-pyside6.qtquick, python3-pyside6.qtqml
+Filename: pool/main/duiaos-relatorios_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 27000
+MD5sum: 41088c9547fed710723ed18ed6adc735
+SHA1: 5e2a2ef07bf20f7f7b74008115b329684e904329
+SHA256: b3084015bdab5643a3991f4084027e8ca11bf465025246b9fac01bb0f5e46594
+SHA512: 13802f0a0a26e20dad486f8f8a70504c1c9dcd0ffdd2403f1de4ede7665e4940b61a6914e82a0181ba98678f356be3b62147d192c4137e89560eb2a882255a9e
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — registros do sistema e "Ajude a melhorar o DuiaOS"
+ Padroniza os registros do DuiaOS: tudo vai para o journal do systemd
+ (guardado no disco), com campos comuns a todos os programas (biblioteca
+ duiaos_registro), e as falhas de programas viram registros com o rastro
+ completo (Python pelo duiaos_registro; os demais pelo systemd-coredump).
+ .
+ O serviço duiaos-relatorios junta erros, falhas e informações do computador
+ em relatórios e, só no nível escolhido pela pessoa em "Ajude a melhorar o
+ DuiaOS", os envia para o desenvolvimento. Sem escolha, nada sai do
+ computador. Os relatórios ficam em /var/lib/duiaos-relatorios para conferir.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-relatorios
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 260
+Depends: python3, systemd, systemd-coredump
+Recommends: git, openssh-client, pciutils, pkexec, python3-pyside6.qtquick, python3-pyside6.qtqml
+Filename: pool/main/duiaos-relatorios_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 27024
+MD5sum: 69d8b077e65b5037ea623fbf956b712e
+SHA1: d6c66e12b7c065e0c78823710bce03aebebe007f
+SHA256: 0337cb4bfd3316814af2f2f11df84df589b6f393125607049a1b0d383334931d
+SHA512: 417ad5ba3dcabc66e8009aea11308f33c9b2484504c18d832bfdf526277d718d90b76cf4e2f522c2d3543d02fb5ff189f217d6675132e0bb026d196652834f8c
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — registros do sistema e "Ajude a melhorar o DuiaOS"
+ Padroniza os registros do DuiaOS: tudo vai para o journal do systemd
+ (guardado no disco), com campos comuns a todos os programas (biblioteca
+ duiaos_registro), e as falhas de programas viram registros com o rastro
+ completo (Python pelo duiaos_registro; os demais pelo systemd-coredump).
+ .
+ O serviço duiaos-relatorios junta erros, falhas e informações do computador
+ em relatórios e, só no nível escolhido pela pessoa em "Ajude a melhorar o
+ DuiaOS", os envia para o desenvolvimento. Sem escolha, nada sai do
+ computador. Os relatórios ficam em /var/lib/duiaos-relatorios para conferir.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-relatorios
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: admin
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 260
+Depends: python3, systemd, systemd-coredump
+Recommends: git, openssh-client, pciutils, pkexec, python3-pyside6.qtquick, python3-pyside6.qtqml
+Filename: pool/main/duiaos-relatorios_0.3.1+git20261124124207.171d18e_all.deb
+Size: 27008
+MD5sum: 890ab8df4d2f3abefc3aad417326a4be
+SHA1: 2d6fcf1f5286c06c9ba66a9fab0fae6f334943af
+SHA256: c43f8179985bfa3aa30bdc2182361ada8241070790c3040faa5eae0815ab46b8
+SHA512: 0c1437d1f726eb245a0e321c3c520caa4cbd732808b96182c572a558d8e74f82c9fe02005acb96cbb6c4540aeabc60a0677d0e4dfe8316557e3615bd6ca460ad
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — registros do sistema e "Ajude a melhorar o DuiaOS"
+ Padroniza os registros do DuiaOS: tudo vai para o journal do systemd
+ (guardado no disco), com campos comuns a todos os programas (biblioteca
+ duiaos_registro), e as falhas de programas viram registros com o rastro
+ completo (Python pelo duiaos_registro; os demais pelo systemd-coredump).
+ .
+ O serviço duiaos-relatorios junta erros, falhas e informações do computador
+ em relatórios e, só no nível escolhido pela pessoa em "Ajude a melhorar o
+ DuiaOS", os envia para o desenvolvimento. Sem escolha, nada sai do
+ computador. Os relatórios ficam em /var/lib/duiaos-relatorios para conferir.
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-shell
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: x11
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 2196
+Depends: duiaos-identidade (= 0.3.1+git20261123225758.657c1c5), python3, greetd, cage, python3-pamela, swayidle, swaylock, dbus-user-session, polkitd, plymouth, labwc, foot, swaybg, wlr-randr, wlrctl, at-spi2-core, gir1.2-atspi-2.0, gsettings-desktop-schemas, grim, wtype, qt6-wayland, qt6-svg-plugins, qml6-module-org-kde-layershell, qml6-module-qtqml, qml6-module-qtqml-models, qml6-module-qtqml-workerscript, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-window, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtsvg, brightnessctl, wlsunset, power-profiles-daemon, pkexec, xdg-user-dirs, xdg-utils, udisks2, network-manager-config-connectivity-debian, network-manager-openvpn, network-manager-openconnect, qrencode, python3-cryptography, modemmanager, 7zip, qml6-module-qtmultimedia, qml6-module-qtquick-effects, qml6-module-qtquick-dialogs, qml6-module-qtquick-templates, qml6-module-qt-labs-folderlistmodel, python3-gi, gir1.2-glib-2.0, libnotify-bin, python3-pyside6.qtdbus, hicolor-icon-theme, fonts-inter, fonts-manrope, fonts-jetbrains-mono, flatpak, appstream, apt-config-icons, python3-yaml, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-shell_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 309508
+MD5sum: 35435751b07176673f014bff9ad21499
+SHA1: 3019a225ea20e420c13da3a83acbd207abe74761
+SHA256: e1c72ae180ce835a6b1614421a15a53e55f9886665984c7126353dd5ef7e22f0
+SHA512: ea1cad54ac0f8c953695c0289b33570e62c695b4997053266e9c163cc7f53ef9482cdd58681ad3098381a3f261f0eb6fc6268c98ee2838857e72149123faab28
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — interface gráfica
+ Tela de Entrada e Tela de Bloqueio, Barra de Recursos (Menu do DuiaOS e
+ Central de Controle), Ilha de Aplicativos, Central de Aplicativos, Menu de
+ Energia, Explorador de Arquivos, Configurações, Duia App Store e a sessão
+ gráfica do DuiaOS (labwc + Qt6/QML + Python).
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-shell
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: x11
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 2196
+Depends: duiaos-identidade (= 0.3.1+git20261123230228.7b090e2), python3, greetd, cage, python3-pamela, swayidle, swaylock, dbus-user-session, polkitd, plymouth, labwc, foot, swaybg, wlr-randr, wlrctl, at-spi2-core, gir1.2-atspi-2.0, gsettings-desktop-schemas, grim, wtype, qt6-wayland, qt6-svg-plugins, qml6-module-org-kde-layershell, qml6-module-qtqml, qml6-module-qtqml-models, qml6-module-qtqml-workerscript, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-window, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtsvg, brightnessctl, wlsunset, power-profiles-daemon, pkexec, xdg-user-dirs, xdg-utils, udisks2, network-manager-config-connectivity-debian, network-manager-openvpn, network-manager-openconnect, qrencode, python3-cryptography, modemmanager, 7zip, qml6-module-qtmultimedia, qml6-module-qtquick-effects, qml6-module-qtquick-dialogs, qml6-module-qtquick-templates, qml6-module-qt-labs-folderlistmodel, python3-gi, gir1.2-glib-2.0, libnotify-bin, python3-pyside6.qtdbus, hicolor-icon-theme, fonts-inter, fonts-manrope, fonts-jetbrains-mono, flatpak, appstream, apt-config-icons, python3-yaml, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-shell_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 309528
+MD5sum: 8a17a87c17342a6e80f94a26877a9920
+SHA1: 9d72f9b6b80dfb72d5059099caab3902fadd338a
+SHA256: 7baa5696b40f2ae56e70f1cac1fbc5648c05d3e6f3036fd44fa651e831e1015e
+SHA512: 05942aa9c877fbe3260c84ff75bbf69186ec58dd36fa462f756ec2e71c81f9e20dfa1aed15ebd61545c0a3acb654ab8beef3ef4d3a291612f952a55110936ee0
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — interface gráfica
+ Tela de Entrada e Tela de Bloqueio, Barra de Recursos (Menu do DuiaOS e
+ Central de Controle), Ilha de Aplicativos, Central de Aplicativos, Menu de
+ Energia, Explorador de Arquivos, Configurações, Duia App Store e a sessão
+ gráfica do DuiaOS (labwc + Qt6/QML + Python).
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-shell
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: x11
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 2196
+Depends: duiaos-identidade (= 0.3.1+git20261124124207.171d18e), python3, greetd, cage, python3-pamela, swayidle, swaylock, dbus-user-session, polkitd, plymouth, labwc, foot, swaybg, wlr-randr, wlrctl, at-spi2-core, gir1.2-atspi-2.0, gsettings-desktop-schemas, grim, wtype, qt6-wayland, qt6-svg-plugins, qml6-module-org-kde-layershell, qml6-module-qtqml, qml6-module-qtqml-models, qml6-module-qtqml-workerscript, qml6-module-qtquick, qml6-module-qtquick-controls, qml6-module-qtquick-layouts, qml6-module-qtquick-window, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtsvg, brightnessctl, wlsunset, power-profiles-daemon, pkexec, xdg-user-dirs, xdg-utils, udisks2, network-manager-config-connectivity-debian, network-manager-openvpn, network-manager-openconnect, qrencode, python3-cryptography, modemmanager, 7zip, qml6-module-qtmultimedia, qml6-module-qtquick-effects, qml6-module-qtquick-dialogs, qml6-module-qtquick-templates, qml6-module-qt-labs-folderlistmodel, python3-gi, gir1.2-glib-2.0, libnotify-bin, python3-pyside6.qtdbus, hicolor-icon-theme, fonts-inter, fonts-manrope, fonts-jetbrains-mono, flatpak, appstream, apt-config-icons, python3-yaml, python3-secretstorage, gnome-keyring
+Filename: pool/main/duiaos-shell_0.3.1+git20261124124207.171d18e_all.deb
+Size: 309444
+MD5sum: 0d6e46052090fba574ee2e37c9a89d9e
+SHA1: 87b491a96bf24bbff59860022dab953928bb1cae
+SHA256: dd1c5df18f7c1af7a056a611621c602e7a991dac51d12ee514b9cec9ec706afa
+SHA512: c9e3116e90bc1ceb51967dc877feb769f26355b16144fbcff0d9b37195264cb0daf24d99da145eedec15508ef88bf816361b53e0ace53296f544bd3c683ddd75
+Homepage: https://github.com/gustavoduia/duiaos-fontes-abertas
+Description: DuiaOS — interface gráfica
+ Tela de Entrada e Tela de Bloqueio, Barra de Recursos (Menu do DuiaOS e
+ Central de Controle), Ilha de Aplicativos, Central de Aplicativos, Menu de
+ Energia, Explorador de Arquivos, Configurações, Duia App Store e a sessão
+ gráfica do DuiaOS (labwc + Qt6/QML + Python).
+ .
+ Software proprietário. Uso regido pelo EULA:
+ /usr/share/duiaos/licenca/EULA.md
+
+Package: duiaos-wise
+Architecture: all
+Version: 0.3.1+git20261123225758.657c1c5
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 652
+Depends: python3, python3-gi, libglib2.0-bin, gir1.2-glib-2.0, gir1.2-atspi-2.0, at-spi2-core, python3-icalendar, python3-dateutil, grim, wtype, wlrctl, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtnetwork, python3-secretstorage, gnome-keyring, libpam-gnome-keyring, qml6-module-qtquick, qml6-module-qtquick-window, qt6-svg-plugins, fonts-inter, fonts-manrope
+Recommends: duiaos-shell, duiaos-agente, duiaos-relatorios, duiaos-voz
+Filename: pool/main/duiaos-wise_0.3.1+git20261123225758.657c1c5_all.deb
+Size: 105700
+MD5sum: 90c50ff8cd45adb510468e14b8ee79bb
+SHA1: 989386f3a23d518bbd3ed524c7e210315b924e12
+SHA256: 7284c13fc2f4a587ef40f4f4e5038fc576c02e9596e381f8534b56770fd98d9c
+SHA512: 3b0cbdd9acfc927805272ef5f1fd6cd1e9f7288d405563d5287a755d51ed10048bbfd81efe982a2da389602084c3cc035b8b6f735e8b1de5cd642f0258fb00d9
+Description: DuiaOS — Wise, o assistente do DuiaOS
+ Assistente que entende pedidos em português e usa o computador por
+ ferramentas declaradas: consulta o sistema, a previsão do tempo e a agenda,
+ instala e atualiza aplicativos e usa qualquer aplicativo aberto pela
+ acessibilidade do sistema. Ações que enviam, apagam, pagam ou instalam pedem
+ aprovação; tudo fica registrado.
+ Usa o modelo de IA local ativo do sistema (rodado pelo Ollama) ou o Google
+ Gemini, com autorização.
+ .
+ Software proprietário, todos os direitos reservados.
+
+Package: duiaos-wise
+Architecture: all
+Version: 0.3.1+git20261123230228.7b090e2
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 652
+Depends: python3, python3-gi, libglib2.0-bin, gir1.2-glib-2.0, gir1.2-atspi-2.0, at-spi2-core, python3-icalendar, python3-dateutil, grim, wtype, wlrctl, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtnetwork, python3-secretstorage, gnome-keyring, libpam-gnome-keyring, qml6-module-qtquick, qml6-module-qtquick-window, qt6-svg-plugins, fonts-inter, fonts-manrope
+Recommends: duiaos-shell, duiaos-agente, duiaos-relatorios, duiaos-voz
+Filename: pool/main/duiaos-wise_0.3.1+git20261123230228.7b090e2_all.deb
+Size: 105688
+MD5sum: f514ac3eb65128cfdb2739033505d2c5
+SHA1: 15f289095ad9e7292a11c69371b788c7f46ae1d1
+SHA256: 90b927b6a0dd0a9820eedf02fef77e54ea00d65d4aa982ef03820b618d5a5417
+SHA512: b96ab50d355dbfb155e47900557656b6c90a6c2b6b0a78365d3ebc7d4b0e070090e4053c230aaaec2619e80b186ac45e9cbac8cba5fc42fd8e8cbda8ae91cefe
+Description: DuiaOS — Wise, o assistente do DuiaOS
+ Assistente que entende pedidos em português e usa o computador por
+ ferramentas declaradas: consulta o sistema, a previsão do tempo e a agenda,
+ instala e atualiza aplicativos e usa qualquer aplicativo aberto pela
+ acessibilidade do sistema. Ações que enviam, apagam, pagam ou instalam pedem
+ aprovação; tudo fica registrado.
+ Usa o modelo de IA local ativo do sistema (rodado pelo Ollama) ou o Google
+ Gemini, com autorização.
+ .
+ Software proprietário, todos os direitos reservados.
+
+Package: duiaos-wise
+Architecture: all
+Version: 0.3.1+git20261124124207.171d18e
+Priority: optional
+Section: utils
+Maintainer: DuiaOS <53358870+gustavoduia@users.noreply.github.com>
+Installed-Size: 652
+Depends: python3, python3-gi, libglib2.0-bin, gir1.2-glib-2.0, gir1.2-atspi-2.0, at-spi2-core, python3-icalendar, python3-dateutil, grim, wtype, wlrctl, python3-pyside6.qtquick, python3-pyside6.qtqml, python3-pyside6.qtgui, python3-pyside6.qtnetwork, python3-secretstorage, gnome-keyring, libpam-gnome-keyring, qml6-module-qtquick, qml6-module-qtquick-window, qt6-svg-plugins, fonts-inter, fonts-manrope
+Recommends: duiaos-shell, duiaos-agente, duiaos-relatorios, duiaos-voz
+Filename: pool/main/duiaos-wise_0.3.1+git20261124124207.171d18e_all.deb
+Size: 105720
+MD5sum: e1006094425c68b0670dedac2bbce85f
+SHA1: 7af7879ceed0c17146bd6a800c3bffe9a22c8a95
+SHA256: 53dd2874cdc7f8895ee11eb137722f06236aad535e2740f9f6d7bd337ad0242e
+SHA512: 110b73feb8602f38f983868549995bfb1544eb6c50bd77bdb1800639b201a49a7a62611e55bc192357f8bf633d16a37cbdd1c508a3444c8c39e3bf65f1897d3c
+Description: DuiaOS — Wise, o assistente do DuiaOS
+ Assistente que entende pedidos em português e usa o computador por
+ ferramentas declaradas: consulta o sistema, a previsão do tempo e a agenda,
+ instala e atualiza aplicativos e usa qualquer aplicativo aberto pela
+ acessibilidade do sistema. Ações que enviam, apagam, pagam ou instalam pedem
+ aprovação; tudo fica registrado.
+ Usa o modelo de IA local ativo do sistema (rodado pelo Ollama) ou o Google
+ Gemini, com autorização.
+ .
+ Software proprietário, todos os direitos reservados.
+

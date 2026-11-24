@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Architectures: amd64 arm64 all
+Codename: teste
+Components: main
+Date: Tue, 24 Nov 2026 12:50:16 +0000
+Description: Atualizações do DuiaOS (fluxo único; ADR 074)
+Label: DuiaOS
+Origin: DuiaOS
+Suite: teste
+MD5Sum:
+ bb7329dafafe7c74889c2dde4e81c622            37479 main/binary-all/Packages
+ 48c7f612b34addde764fddad95864127             8315 main/binary-all/Packages.gz
+ cb4d29244a5286aa28907feb93774ba8            48522 main/binary-amd64/Packages
+ 2a2759e0c1ea3d31e84168b0e4df64a9            11279 main/binary-amd64/Packages.gz
+ 72c464ba706529494c103d3b36be7ec0            48701 main/binary-arm64/Packages
+ 112839c7e15e4b0bd762329cbfa8ca97            11301 main/binary-arm64/Packages.gz
+SHA1:
+ 18cd33ca07ae40fc421af3faaef4b265e894cb25            37479 main/binary-all/Packages
+ 52d3fe3204594be37622b52572b0fd2d62ccbb33             8315 main/binary-all/Packages.gz
+ a2d3cf10acb18d718e1c8125b868562bb791e2fb            48522 main/binary-amd64/Packages
+ 21508ee1d8c58c9371e2ab1f80dce3b76f77a2b6            11279 main/binary-amd64/Packages.gz
+ 234526376407bd3ef3c6d556f564b1e307222925            48701 main/binary-arm64/Packages
+ f10674edaa94833315bd95b2ed9dcb6705333bcc            11301 main/binary-arm64/Packages.gz
+SHA256:
+ 6d364feaaa94db36cec15a1f3bbe08108c2b6f6fa852ff0e36015d3b7eee96f3            37479 main/binary-all/Packages
+ 573bf673f71aad24fb23aa0f2aa39ce29772dc431352cdb4db06b2b6dd993735             8315 main/binary-all/Packages.gz
+ 740010f414b7d63018e7db774177c4002860015ce553f7d0d1d6df12ee25c64c            48522 main/binary-amd64/Packages
+ 2fb6ea3e64d2c7647a0d435653bc848903a92dd5e7b84327e1345fd51bce3acb            11279 main/binary-amd64/Packages.gz
+ 78950784fb5f68ca140ce13d0cf92c7b80a5e35f0d44ac8c5b297f6be0d25061            48701 main/binary-arm64/Packages
+ 5d1662131bd49f6038a23f6f9ce41e31d7a52e175503c93cda6034bd7542cd62            11301 main/binary-arm64/Packages.gz
+SHA512:
+ f38b32d0e93ed317c9628390fc18819d0f8c6ad53c976a8f7405449b2e9ae3d769aca5f6275d2695b7e1905e6fad05b4767990149ec61bf1772d6296df0544a5            37479 main/binary-all/Packages
+ d8ab62c22cd95b614336a6decc4624593245c04be351b4f8574345be49c08f4617bebebeaa51e94023848708480432943cbff8c13ed7def777d4ddb3e88148db             8315 main/binary-all/Packages.gz
+ 76deaf19d79731c253a26b6aa22dd496310f5bf68514bc91b9a5bc147ba92dee2b2faaf921b77b5a1b4fc54b3bd4d1d462a7da63a3a3a11ea1520cd817374ceb            48522 main/binary-amd64/Packages
+ 56d4cdf183f0fb45073df8b97c5fdc7eaabeb86a68a3e57be9e0db361370189a725092677d2562fb70c538a36082a8d573645066297e14926616a568b6361755            11279 main/binary-amd64/Packages.gz
+ 113b1fa96538d35063c829c534fa61e1975b66f8b02c52e6f2d7836dfb650b8b5ac01d612282803a8862da606ac25a677155df9cf419ead87068e1a1497790eb            48701 main/binary-arm64/Packages
+ 94bebea6778337a55be08d6249798168be0e7a3267cb422c22e604f80899029b81275bf68f05acd817258376226a816089e71b735d80971ba410f1bcda0064d9            11301 main/binary-arm64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQQNnCQRYGZ1dNbTiPbqndBTc+OtoQUCawWICAAKCRDqndBTc+Ot
+oW+JAQDc6nis3Lag5bJAfUGug3MHCne6gefPWfTckioh1zrl5AEAvnmxkP6DOHJn
+gX8qvhI2BnmQfQ1zbvXKWMwwugJuqwo=
+=YGRW
+-----END PGP SIGNATURE-----
